@@ -1,6 +1,6 @@
-package pl.kaqu.pg.engine;
+package pl.kaqu.pg.engine.unit;
 
-/*
+/**
  * PuzzleGenerals
  * Copyright (C) 2016 kaqu
  * <p>
@@ -18,5 +18,8 @@ package pl.kaqu.pg.engine;
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-public class PGGame {
+public enum PGUnitRank {
+    BASIC,
+    ADVANCED,
+    EXPERT
 }

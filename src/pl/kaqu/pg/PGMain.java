@@ -1,6 +1,6 @@
 package pl.kaqu.pg;
 
-/**
+/*
  * PuzzleGenerals
  * Copyright (C) 2016 kaqu
  * <p>

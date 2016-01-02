@@ -1,4 +1,10 @@
-package pl.kaqu.pg.engine;
+package pl.kaqu.pg.engine.unit.types;
+
+import pl.kaqu.pg.engine.player.PGPlayer;
+import pl.kaqu.pg.engine.unit.PGUnit;
+import pl.kaqu.pg.engine.unit.PGUnitAssociation;
+import pl.kaqu.pg.engine.unit.activation.PGActivatedUnit;
+import pl.kaqu.pg.engine.unit.activation.PGUnitActivationType;
 
 /*
  * PuzzleGenerals
@@ -18,5 +24,19 @@ package pl.kaqu.pg.engine;
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-public class PGGame {
+public abstract class PGUnitSmall extends PGUnit implements PGActivatedUnit {
+
+    protected PGUnitSmall(long unitID, PGPlayer owner, PGUnitAssociation association){
+        super(unitID, owner, association);
+    }
+    @Override
+    public boolean activate(PGUnitActivationType activationType) {
+        return false; //TODO
+    }
+
+    @Override
+    public PGUnitActivationType getActivationType() {
+        return PGUnitActivationType.VERTICAL_AND_HORIZONTAL;
+    }
+
 }
