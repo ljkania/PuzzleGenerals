@@ -10,7 +10,7 @@ import java.util.List;
 
 /*
     PuzzleGenerals
-    Copyright (C) 2016 kaqu
+    Copyright (C) 2016 kaqu kaqukal@gmail.com
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -26,7 +26,6 @@ import java.util.List;
     with this program; if not, write to the Free Software Foundation, Inc.,
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 public abstract class PGUnit implements Serializable {
 
     public final long unitID;
