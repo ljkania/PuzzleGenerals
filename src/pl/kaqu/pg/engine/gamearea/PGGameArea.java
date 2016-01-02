@@ -2,7 +2,7 @@ package pl.kaqu.pg.engine.gamearea;
 
 /*
     PuzzleGenerals
-    Copyright (C) 2016 kaqu
+    Copyright (C) 2016 kaqu kaqukal@gmail.com
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
