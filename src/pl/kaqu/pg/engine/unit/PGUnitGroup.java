@@ -19,7 +19,7 @@ package pl.kaqu.pg.engine.unit;
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-public enum PGUnitAssociation {
+public enum PGUnitGroup {
     ONE,
     TWO,
     THREE,

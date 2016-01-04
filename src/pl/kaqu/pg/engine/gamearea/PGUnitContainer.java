@@ -1,10 +1,4 @@
-package pl.kaqu.pg.engine.unit.types;
-
-import pl.kaqu.pg.engine.player.PGPlayer;
-import pl.kaqu.pg.engine.unit.PGUnit;
-import pl.kaqu.pg.engine.unit.PGUnitGroup;
-import pl.kaqu.pg.engine.unit.activation.PGActivatedUnit;
-import pl.kaqu.pg.engine.unit.activation.PGUnitActivationType;
+package pl.kaqu.pg.engine.gamearea;
 
 /*
     PuzzleGenerals
@@ -25,18 +19,27 @@ import pl.kaqu.pg.engine.unit.activation.PGUnitActivationType;
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-public abstract class PGUnitLarge extends PGUnit implements PGActivatedUnit {
+import pl.kaqu.pg.engine.unit.PGUnit;
 
-    protected PGUnitLarge(long unitID, PGPlayer owner, PGUnitGroup association){
-        super(unitID, owner, association);
-    }
-    @Override
-    public boolean activate(PGUnitActivationType activationType) {
-        return false; //TODO
+public class PGUnitContainer {
+
+    private PGUnit containedUnit;
+
+    public PGUnitContainer(PGUnit containedUnit) {
+        this.containedUnit = containedUnit;
     }
 
-    @Override
-    public PGUnitActivationType getActivationType() {
-        return PGUnitActivationType.VERTICAL_DOUBLE;
+    public PGUnit getContainedUnit() {
+        return containedUnit;
+    }
+
+    public void setContainedUnit(PGUnit containedUnit) {
+        this.containedUnit = containedUnit;
+    }
+
+    public PGUnit pickContainedUnit() {
+        PGUnit tmp = this.containedUnit;
+        this.containedUnit = null;
+        return tmp;
     }
 }

@@ -20,8 +20,10 @@ package pl.kaqu.pg.engine.unit.effect;
  */
 
 public enum PGUnitState {
-    IDLE,
-    ACTIVATED,
-    DISABLED,
-    DESTROYED
+    IDLE, //just idle
+    ACTIVATED, //activated and counting
+    ASSOCIATED, //part of activation left on field
+    DISABLED, //rooted, excluded, immovable
+    DESTROYED, //something that survived
+    RESERVE //outside of game area
 }

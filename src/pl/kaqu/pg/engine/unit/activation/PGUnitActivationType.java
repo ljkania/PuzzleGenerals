@@ -23,5 +23,6 @@ public enum PGUnitActivationType {
     VERTICAL,
     HORIZONTAL,
     VERTICAL_AND_HORIZONTAL,
+    VERTICAL_DOUBLE,
     INDEPENDENT
 }

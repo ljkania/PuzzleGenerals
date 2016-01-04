@@ -2,7 +2,7 @@ package pl.kaqu.pg.engine.unit.types;
 
 import pl.kaqu.pg.engine.player.PGPlayer;
 import pl.kaqu.pg.engine.unit.PGUnit;
-import pl.kaqu.pg.engine.unit.PGUnitAssociation;
+import pl.kaqu.pg.engine.unit.PGUnitGroup;
 import pl.kaqu.pg.engine.unit.activation.PGActivatedUnit;
 import pl.kaqu.pg.engine.unit.activation.PGUnitActivationType;
 
@@ -27,9 +27,10 @@ import pl.kaqu.pg.engine.unit.activation.PGUnitActivationType;
 
 public abstract class PGUnitHigh extends PGUnit implements PGActivatedUnit {
 
-    protected PGUnitHigh(long unitID, PGPlayer owner, PGUnitAssociation association){
+    protected PGUnitHigh(long unitID, PGPlayer owner, PGUnitGroup association){
         super(unitID, owner, association);
     }
+
     @Override
     public boolean activate(PGUnitActivationType activationType) {
         return false; //TODO

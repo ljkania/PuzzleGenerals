@@ -1,5 +1,6 @@
 package pl.kaqu.pg.engine.unit;
 
+import pl.kaqu.pg.engine.gamearea.PGUnitContainer;
 import pl.kaqu.pg.engine.player.PGPlayer;
 import pl.kaqu.pg.engine.unit.effect.PGUnitEffect;
 import pl.kaqu.pg.engine.unit.effect.PGUnitState;
@@ -29,56 +30,53 @@ import java.util.List;
 public abstract class PGUnit implements Serializable {
 
     public final long unitID;
-
     protected PGPlayer owner;
-    protected PGUnitAssociation association;
+    protected PGUnitGroup group;
     protected PGUnitState state;
-
+    protected PGUnitContainer container;
     protected List<PGUnitEffect> currentEffects;
 
-    protected PGUnit(long unitID, PGPlayer owner, PGUnitAssociation association){
+    protected PGUnit(long unitID, PGPlayer owner, PGUnitGroup group, PGUnitContainer container, PGUnitState state){
         this.unitID = unitID;
         if (owner != null){
             this.owner = owner;
         } else {
             this.owner = PGPlayer.NO_PLAYER;
         }
-        if (association != null){
-            this.association = association;
+        if (group != null){
+            this.group = group;
         } else {
-            this.association = PGUnitAssociation.NONE;
+            this.group = PGUnitGroup.NONE;
         }
-        this.state = PGUnitState.IDLE;
+        this.container = container;
+        this.state = state;
         this.currentEffects = new ArrayList<>();
     }
 
     public PGPlayer getOwner() {
         return owner;
     }
-
-    public PGUnitAssociation getAssociation() {
-        return association;
+    public PGUnitGroup getGroup() {
+        return group;
     }
-
-    protected void setAssociation(PGUnitAssociation association) {
-        this.association = association;
-    }
-
     public PGUnitState getState() {
         return state;
     }
-
     public void setState(PGUnitState state) {
         this.state = state;
     }
-
+    public abstract int getPriority();
     public abstract String getName();
     public abstract String getDescription();
     public abstract PGUnitRank getRank();
-
+    public PGUnitContainer getContainer() {
+        return container;
+    }
+    public void setContainer(PGUnitContainer container) {
+        this.container = container;
+    }
     public abstract void applyEffect(PGUnitEffect effect);
     public abstract void removeEffect(PGUnitEffect effect);
-
     public List<PGUnitEffect> getCurrentEffects() {
         return currentEffects;
     }

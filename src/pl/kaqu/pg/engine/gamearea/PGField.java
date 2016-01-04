@@ -19,5 +19,19 @@ package pl.kaqu.pg.engine.gamearea;
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-public class PGField {
+import pl.kaqu.pg.engine.unit.PGUnit;
+
+public final class PGField extends PGUnitContainer {
+
+    /*package*/ final PGCoordinate coordinate;
+
+    /*package*/ PGUnit content;
+
+    /*package*/ PGField(int x, int y){
+        this.coordinate = new PGCoordinate(x, y);
+    }
+
+//    /*package*/ boolean checkUnitActivation() {
+//
+//    }
 }

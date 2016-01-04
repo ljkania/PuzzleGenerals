@@ -19,5 +19,12 @@ package pl.kaqu.pg.engine.gamearea;
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+import java.util.List;
+
 public class PGGameArea {
+
+    private PGPlayerArea firstPlayerArea;
+    private PGPlayerArea secondPlayerArea;
+
+
 }

@@ -1,10 +1,4 @@
-package pl.kaqu.pg.engine.unit.types;
-
-import pl.kaqu.pg.engine.player.PGPlayer;
-import pl.kaqu.pg.engine.unit.PGUnit;
-import pl.kaqu.pg.engine.unit.PGUnitGroup;
-import pl.kaqu.pg.engine.unit.activation.PGActivatedUnit;
-import pl.kaqu.pg.engine.unit.activation.PGUnitActivationType;
+package pl.kaqu.pg.engine.gamearea;
 
 /*
     PuzzleGenerals
@@ -25,18 +19,13 @@ import pl.kaqu.pg.engine.unit.activation.PGUnitActivationType;
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-public abstract class PGUnitLarge extends PGUnit implements PGActivatedUnit {
+public class PGCoordinate {
 
-    protected PGUnitLarge(long unitID, PGPlayer owner, PGUnitGroup association){
-        super(unitID, owner, association);
-    }
-    @Override
-    public boolean activate(PGUnitActivationType activationType) {
-        return false; //TODO
-    }
+    public int x;
+    public int y;
 
-    @Override
-    public PGUnitActivationType getActivationType() {
-        return PGUnitActivationType.VERTICAL_DOUBLE;
+    public PGCoordinate(int x, int y) {
+        this.x = x;
+        this.y = y;
     }
 }

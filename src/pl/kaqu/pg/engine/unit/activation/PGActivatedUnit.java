@@ -22,15 +22,10 @@ package pl.kaqu.pg.engine.unit.activation;
 public interface PGActivatedUnit {
 
     /**
-     * Call when activating unit. If it is possible by provided type of activation makes unit activated.
-     * @param activationType what type of activation was performed
+     * Try to activate unit by provided activation type.
      * @return true if unit was successfully activated, otherwise false
      */
     boolean activate(PGUnitActivationType activationType);
 
-    /**
-     * @return what type of activation is available for unit.
-     */
     PGUnitActivationType getActivationType();
-
 }
