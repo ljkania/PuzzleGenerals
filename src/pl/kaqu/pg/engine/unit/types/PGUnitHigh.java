@@ -1,10 +1,12 @@
 package pl.kaqu.pg.engine.unit.types;
 
+import pl.kaqu.pg.engine.gamearea.PGField;
 import pl.kaqu.pg.engine.player.PGPlayer;
 import pl.kaqu.pg.engine.unit.PGUnit;
 import pl.kaqu.pg.engine.unit.PGUnitGroup;
 import pl.kaqu.pg.engine.unit.activation.PGActivatedUnit;
-import pl.kaqu.pg.engine.unit.activation.PGUnitActivationType;
+import pl.kaqu.pg.engine.unit.activation.PGActivationKind;
+import pl.kaqu.pg.engine.unit.effect.PGUnitState;
 
 /*
     PuzzleGenerals
@@ -27,17 +29,25 @@ import pl.kaqu.pg.engine.unit.activation.PGUnitActivationType;
 
 public abstract class PGUnitHigh extends PGUnit implements PGActivatedUnit {
 
-    protected PGUnitHigh(long unitID, PGPlayer owner, PGUnitGroup association){
-        super(unitID, owner, association);
+    protected PGUnitHigh(long unitID, PGPlayer owner, PGUnitGroup group, PGUnitState state) {
+        super(unitID, owner, group, state);
     }
 
     @Override
-    public boolean activate(PGUnitActivationType activationType) {
-        return false; //TODO
+    public PGActivationKind tryToActivate(PGField currentField) {
+        if (currentField.getRearNeighbor() != null && currentField.getRearNeighbor().getContainedUnitGroup().equals(this.getGroup())) {
+            if (currentField.getSecondRearNeighbor() != null && currentField.getSecondRearNeighbor().getContainedUnitGroup().equals(this.getGroup())) {
+                activate();
+                return PGActivationKind.SINGLE;
+            }
+        }
+        return PGActivationKind.NONE;
     }
 
     @Override
-    public PGUnitActivationType getActivationType() {
-        return PGUnitActivationType.VERTICAL;
+    public void forceActivate() {
+        this.activate();
     }
+
+    protected abstract void activate();
 }

@@ -1,10 +1,13 @@
 package pl.kaqu.pg.engine.unit.types;
 
+import pl.kaqu.pg.engine.gamearea.PGField;
+import pl.kaqu.pg.engine.gamearea.PGUnitContainer;
 import pl.kaqu.pg.engine.player.PGPlayer;
 import pl.kaqu.pg.engine.unit.PGUnit;
 import pl.kaqu.pg.engine.unit.PGUnitGroup;
 import pl.kaqu.pg.engine.unit.activation.PGActivatedUnit;
-import pl.kaqu.pg.engine.unit.activation.PGUnitActivationType;
+import pl.kaqu.pg.engine.unit.activation.PGActivationKind;
+import pl.kaqu.pg.engine.unit.effect.PGUnitState;
 
 /*
     PuzzleGenerals
@@ -27,16 +30,14 @@ import pl.kaqu.pg.engine.unit.activation.PGUnitActivationType;
 
 public abstract class PGUnitLarge extends PGUnit implements PGActivatedUnit {
 
-    protected PGUnitLarge(long unitID, PGPlayer owner, PGUnitGroup association){
-        super(unitID, owner, association);
-    }
-    @Override
-    public boolean activate(PGUnitActivationType activationType) {
-        return false; //TODO
+    protected PGUnitLarge(long unitID, PGPlayer owner, PGUnitGroup group, PGUnitState state){
+        super(unitID, owner, group, state);
     }
 
     @Override
-    public PGUnitActivationType getActivationType() {
-        return PGUnitActivationType.VERTICAL_DOUBLE;
+    public PGActivationKind tryToActivate(PGField currentField) {
+
+        // #TODO: to complete
+        return PGActivationKind.NONE;
     }
 }

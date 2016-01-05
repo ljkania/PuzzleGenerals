@@ -33,10 +33,9 @@ public abstract class PGUnit implements Serializable {
     protected PGPlayer owner;
     protected PGUnitGroup group;
     protected PGUnitState state;
-    protected PGUnitContainer container;
     protected List<PGUnitEffect> currentEffects;
 
-    protected PGUnit(long unitID, PGPlayer owner, PGUnitGroup group, PGUnitContainer container, PGUnitState state){
+    protected PGUnit(long unitID, PGPlayer owner, PGUnitGroup group, PGUnitState state){
         this.unitID = unitID;
         if (owner != null){
             this.owner = owner;
@@ -48,7 +47,6 @@ public abstract class PGUnit implements Serializable {
         } else {
             this.group = PGUnitGroup.NONE;
         }
-        this.container = container;
         this.state = state;
         this.currentEffects = new ArrayList<>();
     }
@@ -69,12 +67,6 @@ public abstract class PGUnit implements Serializable {
     public abstract String getName();
     public abstract String getDescription();
     public abstract PGUnitRank getRank();
-    public PGUnitContainer getContainer() {
-        return container;
-    }
-    public void setContainer(PGUnitContainer container) {
-        this.container = container;
-    }
     public abstract void applyEffect(PGUnitEffect effect);
     public abstract void removeEffect(PGUnitEffect effect);
     public List<PGUnitEffect> getCurrentEffects() {

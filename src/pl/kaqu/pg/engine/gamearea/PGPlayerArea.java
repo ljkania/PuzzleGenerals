@@ -52,13 +52,13 @@ public class PGPlayerArea {
     }
 
     /*package*/ void normalizeUnitsPositions(){
-        for(int j = 0; j < this.height; j++){
-            for(int i = 0; i < this.width; i++){
-                if(this.fields[i][j].content != null && this.fields[i][j].content.getState() != PGUnitState.DISABLED) {
-
-                }
-            }
-        }
+//        for(int j = 0; j < this.height; j++){
+//            for(int i = 0; i < this.width; i++){
+//                if(this.fields[i][j].content != null && this.fields[i][j].content.getState() != PGUnitState.DISABLED) {
+//
+//                }
+//            }
+//        }
 
     }
 }

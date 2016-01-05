@@ -19,19 +19,73 @@ package pl.kaqu.pg.engine.gamearea;
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import pl.kaqu.pg.engine.unit.PGUnit;
+import pl.kaqu.pg.engine.unit.PGUnitGroup;
+import pl.kaqu.pg.engine.unit.activation.PGActivatedUnit;
+import pl.kaqu.pg.engine.unit.activation.PGActivationKind;
 
 public final class PGField extends PGUnitContainer {
 
     /*package*/ final PGCoordinate coordinate;
 
-    /*package*/ PGUnit content;
+    private PGField leftNeighbor;
+    private PGField frontNeighbor;
+    private PGField rightNeighbor;
+    private PGField rearNeighbor;
 
-    /*package*/ PGField(int x, int y){
+    /*package*/ PGField(int x, int y) {
+        super(null);
         this.coordinate = new PGCoordinate(x, y);
     }
 
-//    /*package*/ boolean checkUnitActivation() {
-//
-//    }
+    /*package*/ PGActivationKind checkUnitActivation() {
+        if (this.containedUnit instanceof PGActivatedUnit){
+            return ((PGActivatedUnit) this.containedUnit).tryToActivate(this);
+        } else {
+            return PGActivationKind.NONE;
+        }
+    }
+
+    public PGCoordinate getCoordinate() {
+        return coordinate;
+    }
+
+    public PGField getLeftNeighbor() {
+        return leftNeighbor;
+    }
+
+    /*package*/ void setLeftNeighbor(PGField leftNeighbor) {
+        this.leftNeighbor = leftNeighbor;
+    }
+
+    public PGField getFrontNeighbor() {
+        return frontNeighbor;
+    }
+
+    /*package*/ void setFrontNeighbor(PGField frontNeighbor) {
+        this.frontNeighbor = frontNeighbor;
+    }
+
+    public PGField getRightNeighbor() {
+        return rightNeighbor;
+    }
+
+    /*package*/ void setRightNeighbor(PGField rightNeighbor) {
+        this.rightNeighbor = rightNeighbor;
+    }
+
+    public PGField getRearNeighbor() {
+        return rearNeighbor;
+    }
+
+    /*package*/ void setRearNeighbor(PGField rearNeighbor) {
+        this.rearNeighbor = rearNeighbor;
+    }
+
+    public PGField getSecondRearNeighbor() {
+        if (this.getRearNeighbor() != null) {
+            return this.getRearNeighbor().getRearNeighbor();
+        }
+        return null;
+    }
+
 }

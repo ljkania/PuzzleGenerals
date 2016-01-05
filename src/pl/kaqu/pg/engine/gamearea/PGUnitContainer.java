@@ -20,10 +20,11 @@ package pl.kaqu.pg.engine.gamearea;
  */
 
 import pl.kaqu.pg.engine.unit.PGUnit;
+import pl.kaqu.pg.engine.unit.PGUnitGroup;
 
 public class PGUnitContainer {
 
-    private PGUnit containedUnit;
+    protected PGUnit containedUnit;
 
     public PGUnitContainer(PGUnit containedUnit) {
         this.containedUnit = containedUnit;
@@ -41,5 +42,12 @@ public class PGUnitContainer {
         PGUnit tmp = this.containedUnit;
         this.containedUnit = null;
         return tmp;
+    }
+
+    public PGUnitGroup getContainedUnitGroup() {
+        if (this.containedUnit != null){
+            return this.containedUnit.getGroup();
+        }
+        return PGUnitGroup.NONE;
     }
 }

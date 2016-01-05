@@ -19,13 +19,16 @@ package pl.kaqu.pg.engine.unit.activation;
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+import pl.kaqu.pg.engine.gamearea.PGField;
+
 public interface PGActivatedUnit {
 
     /**
-     * Try to activate unit by provided activation type.
+     * Try to activate unit.
      * @return true if unit was successfully activated, otherwise false
      */
-    boolean activate(PGUnitActivationType activationType);
+    PGActivationKind tryToActivate(PGField currentField);
 
-    PGUnitActivationType getActivationType();
+    void forceActivate();
+
 }
