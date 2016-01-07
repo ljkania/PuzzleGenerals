@@ -19,9 +19,8 @@ package pl.kaqu.pg.engine.gamearea;
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import pl.kaqu.pg.engine.unit.PGUnitGroup;
 import pl.kaqu.pg.engine.unit.activation.PGActivatedUnit;
-import pl.kaqu.pg.engine.unit.activation.PGActivationKind;
+import pl.kaqu.pg.engine.unit.activation.PGActivationType;
 
 public final class PGField extends PGUnitContainer {
 
@@ -37,11 +36,11 @@ public final class PGField extends PGUnitContainer {
         this.coordinate = new PGCoordinate(x, y);
     }
 
-    /*package*/ PGActivationKind checkUnitActivation() {
+    /*package*/ PGActivationType checkUnitActivation() {
         if (this.containedUnit instanceof PGActivatedUnit){
-            return ((PGActivatedUnit) this.containedUnit).tryToActivate(this);
+            return ((PGActivatedUnit) this.containedUnit).checkActivation(this);
         } else {
-            return PGActivationKind.NONE;
+            return PGActivationType.NONE;
         }
     }
 

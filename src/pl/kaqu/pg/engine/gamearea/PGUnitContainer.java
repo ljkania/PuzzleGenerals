@@ -21,6 +21,7 @@ package pl.kaqu.pg.engine.gamearea;
 
 import pl.kaqu.pg.engine.unit.PGUnit;
 import pl.kaqu.pg.engine.unit.PGUnitGroup;
+import pl.kaqu.pg.engine.unit.types.PGUnitSmall;
 
 public class PGUnitContainer {
 
@@ -44,10 +45,7 @@ public class PGUnitContainer {
         return tmp;
     }
 
-    public PGUnitGroup getContainedUnitGroup() {
-        if (this.containedUnit != null){
-            return this.containedUnit.getGroup();
-        }
-        return PGUnitGroup.NONE;
+    public boolean isContainingUnitAbleToActivate(PGUnit checkedUnit) {
+        return (this.containedUnit instanceof PGUnitSmall && this.containedUnit.getGroup().isMatchingGroup(checkedUnit.getGroup()));
     }
 }

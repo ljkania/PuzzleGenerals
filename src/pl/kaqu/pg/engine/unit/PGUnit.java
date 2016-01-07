@@ -33,6 +33,8 @@ public abstract class PGUnit implements Serializable {
     protected PGPlayer owner;
     protected PGUnitGroup group;
     protected PGUnitState state;
+    protected PGUnitPositionState positionState;
+    protected PGUnitActivationState positionState;
     protected List<PGUnitEffect> currentEffects;
 
     protected PGUnit(long unitID, PGPlayer owner, PGUnitGroup group, PGUnitState state){

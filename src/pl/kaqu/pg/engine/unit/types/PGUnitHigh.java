@@ -5,7 +5,7 @@ import pl.kaqu.pg.engine.player.PGPlayer;
 import pl.kaqu.pg.engine.unit.PGUnit;
 import pl.kaqu.pg.engine.unit.PGUnitGroup;
 import pl.kaqu.pg.engine.unit.activation.PGActivatedUnit;
-import pl.kaqu.pg.engine.unit.activation.PGActivationKind;
+import pl.kaqu.pg.engine.unit.activation.PGActivationType;
 import pl.kaqu.pg.engine.unit.effect.PGUnitState;
 
 /*
@@ -34,20 +34,13 @@ public abstract class PGUnitHigh extends PGUnit implements PGActivatedUnit {
     }
 
     @Override
-    public PGActivationKind tryToActivate(PGField currentField) {
-        if (currentField.getRearNeighbor() != null && currentField.getRearNeighbor().getContainedUnitGroup().equals(this.getGroup())) {
-            if (currentField.getSecondRearNeighbor() != null && currentField.getSecondRearNeighbor().getContainedUnitGroup().equals(this.getGroup())) {
-                activate();
-                return PGActivationKind.SINGLE;
+    public PGActivationType checkActivation(PGField currentField) {
+        if (currentField.getRearNeighbor() != null && currentField.getRearNeighbor().isContainingUnitAbleToActivate(this)) {
+            if (currentField.getSecondRearNeighbor() != null && currentField.getSecondRearNeighbor().isContainingUnitAbleToActivate(this)) {
+                return PGActivationType.SINGLE;
             }
         }
-        return PGActivationKind.NONE;
+        return PGActivationType.NONE;
     }
 
-    @Override
-    public void forceActivate() {
-        this.activate();
-    }
-
-    protected abstract void activate();
 }

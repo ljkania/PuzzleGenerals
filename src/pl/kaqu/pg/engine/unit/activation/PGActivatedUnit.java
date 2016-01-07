@@ -27,8 +27,8 @@ public interface PGActivatedUnit {
      * Try to activate unit.
      * @return true if unit was successfully activated, otherwise false
      */
-    PGActivationKind tryToActivate(PGField currentField);
+    PGActivationType checkActivation(PGField currentField);
 
-    void forceActivate();
+    void activate(PGActivationType activationType);
 
 }

@@ -1,12 +1,4 @@
-package pl.kaqu.pg.engine.unit.types;
-
-import pl.kaqu.pg.engine.gamearea.PGField;
-import pl.kaqu.pg.engine.player.PGPlayer;
-import pl.kaqu.pg.engine.unit.PGUnit;
-import pl.kaqu.pg.engine.unit.PGUnitGroup;
-import pl.kaqu.pg.engine.unit.activation.PGActivatedUnit;
-import pl.kaqu.pg.engine.unit.activation.PGActivationType;
-import pl.kaqu.pg.engine.unit.effect.PGUnitState;
+package pl.kaqu.pg.engine.gamearea.behaviour;
 
 /*
     PuzzleGenerals
@@ -27,16 +19,5 @@ import pl.kaqu.pg.engine.unit.effect.PGUnitState;
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-public abstract class PGUnitLarge extends PGUnit implements PGActivatedUnit {
-
-    protected PGUnitLarge(long unitID, PGPlayer owner, PGUnitGroup group, PGUnitState state){
-        super(unitID, owner, group, state);
-    }
-
-    @Override
-    public PGActivationType checkActivation(PGField currentField) {
-
-        // #TODO: to complete
-        return PGActivationType.NONE;
-    }
+public class PGOrderDispatcher {
 }

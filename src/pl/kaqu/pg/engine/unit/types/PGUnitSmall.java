@@ -1,12 +1,11 @@
 package pl.kaqu.pg.engine.unit.types;
 
 import pl.kaqu.pg.engine.gamearea.PGField;
-import pl.kaqu.pg.engine.gamearea.PGUnitContainer;
 import pl.kaqu.pg.engine.player.PGPlayer;
 import pl.kaqu.pg.engine.unit.PGUnit;
 import pl.kaqu.pg.engine.unit.PGUnitGroup;
 import pl.kaqu.pg.engine.unit.activation.PGActivatedUnit;
-import pl.kaqu.pg.engine.unit.activation.PGActivationKind;
+import pl.kaqu.pg.engine.unit.activation.PGActivationType;
 import pl.kaqu.pg.engine.unit.effect.PGUnitState;
 
 /*
@@ -35,8 +34,19 @@ public abstract class PGUnitSmall extends PGUnit implements PGActivatedUnit {
     }
 
     @Override
-    public PGActivationKind tryToActivate(PGField currentField) {
-        // #TODO: to complete
-        return PGActivationKind.NONE;
+    public PGActivationType checkActivation(PGField currentField) {
+        PGActivationType currentActivation = PGActivationType.NONE;
+        if (currentField.getRearNeighbor() != null && currentField.getRearNeighbor().isContainingUnitAbleToActivate(this)) {
+            if (currentField.getSecondRearNeighbor() != null && currentField.getSecondRearNeighbor().isContainingUnitAbleToActivate(this)) {
+                currentActivation = PGActivationType.SINGLE;
+            }
+        }
+        if (currentField.getLeftNeighbor() != null && currentField.getLeftNeighbor().isContainingUnitAbleToActivate(this)) {
+            if (currentField.getRightNeighbor() != null && currentField.getRightNeighbor().isContainingUnitAbleToActivate(this)) {
+                currentActivation = currentActivation == PGActivationType.NONE ? PGActivationType.SINGLE : PGActivationType.DOUBLE;
+            }
+        }
+        return currentActivation;
     }
+
 }
