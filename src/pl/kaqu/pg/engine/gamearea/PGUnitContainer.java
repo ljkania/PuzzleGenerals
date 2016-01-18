@@ -19,9 +19,8 @@ package pl.kaqu.pg.engine.gamearea;
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+import com.sun.istack.internal.Nullable;
 import pl.kaqu.pg.engine.unit.PGUnit;
-import pl.kaqu.pg.engine.unit.PGUnitGroup;
-import pl.kaqu.pg.engine.unit.types.PGUnitSmall;
 
 public class PGUnitContainer {
 
@@ -31,21 +30,18 @@ public class PGUnitContainer {
         this.containedUnit = containedUnit;
     }
 
-    public PGUnit getContainedUnit() {
+    @Nullable public PGUnit getContainedUnit() {
         return containedUnit;
     }
 
-    public void setContainedUnit(PGUnit containedUnit) {
+    public void setContainedUnit(@Nullable PGUnit containedUnit) {
         this.containedUnit = containedUnit;
     }
 
-    public PGUnit pickContainedUnit() {
+    @Nullable public PGUnit pickContainedUnit() {
         PGUnit tmp = this.containedUnit;
         this.containedUnit = null;
         return tmp;
     }
 
-    public boolean isContainingUnitAbleToActivate(PGUnit checkedUnit) {
-        return (this.containedUnit instanceof PGUnitSmall && this.containedUnit.getGroup().isMatchingGroup(checkedUnit.getGroup()));
-    }
 }

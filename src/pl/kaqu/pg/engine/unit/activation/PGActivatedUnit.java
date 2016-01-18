@@ -23,12 +23,6 @@ import pl.kaqu.pg.engine.gamearea.PGField;
 
 public interface PGActivatedUnit {
 
-    /**
-     * Try to activate unit.
-     * @return true if unit was successfully activated, otherwise false
-     */
-    PGActivationType checkActivation(PGField currentField);
-
     void activate(PGActivationType activationType);
 
 }

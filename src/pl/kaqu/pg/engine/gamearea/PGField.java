@@ -19,8 +19,7 @@ package pl.kaqu.pg.engine.gamearea;
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import pl.kaqu.pg.engine.unit.activation.PGActivatedUnit;
-import pl.kaqu.pg.engine.unit.activation.PGActivationType;
+import com.sun.istack.internal.Nullable;
 
 public final class PGField extends PGUnitContainer {
 
@@ -36,19 +35,11 @@ public final class PGField extends PGUnitContainer {
         this.coordinate = new PGCoordinate(x, y);
     }
 
-    /*package*/ PGActivationType checkUnitActivation() {
-        if (this.containedUnit instanceof PGActivatedUnit){
-            return ((PGActivatedUnit) this.containedUnit).checkActivation(this);
-        } else {
-            return PGActivationType.NONE;
-        }
-    }
-
     public PGCoordinate getCoordinate() {
         return coordinate;
     }
 
-    public PGField getLeftNeighbor() {
+    @Nullable public PGField getLeftNeighbor() {
         return leftNeighbor;
     }
 
@@ -56,7 +47,7 @@ public final class PGField extends PGUnitContainer {
         this.leftNeighbor = leftNeighbor;
     }
 
-    public PGField getFrontNeighbor() {
+    @Nullable public PGField getFrontNeighbor() {
         return frontNeighbor;
     }
 
@@ -64,7 +55,7 @@ public final class PGField extends PGUnitContainer {
         this.frontNeighbor = frontNeighbor;
     }
 
-    public PGField getRightNeighbor() {
+    @Nullable public PGField getRightNeighbor() {
         return rightNeighbor;
     }
 
@@ -72,7 +63,7 @@ public final class PGField extends PGUnitContainer {
         this.rightNeighbor = rightNeighbor;
     }
 
-    public PGField getRearNeighbor() {
+    @Nullable public PGField getRearNeighbor() {
         return rearNeighbor;
     }
 
@@ -80,7 +71,7 @@ public final class PGField extends PGUnitContainer {
         this.rearNeighbor = rearNeighbor;
     }
 
-    public PGField getSecondRearNeighbor() {
+    @Nullable public PGField getSecondRearNeighbor() {
         if (this.getRearNeighbor() != null) {
             return this.getRearNeighbor().getRearNeighbor();
         }

@@ -33,10 +33,4 @@ public abstract class PGUnitLarge extends PGUnit implements PGActivatedUnit {
         super(unitID, owner, group, state);
     }
 
-    @Override
-    public PGActivationType checkActivation(PGField currentField) {
-
-        // #TODO: to complete
-        return PGActivationType.NONE;
-    }
 }

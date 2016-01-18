@@ -21,8 +21,8 @@ package pl.kaqu.pg.engine.gamearea;
 
 public class PGCoordinate {
 
-    public int x;
-    public int y;
+    public final int x;
+    public final int y;
 
     public PGCoordinate(int x, int y) {
         this.x = x;

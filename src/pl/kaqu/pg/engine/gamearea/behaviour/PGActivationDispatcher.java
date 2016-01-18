@@ -20,4 +20,5 @@ package pl.kaqu.pg.engine.gamearea.behaviour;
  */
 
 public class PGActivationDispatcher {
+    //Responsible for checking and activating units
 }

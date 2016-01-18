@@ -19,11 +19,6 @@ package pl.kaqu.pg.engine.gamearea;
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import pl.kaqu.pg.engine.unit.effect.PGUnitEffect;
-import pl.kaqu.pg.engine.unit.effect.PGUnitState;
-
-import java.util.List;
-
 public class PGPlayerArea {
 
     private final int width;
@@ -37,28 +32,14 @@ public class PGPlayerArea {
         for(int i = 0; i < this.width; i++) {
             this.fields[i] = new PGField[this.height];
         }
+        //#TODO: add neighborhood
     }
 
     public PGField getField(int x, int y) {
         return this.fields[x][y];
     }
 
-    public void applyEffectForColumn(int column, PGUnitEffect effect){
-
-    }
-
     /*package*/ void refreshArea(){
         //TODO - check area, fall and activate if needed
-    }
-
-    /*package*/ void normalizeUnitsPositions(){
-//        for(int j = 0; j < this.height; j++){
-//            for(int i = 0; i < this.width; i++){
-//                if(this.fields[i][j].content != null && this.fields[i][j].content.getState() != PGUnitState.DISABLED) {
-//
-//                }
-//            }
-//        }
-
     }
 }

@@ -33,20 +33,4 @@ public abstract class PGUnitSmall extends PGUnit implements PGActivatedUnit {
         super(unitID, owner, group, state);
     }
 
-    @Override
-    public PGActivationType checkActivation(PGField currentField) {
-        PGActivationType currentActivation = PGActivationType.NONE;
-        if (currentField.getRearNeighbor() != null && currentField.getRearNeighbor().isContainingUnitAbleToActivate(this)) {
-            if (currentField.getSecondRearNeighbor() != null && currentField.getSecondRearNeighbor().isContainingUnitAbleToActivate(this)) {
-                currentActivation = PGActivationType.SINGLE;
-            }
-        }
-        if (currentField.getLeftNeighbor() != null && currentField.getLeftNeighbor().isContainingUnitAbleToActivate(this)) {
-            if (currentField.getRightNeighbor() != null && currentField.getRightNeighbor().isContainingUnitAbleToActivate(this)) {
-                currentActivation = currentActivation == PGActivationType.NONE ? PGActivationType.SINGLE : PGActivationType.DOUBLE;
-            }
-        }
-        return currentActivation;
-    }
-
 }

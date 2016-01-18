@@ -33,14 +33,4 @@ public abstract class PGUnitHigh extends PGUnit implements PGActivatedUnit {
         super(unitID, owner, group, state);
     }
 
-    @Override
-    public PGActivationType checkActivation(PGField currentField) {
-        if (currentField.getRearNeighbor() != null && currentField.getRearNeighbor().isContainingUnitAbleToActivate(this)) {
-            if (currentField.getSecondRearNeighbor() != null && currentField.getSecondRearNeighbor().isContainingUnitAbleToActivate(this)) {
-                return PGActivationType.SINGLE;
-            }
-        }
-        return PGActivationType.NONE;
-    }
-
 }

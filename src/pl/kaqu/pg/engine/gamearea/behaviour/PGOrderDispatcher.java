@@ -20,4 +20,5 @@ package pl.kaqu.pg.engine.gamearea.behaviour;
  */
 
 public class PGOrderDispatcher {
+    //Responsible for correcting and checking unit order
 }

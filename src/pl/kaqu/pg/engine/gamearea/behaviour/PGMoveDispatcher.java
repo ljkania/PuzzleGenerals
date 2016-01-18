@@ -20,4 +20,5 @@ package pl.kaqu.pg.engine.gamearea.behaviour;
  */
 
 public class PGMoveDispatcher {
+    //Responsible for unit movement on board
 }

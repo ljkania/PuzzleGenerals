@@ -19,5 +19,5 @@ package pl.kaqu.pg.engine.unit.abillity;
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-public abstract class PGUnitActivationAbility {
+public abstract class PGUnitActivatedAbility {
 }
