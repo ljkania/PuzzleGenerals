@@ -19,8 +19,6 @@ package pl.kaqu.pg.engine.unit.activation;
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import pl.kaqu.pg.engine.gamearea.PGField;
-
 public interface PGActivatedUnit {
 
     void activate(PGActivationType activationType);

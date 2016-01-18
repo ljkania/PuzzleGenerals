@@ -1,14 +1,5 @@
 package pl.kaqu.pg.engine.unit;
 
-import pl.kaqu.pg.engine.gamearea.PGUnitContainer;
-import pl.kaqu.pg.engine.player.PGPlayer;
-import pl.kaqu.pg.engine.unit.effect.PGUnitEffect;
-import pl.kaqu.pg.engine.unit.effect.PGUnitState;
-
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
 /*
     PuzzleGenerals
     Copyright (C) 2016 kaqu kaqukal@gmail.com
@@ -27,6 +18,16 @@ import java.util.List;
     with this program; if not, write to the Free Software Foundation, Inc.,
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+
+import com.sun.istack.internal.NotNull;
+import pl.kaqu.pg.engine.player.PGPlayer;
+import pl.kaqu.pg.engine.unit.effect.PGUnitEffect;
+import pl.kaqu.pg.engine.unit.effect.PGUnitState;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract class PGUnit implements Serializable {
 
     public final long unitID;
@@ -51,14 +52,8 @@ public abstract class PGUnit implements Serializable {
         this.currentEffects = new ArrayList<>();
     }
 
-    public PGPlayer getOwner() {
+    @NotNull public PGPlayer getOwner() {
         return owner;
-    }
-    public PGUnitGroup getGroup() {
-        return group;
-    }
-    public PGUnitState getState() {
-        return state;
     }
     public void setState(PGUnitState state) {
         this.state = state;
@@ -69,7 +64,7 @@ public abstract class PGUnit implements Serializable {
     public abstract PGUnitRank getRank();
     public abstract void applyEffect(PGUnitEffect effect);
     public abstract void removeEffect(PGUnitEffect effect);
-    public List<PGUnitEffect> getCurrentEffects() {
+    @NotNull public List<PGUnitEffect> getCurrentEffects() {
         return currentEffects;
     }
 }
