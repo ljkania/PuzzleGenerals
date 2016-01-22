@@ -19,6 +19,15 @@ package pl.kaqu.pg.engine.gamearea.behaviour;
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+import pl.kaqu.pg.engine.gamearea.PGPlayerArea;
+
+/**
+ * Class responsible for dispatching player moves
+ */
 public class PGMoveDispatcher {
+
+    public PGMoveDispatcher(PGPlayerArea playerArea) {
+
+    }
     //Responsible for unit movement on board
 }

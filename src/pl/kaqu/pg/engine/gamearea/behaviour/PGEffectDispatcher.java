@@ -22,12 +22,11 @@ package pl.kaqu.pg.engine.gamearea.behaviour;
 import pl.kaqu.pg.engine.gamearea.PGPlayerArea;
 
 /**
- * Class responsible for setting units in correct order on board after changes
+ * Class responsible for dispatching all effects like abilities, spells and unit attacks
  */
-public class PGOrderDispatcher {
+public class PGEffectDispatcher {
 
-    public PGOrderDispatcher(PGPlayerArea playerArea) {
+    public PGEffectDispatcher(PGPlayerArea playerArea) {
 
     }
-    //Responsible for correcting and checking unit order
 }

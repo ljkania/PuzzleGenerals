@@ -1,4 +1,4 @@
-package pl.kaqu.pg.engine.gamearea.behaviour;
+package pl.kaqu.pg.engine.error;
 
 /*
     PuzzleGenerals
@@ -19,15 +19,5 @@ package pl.kaqu.pg.engine.gamearea.behaviour;
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import pl.kaqu.pg.engine.gamearea.PGPlayerArea;
-
-/**
- * Class responsible for setting units in correct order on board after changes
- */
-public class PGOrderDispatcher {
-
-    public PGOrderDispatcher(PGPlayerArea playerArea) {
-
-    }
-    //Responsible for correcting and checking unit order
+public class PGOutOfAreaException extends PGError {
 }
