@@ -1,4 +1,4 @@
-package pl.kaqu.pg.engine.gamearea.behaviour;
+package pl.kaqu.pg.engine.gamearea.behaviour.dispatcher;
 
 /*
     PuzzleGenerals
@@ -22,9 +22,9 @@ package pl.kaqu.pg.engine.gamearea.behaviour;
 import pl.kaqu.pg.engine.gamearea.PGPlayerArea;
 
 /**
- * Class responsible for checking units activation after changes on board
+ * Class responsible for setting units in correct order on board after changes
  */
-public class PGActivationDispatcher {
+public class PGOrderDispatcher {
 
-    //Responsible for checking and activating units
+    //Responsible for correcting and checking unit order
 }

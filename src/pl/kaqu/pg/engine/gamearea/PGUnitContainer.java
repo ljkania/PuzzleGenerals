@@ -19,15 +19,22 @@ package pl.kaqu.pg.engine.gamearea;
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+import com.sun.istack.internal.NotNull;
 import com.sun.istack.internal.Nullable;
+import pl.kaqu.pg.engine.gamearea.behaviour.PGFieldObserver;
 import pl.kaqu.pg.engine.unit.PGUnit;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class PGUnitContainer {
 
     protected PGUnit containedUnit;
+    private Set<PGFieldObserver> observers;
 
     public PGUnitContainer(@Nullable PGUnit containedUnit) {
         this.containedUnit = containedUnit;
+        this.observers = new HashSet<>();
     }
 
     @Nullable public PGUnit getContainedUnit() {
@@ -42,6 +49,21 @@ public class PGUnitContainer {
         PGUnit tmp = this.containedUnit;
         this.containedUnit = null;
         return tmp;
+    }
+
+    public void registerObserver(@NotNull PGFieldObserver observer) {
+        this.observers.add(observer);
+    }
+
+    public void removeObserver(@NotNull PGFieldObserver observer) {
+        this.observers.remove(observer);
+    }
+
+    // TODO: check if this should be on another thread
+    private void notifyFieldObservers() {
+        for(PGFieldObserver observer : this.observers) {
+            observer.notify(this);
+        }
     }
 
 }

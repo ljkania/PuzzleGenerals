@@ -21,10 +21,6 @@ package pl.kaqu.pg.engine.gamearea;
 
 import com.sun.istack.internal.NotNull;
 import pl.kaqu.pg.engine.error.PGOutOfAreaException;
-import pl.kaqu.pg.engine.gamearea.behaviour.PGActivationDispatcher;
-import pl.kaqu.pg.engine.gamearea.behaviour.PGEffectDispatcher;
-import pl.kaqu.pg.engine.gamearea.behaviour.PGMoveDispatcher;
-import pl.kaqu.pg.engine.gamearea.behaviour.PGOrderDispatcher;
 import pl.kaqu.pg.engine.player.PGPlayer;
 
 public class PGPlayerArea {

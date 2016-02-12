@@ -19,12 +19,9 @@ package pl.kaqu.pg.engine.gamearea.behaviour;
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import pl.kaqu.pg.engine.gamearea.PGPlayerArea;
+import pl.kaqu.pg.engine.gamearea.PGUnitContainer;
 
-/**
- * Class responsible for setting units in correct order on board after changes
- */
-public class PGOrderDispatcher {
+public interface PGFieldObserver {
 
-    //Responsible for correcting and checking unit order
+    void notify(PGUnitContainer source);
 }

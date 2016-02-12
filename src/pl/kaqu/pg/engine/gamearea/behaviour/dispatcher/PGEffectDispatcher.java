@@ -1,4 +1,4 @@
-package pl.kaqu.pg.engine.gamearea.behaviour;
+package pl.kaqu.pg.engine.gamearea.behaviour.dispatcher;
 
 /*
     PuzzleGenerals

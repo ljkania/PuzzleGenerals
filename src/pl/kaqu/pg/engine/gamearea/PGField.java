@@ -31,6 +31,7 @@ public final class PGField extends PGUnitContainer {
     private PGField rightNeighbor;
     private PGField rearNeighbor;
 
+
     /*package*/ PGField(int x, int y) {
         super(null);
         this.coordinate = new PGCoordinate(x, y);
