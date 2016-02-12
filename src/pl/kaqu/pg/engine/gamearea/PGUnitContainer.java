@@ -21,7 +21,7 @@ package pl.kaqu.pg.engine.gamearea;
 
 import com.sun.istack.internal.NotNull;
 import com.sun.istack.internal.Nullable;
-import pl.kaqu.pg.engine.gamearea.behaviour.PGFieldObserver;
+import pl.kaqu.pg.engine.gamearea.behaviour.PGUnitContainerObserver;
 import pl.kaqu.pg.engine.unit.PGUnit;
 
 import java.util.HashSet;
@@ -30,7 +30,7 @@ import java.util.Set;
 public class PGUnitContainer {
 
     protected PGUnit containedUnit;
-    private Set<PGFieldObserver> observers;
+    private Set<PGUnitContainerObserver> observers;
 
     public PGUnitContainer(@Nullable PGUnit containedUnit) {
         this.containedUnit = containedUnit;
@@ -43,6 +43,7 @@ public class PGUnitContainer {
 
     public void setContainedUnit(@Nullable PGUnit containedUnit) {
         this.containedUnit = containedUnit;
+        this.notifyFieldObservers();
     }
 
     @Nullable public PGUnit pickContainedUnit() {
@@ -51,17 +52,17 @@ public class PGUnitContainer {
         return tmp;
     }
 
-    public void registerObserver(@NotNull PGFieldObserver observer) {
+    public void registerObserver(@NotNull PGUnitContainerObserver observer) {
         this.observers.add(observer);
     }
 
-    public void removeObserver(@NotNull PGFieldObserver observer) {
+    public void removeObserver(@NotNull PGUnitContainerObserver observer) {
         this.observers.remove(observer);
     }
 
     // TODO: check if this should be on another thread
     private void notifyFieldObservers() {
-        for(PGFieldObserver observer : this.observers) {
+        for(PGUnitContainerObserver observer : this.observers) {
             observer.notify(this);
         }
     }
