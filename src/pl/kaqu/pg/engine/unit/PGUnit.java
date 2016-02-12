@@ -21,6 +21,8 @@ package pl.kaqu.pg.engine.unit;
 
 import com.sun.istack.internal.NotNull;
 import pl.kaqu.pg.engine.player.PGPlayer;
+import pl.kaqu.pg.engine.unit.action.PGUnitAction;
+import pl.kaqu.pg.engine.unit.activation.PGUnitActivationCheckerCallable;
 import pl.kaqu.pg.engine.unit.effect.PGUnitEffect;
 import pl.kaqu.pg.engine.unit.effect.PGUnitState;
 
@@ -36,7 +38,7 @@ public abstract class PGUnit implements Serializable {
     protected PGUnitState state;
     protected List<PGUnitEffect> currentEffects;
 
-    protected PGUnit(long unitID, PGPlayer owner, PGUnitGroup group, PGUnitState state){
+    protected PGUnit(long unitID, @NotNull PGPlayer owner, @NotNull PGUnitGroup group, @NotNull PGUnitState state){
         this.unitID = unitID;
         if (owner != null){
             this.owner = owner;
@@ -58,13 +60,15 @@ public abstract class PGUnit implements Serializable {
     public void setState(PGUnitState state) {
         this.state = state;
     }
-    public abstract int getPriority();
-    public abstract String getName();
-    public abstract String getDescription();
-    public abstract PGUnitRank getRank();
-    public abstract void applyEffect(PGUnitEffect effect);
-    public abstract void removeEffect(PGUnitEffect effect);
+    abstract public int getPriority();
+    abstract @NotNull public String getName();
+    abstract @NotNull public String getDescription();
+    abstract public PGUnitRank getRank();
+    abstract public void applyEffect(PGUnitEffect effect);
+    abstract public void removeEffect(PGUnitEffect effect);
     @NotNull public List<PGUnitEffect> getCurrentEffects() {
         return currentEffects;
     }
+    abstract @NotNull public PGUnitAction getUnitAction();
+    abstract @NotNull public PGUnitActivationCheckerCallable getCheckerCallable();
 }

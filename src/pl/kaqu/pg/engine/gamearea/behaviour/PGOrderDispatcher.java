@@ -26,8 +26,5 @@ import pl.kaqu.pg.engine.gamearea.PGPlayerArea;
  */
 public class PGOrderDispatcher {
 
-    public PGOrderDispatcher(PGPlayerArea playerArea) {
-
-    }
     //Responsible for correcting and checking unit order
 }

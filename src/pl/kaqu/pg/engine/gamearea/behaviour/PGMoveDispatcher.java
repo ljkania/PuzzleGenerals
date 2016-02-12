@@ -26,8 +26,5 @@ import pl.kaqu.pg.engine.gamearea.PGPlayerArea;
  */
 public class PGMoveDispatcher {
 
-    public PGMoveDispatcher(PGPlayerArea playerArea) {
-
-    }
     //Responsible for unit movement on board
 }

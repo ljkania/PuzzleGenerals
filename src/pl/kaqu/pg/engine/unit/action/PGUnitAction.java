@@ -1,4 +1,4 @@
-package pl.kaqu.pg.engine.gamearea.behaviour;
+package pl.kaqu.pg.engine.unit.action;
 
 /*
     PuzzleGenerals
@@ -19,12 +19,16 @@ package pl.kaqu.pg.engine.gamearea.behaviour;
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import pl.kaqu.pg.engine.gamearea.PGPlayerArea;
+import com.sun.istack.internal.NotNull;
+import pl.kaqu.pg.engine.unit.PGUnit;
 
-/**
- * Class responsible for checking units activation after changes on board
- */
-public class PGActivationDispatcher {
+public abstract class PGUnitAction {
 
-    //Responsible for checking and activating units
+    private final PGUnit sourceUnit;
+
+    public PGUnitAction(@NotNull PGUnit sourceUnit) {
+        this.sourceUnit = sourceUnit;
+    }
+
+    public abstract void execute();
 }

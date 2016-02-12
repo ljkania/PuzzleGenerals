@@ -19,6 +19,7 @@ package pl.kaqu.pg.engine.gamearea;
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+import com.sun.istack.internal.NotNull;
 import com.sun.istack.internal.Nullable;
 
 public final class PGField extends PGUnitContainer {
@@ -35,7 +36,7 @@ public final class PGField extends PGUnitContainer {
         this.coordinate = new PGCoordinate(x, y);
     }
 
-    public PGCoordinate getCoordinate() {
+    @NotNull public PGCoordinate getCoordinate() {
         return coordinate;
     }
 
@@ -43,7 +44,7 @@ public final class PGField extends PGUnitContainer {
         return leftNeighbor;
     }
 
-    /*package*/ void setLeftNeighbor(PGField leftNeighbor) {
+    /*package*/ void setLeftNeighbor(@Nullable PGField leftNeighbor) {
         this.leftNeighbor = leftNeighbor;
     }
 
@@ -51,7 +52,7 @@ public final class PGField extends PGUnitContainer {
         return frontNeighbor;
     }
 
-    /*package*/ void setFrontNeighbor(PGField frontNeighbor) {
+    /*package*/ void setFrontNeighbor(@Nullable PGField frontNeighbor) {
         this.frontNeighbor = frontNeighbor;
     }
 
@@ -59,7 +60,7 @@ public final class PGField extends PGUnitContainer {
         return rightNeighbor;
     }
 
-    /*package*/ void setRightNeighbor(PGField rightNeighbor) {
+    /*package*/ void setRightNeighbor(@Nullable PGField rightNeighbor) {
         this.rightNeighbor = rightNeighbor;
     }
 
@@ -67,7 +68,7 @@ public final class PGField extends PGUnitContainer {
         return rearNeighbor;
     }
 
-    /*package*/ void setRearNeighbor(PGField rearNeighbor) {
+    /*package*/ void setRearNeighbor(@Nullable PGField rearNeighbor) {
         this.rearNeighbor = rearNeighbor;
     }
 

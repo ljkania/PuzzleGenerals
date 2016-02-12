@@ -1,4 +1,4 @@
-package pl.kaqu.pg.engine.gamearea.behaviour;
+package pl.kaqu.pg.engine.unit.activation;
 
 /*
     PuzzleGenerals
@@ -19,12 +19,25 @@ package pl.kaqu.pg.engine.gamearea.behaviour;
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import pl.kaqu.pg.engine.gamearea.PGPlayerArea;
 
-/**
- * Class responsible for checking units activation after changes on board
- */
-public class PGActivationDispatcher {
+import com.sun.istack.internal.NotNull;
+import pl.kaqu.pg.engine.unit.PGUnit;
 
-    //Responsible for checking and activating units
+import java.util.concurrent.Callable;
+
+// http://stackoverflow.com/questions/3929361/how-to-wait-for-all-tasks-in-an-threadpoolexecutor-to-finish-without-shutting-do
+public abstract class PGUnitActivationCheckerCallable implements Callable<PGActivationType> {
+
+    private final PGUnit unit;
+
+    public PGUnitActivationCheckerCallable(@NotNull PGUnit unit) {
+        this.unit = unit;
+    }
+
+    @Override
+    public PGActivationType call() throws Exception {
+        return checkActivation();
+    }
+
+    abstract @NotNull protected PGActivationType checkActivation();
 }

@@ -19,6 +19,7 @@ package pl.kaqu.pg.engine.gamearea;
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+import com.sun.istack.internal.NotNull;
 import pl.kaqu.pg.engine.error.PGOutOfAreaException;
 import pl.kaqu.pg.engine.gamearea.behaviour.PGActivationDispatcher;
 import pl.kaqu.pg.engine.gamearea.behaviour.PGEffectDispatcher;
@@ -33,22 +34,12 @@ public class PGPlayerArea {
     private final PGField[][] fields;
     private PGPlayer connectedPlayer;
 
-
-    private final PGMoveDispatcher moveDispatcher; // used for player moves
-    private final PGActivationDispatcher activationDispatcher; // used to check and progress activation
-    private final PGOrderDispatcher orderDispatcher; // used to cleanup and set proper order on board
-    private final PGEffectDispatcher effectDispatcher; // used to apply effects and attacks
-
-    public PGPlayerArea(int width, int height, PGPlayer connectedPlayer) {
+    public PGPlayerArea(int width, int height, @NotNull PGPlayer connectedPlayer) {
         this.width = width;
         this.height = height;
         this.connectedPlayer = connectedPlayer;
         this.fields = new PGField[this.width][];
         initializeFields();
-        this.moveDispatcher = new PGMoveDispatcher(this);
-        this.activationDispatcher = new PGActivationDispatcher(this);
-        this.orderDispatcher = new PGOrderDispatcher(this);
-        this.effectDispatcher = new PGEffectDispatcher(this);
     }
 
     private void initializeFields() {
@@ -77,7 +68,7 @@ public class PGPlayerArea {
 
     }
 
-    public PGField getField(int x, int y) throws PGOutOfAreaException {
+    @NotNull public PGField getField(int x, int y) throws PGOutOfAreaException {
         if (x < 0 && x >= this.width && y < 0 && y >= this.height) {
             throw new PGOutOfAreaException();
         }

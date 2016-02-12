@@ -25,8 +25,4 @@ import pl.kaqu.pg.engine.gamearea.PGPlayerArea;
  * Class responsible for dispatching all effects like abilities, spells and unit attacks
  */
 public class PGEffectDispatcher {
-
-    public PGEffectDispatcher(PGPlayerArea playerArea) {
-
-    }
 }

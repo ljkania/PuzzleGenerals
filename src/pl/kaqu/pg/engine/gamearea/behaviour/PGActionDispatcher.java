@@ -19,12 +19,5 @@ package pl.kaqu.pg.engine.gamearea.behaviour;
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import pl.kaqu.pg.engine.gamearea.PGPlayerArea;
-
-/**
- * Class responsible for checking units activation after changes on board
- */
-public class PGActivationDispatcher {
-
-    //Responsible for checking and activating units
+public class PGActionDispatcher {
 }

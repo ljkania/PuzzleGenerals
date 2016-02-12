@@ -26,7 +26,7 @@ public class PGUnitContainer {
 
     protected PGUnit containedUnit;
 
-    public PGUnitContainer(PGUnit containedUnit) {
+    public PGUnitContainer(@Nullable PGUnit containedUnit) {
         this.containedUnit = containedUnit;
     }
 
