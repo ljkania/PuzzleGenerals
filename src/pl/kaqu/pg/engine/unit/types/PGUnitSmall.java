@@ -10,6 +10,9 @@ import pl.kaqu.pg.engine.unit.activation.PGActivatedUnit;
 import pl.kaqu.pg.engine.unit.activation.PGActivationType;
 import pl.kaqu.pg.engine.unit.effect.PGUnitState;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /*
     PuzzleGenerals
     Copyright (C) 2016 kaqu kaqukal@gmail.com
@@ -37,12 +40,14 @@ public abstract class PGUnitSmall extends PGUnit implements PGActivatedUnit {
         this.container = container;
 
         if(container instanceof PGField) {
-            PGField rear = ((PGField) container).getRearNeighbor();
-            PGField second_rear = ((PGField) container).getSecondRearNeighbor();
+            List<PGField> toObserve = new ArrayList<>();
+            toObserve.add(((PGField) container).getRearNeighbor());
+            toObserve.add(((PGField) container).getSecondRearNeighbor());
 
-            if(rear != null && second_rear != null) {
-                rear.addObserver(this);
-                second_rear.addObserver(this);
+            if(!toObserve.contains(null)) {
+                for(PGField field : toObserve) {
+                    field.addObserver(this);
+                }
             }
         }
     }
