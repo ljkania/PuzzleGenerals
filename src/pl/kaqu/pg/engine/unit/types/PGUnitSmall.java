@@ -1,12 +1,15 @@
 package pl.kaqu.pg.engine.unit.types;
 
+import com.sun.istack.internal.NotNull;
 import pl.kaqu.pg.engine.gamearea.PGField;
+import pl.kaqu.pg.engine.gamearea.PGUnitContainer;
 import pl.kaqu.pg.engine.player.PGPlayer;
 import pl.kaqu.pg.engine.unit.PGUnit;
 import pl.kaqu.pg.engine.unit.PGUnitGroup;
 import pl.kaqu.pg.engine.unit.activation.PGActivatedUnit;
-import pl.kaqu.pg.engine.unit.activation.PGActivationType;
 import pl.kaqu.pg.engine.unit.effect.PGUnitState;
+
+import java.util.*;
 
 /*
     PuzzleGenerals
@@ -28,9 +31,27 @@ import pl.kaqu.pg.engine.unit.effect.PGUnitState;
  */
 
 public abstract class PGUnitSmall extends PGUnit implements PGActivatedUnit {
+    PGUnitContainer currentUnitContainers;
 
-    protected PGUnitSmall(long unitID, PGPlayer owner, PGUnitGroup group, PGUnitState state){
+    protected PGUnitSmall(long unitID, PGPlayer owner, PGUnitGroup group, PGUnitState state, @NotNull PGUnitContainer currentUnitContainers){
         super(unitID, owner, group, state);
+        this.currentUnitContainers = currentUnitContainers;
+
+        if(this.currentUnitContainers instanceof PGField) {
+            List<PGField> toObserve = new ArrayList<>();
+            toObserve.add(((PGField) this.currentUnitContainers).getRearNeighbor());
+            toObserve.add(((PGField) this.currentUnitContainers).getSecondRearNeighbor());
+
+            if(!toObserve.contains(null)) {
+                for(PGField field : toObserve) {
+                    field.addObserver(this);
+                }
+            }
+        }
     }
 
+    @Override
+    public void update(Observable obj, Object arg) {
+        //TODO: Register yourself for checking of activation
+    }
 }

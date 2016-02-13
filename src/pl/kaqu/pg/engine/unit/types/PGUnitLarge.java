@@ -1,12 +1,16 @@
 package pl.kaqu.pg.engine.unit.types;
 
+import com.sun.istack.internal.NotNull;
+import pl.kaqu.pg.engine.error.PGError;
 import pl.kaqu.pg.engine.gamearea.PGField;
+import pl.kaqu.pg.engine.gamearea.PGUnitContainer;
 import pl.kaqu.pg.engine.player.PGPlayer;
 import pl.kaqu.pg.engine.unit.PGUnit;
 import pl.kaqu.pg.engine.unit.PGUnitGroup;
 import pl.kaqu.pg.engine.unit.activation.PGActivatedUnit;
-import pl.kaqu.pg.engine.unit.activation.PGActivationType;
 import pl.kaqu.pg.engine.unit.effect.PGUnitState;
+
+import java.util.*;
 
 /*
     PuzzleGenerals
@@ -28,9 +32,55 @@ import pl.kaqu.pg.engine.unit.effect.PGUnitState;
  */
 
 public abstract class PGUnitLarge extends PGUnit implements PGActivatedUnit {
+    Map<Integer, PGUnitContainer> currentUnitContainers;
+    public static final int LEFT_FRONT = 0;
+    public static final int LEFT_BACK = 1;
+    public static final int RIGHT_FRONT = 2;
+    public static final int RIGHT_BACK = 3;
 
-    protected PGUnitLarge(long unitID, PGPlayer owner, PGUnitGroup group, PGUnitState state){
+    protected PGUnitLarge(long unitID, PGPlayer owner, PGUnitGroup group, PGUnitState state, @NotNull PGUnitContainer leftFrontOfUnit) throws PGError {
         super(unitID, owner, group, state);
+        this.currentUnitContainers = new HashMap<>();
+
+        if(leftFrontOfUnit instanceof PGField) {
+            PGField leftBackOfUnit;
+            PGField rightFrontOfUnit;
+            PGField rightBackOfUnit;
+
+            try {
+                leftBackOfUnit = ((PGField) leftFrontOfUnit).getRearNeighbor();
+                rightFrontOfUnit = ((PGField) leftFrontOfUnit).getRightNeighbor();
+                rightBackOfUnit = rightFrontOfUnit.getRearNeighbor();
+            } catch(NullPointerException e) {
+                throw new PGError("Incorrect location of unit");
+            }
+
+            currentUnitContainers.put(LEFT_FRONT, leftFrontOfUnit);
+            currentUnitContainers.put(LEFT_BACK, leftBackOfUnit);
+            currentUnitContainers.put(RIGHT_FRONT, rightFrontOfUnit);
+            currentUnitContainers.put(RIGHT_BACK, rightBackOfUnit);
+
+            if(currentUnitContainers.containsValue(null)) {
+                throw new PGError("Incorrect location of unit");
+            }
+
+            List<PGField> toObserve = new ArrayList<>();
+            toObserve.add(leftBackOfUnit.getRearNeighbor());
+            toObserve.add(leftBackOfUnit.getSecondRearNeighbor());
+            toObserve.add(rightBackOfUnit.getRearNeighbor());
+            toObserve.add(rightBackOfUnit.getSecondRearNeighbor());
+
+
+            if(!toObserve.contains(null)) {
+                for(PGField field : toObserve) {
+                    field.addObserver(this);
+                }
+            }
+        }
     }
 
+    @Override
+    public void update(Observable obj, Object arg) {
+        //TODO: Register yourself for checking of activation
+    }
 }

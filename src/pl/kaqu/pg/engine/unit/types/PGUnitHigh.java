@@ -1,12 +1,17 @@
 package pl.kaqu.pg.engine.unit.types;
 
+import com.sun.istack.internal.NotNull;
+import pl.kaqu.pg.engine.error.PGError;
 import pl.kaqu.pg.engine.gamearea.PGField;
+import pl.kaqu.pg.engine.gamearea.PGUnitContainer;
 import pl.kaqu.pg.engine.player.PGPlayer;
 import pl.kaqu.pg.engine.unit.PGUnit;
 import pl.kaqu.pg.engine.unit.PGUnitGroup;
 import pl.kaqu.pg.engine.unit.activation.PGActivatedUnit;
 import pl.kaqu.pg.engine.unit.activation.PGActivationType;
 import pl.kaqu.pg.engine.unit.effect.PGUnitState;
+
+import java.util.*;
 
 /*
     PuzzleGenerals
@@ -28,9 +33,39 @@ import pl.kaqu.pg.engine.unit.effect.PGUnitState;
  */
 
 public abstract class PGUnitHigh extends PGUnit implements PGActivatedUnit {
+    Map<Integer, PGUnitContainer> currentUnitContainers;
+    public static final int FRONT = 0;
+    public static final int BACK = 1;
 
-    protected PGUnitHigh(long unitID, PGPlayer owner, PGUnitGroup group, PGUnitState state) {
+    protected PGUnitHigh(long unitID, PGPlayer owner, PGUnitGroup group, PGUnitState state, @NotNull PGUnitContainer frontOfUnit) throws PGError {
         super(unitID, owner, group, state);
+        this.currentUnitContainers = new HashMap<>();
+
+        if(frontOfUnit instanceof PGField) {
+            PGField backOfUnit = ((PGField) frontOfUnit).getRearNeighbor();
+
+            if(backOfUnit == null) {
+                throw new PGError("Incorrect location of unit");
+            }
+
+            this.currentUnitContainers.put(FRONT, frontOfUnit);
+            this.currentUnitContainers.put(BACK, backOfUnit);
+
+            List<PGField> toObserve = new ArrayList<>();
+            toObserve.add(backOfUnit.getRearNeighbor());
+            toObserve.add(backOfUnit.getSecondRearNeighbor());
+
+            if(!toObserve.contains(null)) {
+                for(PGField field : toObserve) {
+                    field.addObserver(this);
+                }
+            }
+
+        }
     }
 
+    @Override
+    public void update(Observable obj, Object arg) {
+        //TODO: Register yourself for checking of activation
+    }
 }
