@@ -1,12 +1,18 @@
 package pl.kaqu.pg.engine.unit.types;
 
+import com.sun.istack.internal.NotNull;
+import pl.kaqu.pg.engine.error.PGError;
 import pl.kaqu.pg.engine.gamearea.PGField;
+import pl.kaqu.pg.engine.gamearea.PGUnitContainer;
 import pl.kaqu.pg.engine.player.PGPlayer;
 import pl.kaqu.pg.engine.unit.PGUnit;
 import pl.kaqu.pg.engine.unit.PGUnitGroup;
 import pl.kaqu.pg.engine.unit.activation.PGActivatedUnit;
 import pl.kaqu.pg.engine.unit.activation.PGActivationType;
 import pl.kaqu.pg.engine.unit.effect.PGUnitState;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /*
     PuzzleGenerals
@@ -28,9 +34,33 @@ import pl.kaqu.pg.engine.unit.effect.PGUnitState;
  */
 
 public abstract class PGUnitHigh extends PGUnit implements PGActivatedUnit {
+    List<PGUnitContainer> containers;
 
-    protected PGUnitHigh(long unitID, PGPlayer owner, PGUnitGroup group, PGUnitState state) {
+    protected PGUnitHigh(long unitID, PGPlayer owner, PGUnitGroup group, PGUnitState state, @NotNull PGUnitContainer front_of_unit) throws PGError {
         super(unitID, owner, group, state);
+        this.containers = new ArrayList<>();
+
+        if(front_of_unit instanceof PGField) {
+            PGField back_of_unit = ((PGField) front_of_unit).getRearNeighbor();
+
+            if(back_of_unit == null) {
+                throw new PGError("Incorrect location of unit");
+            }
+
+            containers.add(front_of_unit);
+            containers.add(back_of_unit);
+
+            List<PGField> toObserve = new ArrayList<>();
+            toObserve.add(back_of_unit.getRearNeighbor());
+            toObserve.add(back_of_unit.getSecondRearNeighbor());
+
+            if(!toObserve.contains(null)) {
+                for(PGField field : toObserve) {
+                    field.addObserver(this);
+                }
+            }
+
+        }
     }
 
 }

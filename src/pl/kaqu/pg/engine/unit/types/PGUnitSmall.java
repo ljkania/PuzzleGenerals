@@ -1,6 +1,8 @@
 package pl.kaqu.pg.engine.unit.types;
 
+import com.sun.istack.internal.NotNull;
 import pl.kaqu.pg.engine.gamearea.PGField;
+import pl.kaqu.pg.engine.gamearea.PGUnitContainer;
 import pl.kaqu.pg.engine.player.PGPlayer;
 import pl.kaqu.pg.engine.unit.PGUnit;
 import pl.kaqu.pg.engine.unit.PGUnitGroup;
@@ -28,9 +30,21 @@ import pl.kaqu.pg.engine.unit.effect.PGUnitState;
  */
 
 public abstract class PGUnitSmall extends PGUnit implements PGActivatedUnit {
+    PGUnitContainer container;
 
-    protected PGUnitSmall(long unitID, PGPlayer owner, PGUnitGroup group, PGUnitState state){
+    protected PGUnitSmall(long unitID, PGPlayer owner, PGUnitGroup group, PGUnitState state, @NotNull PGUnitContainer container){
         super(unitID, owner, group, state);
+        this.container = container;
+
+        if(container instanceof PGField) {
+            PGField rear = ((PGField) container).getRearNeighbor();
+            PGField second_rear = ((PGField) container).getSecondRearNeighbor();
+
+            if(rear != null && second_rear != null) {
+                rear.addObserver(this);
+                second_rear.addObserver(this);
+            }
+        }
     }
 
 }

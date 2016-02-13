@@ -25,16 +25,15 @@ import pl.kaqu.pg.engine.gamearea.behaviour.PGUnitContainerObserver;
 import pl.kaqu.pg.engine.unit.PGUnit;
 
 import java.util.HashSet;
+import java.util.Observable;
 import java.util.Set;
 
-public class PGUnitContainer {
+public class PGUnitContainer extends Observable {
 
     protected PGUnit containedUnit;
-    private Set<PGUnitContainerObserver> observers;
 
     public PGUnitContainer(@Nullable PGUnit containedUnit) {
         this.containedUnit = containedUnit;
-        this.observers = new HashSet<>();
     }
 
     @Nullable public PGUnit getContainedUnit() {
@@ -43,7 +42,7 @@ public class PGUnitContainer {
 
     public void setContainedUnit(@Nullable PGUnit containedUnit) {
         this.containedUnit = containedUnit;
-        this.notifyFieldObservers();
+        this.notifyObservers();
     }
 
     @Nullable public PGUnit pickContainedUnit() {
@@ -51,20 +50,4 @@ public class PGUnitContainer {
         this.containedUnit = null;
         return tmp;
     }
-
-    public void registerObserver(@NotNull PGUnitContainerObserver observer) {
-        this.observers.add(observer);
-    }
-
-    public void removeObserver(@NotNull PGUnitContainerObserver observer) {
-        this.observers.remove(observer);
-    }
-
-    // TODO: check if this should be on another thread
-    private void notifyFieldObservers() {
-        for(PGUnitContainerObserver observer : this.observers) {
-            observer.notify(this);
-        }
-    }
-
 }

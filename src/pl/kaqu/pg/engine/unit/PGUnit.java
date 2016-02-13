@@ -20,6 +20,7 @@ package pl.kaqu.pg.engine.unit;
  */
 
 import com.sun.istack.internal.NotNull;
+import pl.kaqu.pg.engine.gamearea.behaviour.PGUnitContainerObserver;
 import pl.kaqu.pg.engine.player.PGPlayer;
 import pl.kaqu.pg.engine.unit.action.PGUnitAction;
 import pl.kaqu.pg.engine.unit.activation.PGUnitActivationCheckerCallable;
@@ -29,8 +30,9 @@ import pl.kaqu.pg.engine.unit.effect.PGUnitState;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observer;
 
-public abstract class PGUnit implements Serializable {
+public abstract class PGUnit implements Serializable, PGUnitContainerObserver {
 
     public final long unitID;
     protected PGPlayer owner;

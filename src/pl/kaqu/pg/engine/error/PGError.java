@@ -20,4 +20,7 @@ package pl.kaqu.pg.engine.error;
  */
 
 public class PGError extends Exception {
+    public PGError(String s) {
+        super(s);
+    }
 }

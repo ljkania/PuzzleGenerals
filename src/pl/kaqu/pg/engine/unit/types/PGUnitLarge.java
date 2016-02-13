@@ -1,12 +1,18 @@
 package pl.kaqu.pg.engine.unit.types;
 
+import com.sun.istack.internal.NotNull;
+import pl.kaqu.pg.engine.error.PGError;
 import pl.kaqu.pg.engine.gamearea.PGField;
+import pl.kaqu.pg.engine.gamearea.PGUnitContainer;
 import pl.kaqu.pg.engine.player.PGPlayer;
 import pl.kaqu.pg.engine.unit.PGUnit;
 import pl.kaqu.pg.engine.unit.PGUnitGroup;
 import pl.kaqu.pg.engine.unit.activation.PGActivatedUnit;
 import pl.kaqu.pg.engine.unit.activation.PGActivationType;
 import pl.kaqu.pg.engine.unit.effect.PGUnitState;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /*
     PuzzleGenerals
@@ -28,9 +34,47 @@ import pl.kaqu.pg.engine.unit.effect.PGUnitState;
  */
 
 public abstract class PGUnitLarge extends PGUnit implements PGActivatedUnit {
+    List<PGUnitContainer> containers;
 
-    protected PGUnitLarge(long unitID, PGPlayer owner, PGUnitGroup group, PGUnitState state){
+    protected PGUnitLarge(long unitID, PGPlayer owner, PGUnitGroup group, PGUnitState state, @NotNull PGUnitContainer left_front_of_unit) throws PGError {
         super(unitID, owner, group, state);
+        this.containers = new ArrayList<>();
+
+        if(left_front_of_unit instanceof PGField) {
+            PGField left_back_of_unit;
+            PGField right_front_of_unit;
+            PGField right_back_of_unit;
+
+            try {
+                left_back_of_unit = ((PGField) left_front_of_unit).getRearNeighbor();
+                right_front_of_unit = ((PGField) left_front_of_unit).getRightNeighbor();
+                right_back_of_unit = right_front_of_unit.getRearNeighbor();
+            } catch(NullPointerException e) {
+                throw new PGError("Incorrect location of unit");
+            }
+
+            containers.add(left_front_of_unit);
+            containers.add(left_back_of_unit);
+            containers.add(right_front_of_unit);
+            containers.add(right_back_of_unit);
+
+            if(containers.contains(null)) {
+                throw new PGError("Incorrect location of unit");
+            }
+
+            List<PGField> toObserve = new ArrayList<>();
+            toObserve.add(left_back_of_unit.getRearNeighbor());
+            toObserve.add(left_back_of_unit.getSecondRearNeighbor());
+            toObserve.add(right_back_of_unit.getRearNeighbor());
+            toObserve.add(right_back_of_unit.getSecondRearNeighbor());
+
+
+            if(!toObserve.contains(null)) {
+                for(PGField field : toObserve) {
+                    field.addObserver(this);
+                }
+            }
+        }
     }
 
 }

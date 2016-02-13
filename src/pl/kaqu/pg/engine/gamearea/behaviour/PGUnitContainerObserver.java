@@ -22,7 +22,7 @@ package pl.kaqu.pg.engine.gamearea.behaviour;
 import com.sun.istack.internal.Nullable;
 import pl.kaqu.pg.engine.gamearea.PGUnitContainer;
 
-public interface PGUnitContainerObserver {
+import java.util.Observer;
 
-    void notify(@Nullable PGUnitContainer container);
+public interface PGUnitContainerObserver extends Observer {
 }
