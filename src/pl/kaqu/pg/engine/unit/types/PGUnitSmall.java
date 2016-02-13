@@ -1,14 +1,12 @@
 package pl.kaqu.pg.engine.unit.types;
 
 import com.sun.istack.internal.NotNull;
-import pl.kaqu.pg.engine.error.PGError;
 import pl.kaqu.pg.engine.gamearea.PGField;
 import pl.kaqu.pg.engine.gamearea.PGUnitContainer;
 import pl.kaqu.pg.engine.player.PGPlayer;
 import pl.kaqu.pg.engine.unit.PGUnit;
 import pl.kaqu.pg.engine.unit.PGUnitGroup;
 import pl.kaqu.pg.engine.unit.activation.PGActivatedUnit;
-import pl.kaqu.pg.engine.unit.activation.PGActivationType;
 import pl.kaqu.pg.engine.unit.effect.PGUnitState;
 
 import java.util.*;
@@ -33,16 +31,16 @@ import java.util.*;
  */
 
 public abstract class PGUnitSmall extends PGUnit implements PGActivatedUnit {
-    PGUnitContainer container;
+    PGUnitContainer currentUnitContainers;
 
-    protected PGUnitSmall(long unitID, PGPlayer owner, PGUnitGroup group, PGUnitState state, @NotNull PGUnitContainer container){
+    protected PGUnitSmall(long unitID, PGPlayer owner, PGUnitGroup group, PGUnitState state, @NotNull PGUnitContainer currentUnitContainers){
         super(unitID, owner, group, state);
-        this.container = container;
+        this.currentUnitContainers = currentUnitContainers;
 
-        if(container instanceof PGField) {
+        if(this.currentUnitContainers instanceof PGField) {
             List<PGField> toObserve = new ArrayList<>();
-            toObserve.add(((PGField) container).getRearNeighbor());
-            toObserve.add(((PGField) container).getSecondRearNeighbor());
+            toObserve.add(((PGField) this.currentUnitContainers).getRearNeighbor());
+            toObserve.add(((PGField) this.currentUnitContainers).getSecondRearNeighbor());
 
             if(!toObserve.contains(null)) {
                 for(PGField field : toObserve) {
@@ -54,28 +52,6 @@ public abstract class PGUnitSmall extends PGUnit implements PGActivatedUnit {
 
     @Override
     public void update(Observable obj, Object arg) {
-        if(this.container instanceof PGField) {
-            List<PGUnit> units = new ArrayList<>();
-            try {
-                units.add(((PGField) container).getRearNeighbor().getContainedUnit());
-                units.add(((PGField) container).getSecondRearNeighbor().getContainedUnit());
-            } catch (NullPointerException e) {
-                return;
-            }
-
-            if(units.contains(null)) {
-                return;
-            }
-
-            Set<PGUnitGroup> unique_groups = new HashSet<>();
-            unique_groups.add(this.group);
-            for(PGUnit unit : units) {
-                unique_groups.add(unit.getGroup());
-            }
-
-            if(unique_groups.size() == 1) {
-                this.state = PGUnitState.ACTIVATED; //TODO: Perform real activation here
-            }
-        }
+        //TODO: Register yourself for checking of activation
     }
 }

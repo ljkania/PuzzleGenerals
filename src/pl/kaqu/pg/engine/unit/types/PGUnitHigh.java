@@ -33,25 +33,27 @@ import java.util.*;
  */
 
 public abstract class PGUnitHigh extends PGUnit implements PGActivatedUnit {
-    Map<String, PGUnitContainer> containers;
+    Map<Integer, PGUnitContainer> currentUnitContainers;
+    public static final int FRONT = 0;
+    public static final int BACK = 1;
 
-    protected PGUnitHigh(long unitID, PGPlayer owner, PGUnitGroup group, PGUnitState state, @NotNull PGUnitContainer front_of_unit) throws PGError {
+    protected PGUnitHigh(long unitID, PGPlayer owner, PGUnitGroup group, PGUnitState state, @NotNull PGUnitContainer frontOfUnit) throws PGError {
         super(unitID, owner, group, state);
-        this.containers = new HashMap<>();
+        this.currentUnitContainers = new HashMap<>();
 
-        if(front_of_unit instanceof PGField) {
-            PGField back_of_unit = ((PGField) front_of_unit).getRearNeighbor();
+        if(frontOfUnit instanceof PGField) {
+            PGField backOfUnit = ((PGField) frontOfUnit).getRearNeighbor();
 
-            if(back_of_unit == null) {
+            if(backOfUnit == null) {
                 throw new PGError("Incorrect location of unit");
             }
 
-            this.containers.put("front", front_of_unit);
-            this.containers.put("back", back_of_unit);
+            this.currentUnitContainers.put(FRONT, frontOfUnit);
+            this.currentUnitContainers.put(BACK, backOfUnit);
 
             List<PGField> toObserve = new ArrayList<>();
-            toObserve.add(back_of_unit.getRearNeighbor());
-            toObserve.add(back_of_unit.getSecondRearNeighbor());
+            toObserve.add(backOfUnit.getRearNeighbor());
+            toObserve.add(backOfUnit.getSecondRearNeighbor());
 
             if(!toObserve.contains(null)) {
                 for(PGField field : toObserve) {
@@ -64,30 +66,6 @@ public abstract class PGUnitHigh extends PGUnit implements PGActivatedUnit {
 
     @Override
     public void update(Observable obj, Object arg) {
-        if(this.containers.get("back") instanceof PGField) {
-            PGField field = (PGField) this.containers.get("back");
-            List<PGUnit> units = new ArrayList<>();
-
-            try {
-                units.add(field.getRearNeighbor().getContainedUnit());
-                units.add(field.getSecondRearNeighbor().getContainedUnit());
-            } catch(NullPointerException e) {
-                return;
-            }
-
-            if(units.contains(null)) {
-                return;
-            }
-
-            Set<PGUnitGroup> unique_groups = new HashSet<>();
-            unique_groups.add(this.group);
-            for(PGUnit unit : units) {
-                unique_groups.add(unit.getGroup());
-            }
-
-            if(unique_groups.size() == 1) {
-                this.state = PGUnitState.ACTIVATED; //TODO: Perform real activation here
-            }
-        }
+        //TODO: Register yourself for checking of activation
     }
 }
