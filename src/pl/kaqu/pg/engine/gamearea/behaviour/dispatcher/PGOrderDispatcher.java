@@ -19,12 +19,10 @@ package pl.kaqu.pg.engine.gamearea.behaviour.dispatcher;
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import pl.kaqu.pg.engine.gamearea.PGPlayerArea;
-
 /**
  * Class responsible for setting units in correct order on board after changes
  */
 public class PGOrderDispatcher {
 
-    //Responsible for correcting and checking unit order
+    // Responsible for correcting and checking unit order
 }

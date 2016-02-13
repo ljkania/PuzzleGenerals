@@ -20,8 +20,11 @@ package pl.kaqu.pg.engine.unit.activation;
  */
 
 public enum PGActivationType {
-    NONE,
-    INDEPENDENT,
-    SINGLE,
-    DOUBLE
+    NONE, // if unit is not actually activated
+    INDEPENDENT, // if unit is activated irregular way
+    SINGLE_VARTICAL, // if unit is activated once - vertical
+    SINGLE_HORIZONTAL, // if unit is activated once - horizontal
+    DOUBLE, // if unit is double activated at the same time
+    KEEPED_PART_OF, // if unit is part of activation and will not be removed
+    REMOVED_PART_OF  // if unit is part of activation and will be removed
 }

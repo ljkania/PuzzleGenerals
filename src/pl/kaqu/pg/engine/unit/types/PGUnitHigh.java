@@ -45,7 +45,7 @@ public abstract class PGUnitHigh extends PGUnit implements PGActivatedUnit {
             PGField backOfUnit = ((PGField) frontOfUnit).getRearNeighbor();
 
             if(backOfUnit == null) {
-                throw new PGError("Incorrect location of unit");
+                throw new PGError(); // FIXME: change error to new error class
             }
 
             this.currentUnitContainers.put(FRONT, frontOfUnit);

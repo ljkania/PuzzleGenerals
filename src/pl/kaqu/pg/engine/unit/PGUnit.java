@@ -67,5 +67,4 @@ public abstract class PGUnit implements Serializable, PGUnitContainerObserver {
         return currentEffects;
     }
     abstract @NotNull public PGUnitAction getUnitAction();
-    abstract @NotNull public PGUnitActivationCheckerCallable getCheckerCallable();
 }

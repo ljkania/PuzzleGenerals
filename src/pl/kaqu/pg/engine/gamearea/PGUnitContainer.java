@@ -19,14 +19,10 @@ package pl.kaqu.pg.engine.gamearea;
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import com.sun.istack.internal.NotNull;
 import com.sun.istack.internal.Nullable;
-import pl.kaqu.pg.engine.gamearea.behaviour.PGUnitContainerObserver;
 import pl.kaqu.pg.engine.unit.PGUnit;
 
-import java.util.HashSet;
 import java.util.Observable;
-import java.util.Set;
 
 public class PGUnitContainer extends Observable {
 

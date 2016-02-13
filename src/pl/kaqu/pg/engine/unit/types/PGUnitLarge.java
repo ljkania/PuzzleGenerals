@@ -52,7 +52,7 @@ public abstract class PGUnitLarge extends PGUnit implements PGActivatedUnit {
                 rightFrontOfUnit = ((PGField) leftFrontOfUnit).getRightNeighbor();
                 rightBackOfUnit = rightFrontOfUnit.getRearNeighbor();
             } catch(NullPointerException e) {
-                throw new PGError("Incorrect location of unit");
+                throw new PGError(); // FIXME: change error to new error class
             }
 
             currentUnitContainers.put(LEFT_FRONT, leftFrontOfUnit);
@@ -61,7 +61,7 @@ public abstract class PGUnitLarge extends PGUnit implements PGActivatedUnit {
             currentUnitContainers.put(RIGHT_BACK, rightBackOfUnit);
 
             if(currentUnitContainers.containsValue(null)) {
-                throw new PGError("Incorrect location of unit");
+                throw new PGError(); // FIXME: change error to new error class
             }
 
             List<PGField> toObserve = new ArrayList<>();

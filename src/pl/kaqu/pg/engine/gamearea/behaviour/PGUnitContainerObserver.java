@@ -19,9 +19,6 @@ package pl.kaqu.pg.engine.gamearea.behaviour;
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import com.sun.istack.internal.Nullable;
-import pl.kaqu.pg.engine.gamearea.PGUnitContainer;
-
 import java.util.Observer;
 
 public interface PGUnitContainerObserver extends Observer {

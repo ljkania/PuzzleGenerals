@@ -19,5 +19,8 @@ package pl.kaqu.pg.engine.gamearea.behaviour.dispatcher;
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+/**
+ * Class responsible for checking dispatching unit actions like attacks
+ */
 public class PGActionDispatcher {
 }
