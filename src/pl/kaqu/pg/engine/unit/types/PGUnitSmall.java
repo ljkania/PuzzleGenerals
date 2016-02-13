@@ -1,6 +1,7 @@
 package pl.kaqu.pg.engine.unit.types;
 
 import com.sun.istack.internal.NotNull;
+import pl.kaqu.pg.engine.error.PGError;
 import pl.kaqu.pg.engine.gamearea.PGField;
 import pl.kaqu.pg.engine.gamearea.PGUnitContainer;
 import pl.kaqu.pg.engine.player.PGPlayer;
@@ -10,8 +11,7 @@ import pl.kaqu.pg.engine.unit.activation.PGActivatedUnit;
 import pl.kaqu.pg.engine.unit.activation.PGActivationType;
 import pl.kaqu.pg.engine.unit.effect.PGUnitState;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /*
     PuzzleGenerals
@@ -52,4 +52,30 @@ public abstract class PGUnitSmall extends PGUnit implements PGActivatedUnit {
         }
     }
 
+    @Override
+    public void update(Observable obj, Object arg) {
+        if(this.container instanceof PGField) {
+            List<PGUnit> units = new ArrayList<>();
+            try {
+                units.add(((PGField) container).getRearNeighbor().getContainedUnit());
+                units.add(((PGField) container).getSecondRearNeighbor().getContainedUnit());
+            } catch (NullPointerException e) {
+                return;
+            }
+
+            if(units.contains(null)) {
+                return;
+            }
+
+            Set<PGUnitGroup> unique_groups = new HashSet<>();
+            unique_groups.add(this.group);
+            for(PGUnit unit : units) {
+                unique_groups.add(unit.getGroup());
+            }
+
+            if(unique_groups.size() == 1) {
+                this.state = PGUnitState.ACTIVATED; //TODO: Perform real activation here
+            }
+        }
+    }
 }

@@ -42,16 +42,8 @@ public abstract class PGUnit implements Serializable, PGUnitContainerObserver {
 
     protected PGUnit(long unitID, @NotNull PGPlayer owner, @NotNull PGUnitGroup group, @NotNull PGUnitState state){
         this.unitID = unitID;
-        if (owner != null){
-            this.owner = owner;
-        } else {
-            this.owner = PGPlayer.NO_PLAYER;
-        }
-        if (group != null){
-            this.group = group;
-        } else {
-            this.group = PGUnitGroup.NONE;
-        }
+        this.owner = owner != null ? owner : PGPlayer.NO_PLAYER;
+        this.group = group != null ? group : PGUnitGroup.NONE;
         this.state = state;
         this.currentEffects = new ArrayList<>();
     }
@@ -61,6 +53,9 @@ public abstract class PGUnit implements Serializable, PGUnitContainerObserver {
     }
     public void setState(PGUnitState state) {
         this.state = state;
+    }
+    @NotNull public PGUnitGroup getGroup() {
+        return this.group;
     }
     abstract public int getPriority();
     abstract @NotNull public String getName();

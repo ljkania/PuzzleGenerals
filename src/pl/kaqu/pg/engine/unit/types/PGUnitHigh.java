@@ -11,8 +11,7 @@ import pl.kaqu.pg.engine.unit.activation.PGActivatedUnit;
 import pl.kaqu.pg.engine.unit.activation.PGActivationType;
 import pl.kaqu.pg.engine.unit.effect.PGUnitState;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /*
     PuzzleGenerals
@@ -34,11 +33,11 @@ import java.util.List;
  */
 
 public abstract class PGUnitHigh extends PGUnit implements PGActivatedUnit {
-    List<PGUnitContainer> containers;
+    Map<String, PGUnitContainer> containers;
 
     protected PGUnitHigh(long unitID, PGPlayer owner, PGUnitGroup group, PGUnitState state, @NotNull PGUnitContainer front_of_unit) throws PGError {
         super(unitID, owner, group, state);
-        this.containers = new ArrayList<>();
+        this.containers = new HashMap<>();
 
         if(front_of_unit instanceof PGField) {
             PGField back_of_unit = ((PGField) front_of_unit).getRearNeighbor();
@@ -47,8 +46,8 @@ public abstract class PGUnitHigh extends PGUnit implements PGActivatedUnit {
                 throw new PGError("Incorrect location of unit");
             }
 
-            containers.add(front_of_unit);
-            containers.add(back_of_unit);
+            this.containers.put("front", front_of_unit);
+            this.containers.put("back", back_of_unit);
 
             List<PGField> toObserve = new ArrayList<>();
             toObserve.add(back_of_unit.getRearNeighbor());
@@ -63,4 +62,32 @@ public abstract class PGUnitHigh extends PGUnit implements PGActivatedUnit {
         }
     }
 
+    @Override
+    public void update(Observable obj, Object arg) {
+        if(this.containers.get("back") instanceof PGField) {
+            PGField field = (PGField) this.containers.get("back");
+            List<PGUnit> units = new ArrayList<>();
+
+            try {
+                units.add(field.getRearNeighbor().getContainedUnit());
+                units.add(field.getSecondRearNeighbor().getContainedUnit());
+            } catch(NullPointerException e) {
+                return;
+            }
+
+            if(units.contains(null)) {
+                return;
+            }
+
+            Set<PGUnitGroup> unique_groups = new HashSet<>();
+            unique_groups.add(this.group);
+            for(PGUnit unit : units) {
+                unique_groups.add(unit.getGroup());
+            }
+
+            if(unique_groups.size() == 1) {
+                this.state = PGUnitState.ACTIVATED; //TODO: Perform real activation here
+            }
+        }
+    }
 }

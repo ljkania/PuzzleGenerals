@@ -11,8 +11,7 @@ import pl.kaqu.pg.engine.unit.activation.PGActivatedUnit;
 import pl.kaqu.pg.engine.unit.activation.PGActivationType;
 import pl.kaqu.pg.engine.unit.effect.PGUnitState;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /*
     PuzzleGenerals
@@ -34,11 +33,11 @@ import java.util.List;
  */
 
 public abstract class PGUnitLarge extends PGUnit implements PGActivatedUnit {
-    List<PGUnitContainer> containers;
+    Map<String, PGUnitContainer> containers;
 
     protected PGUnitLarge(long unitID, PGPlayer owner, PGUnitGroup group, PGUnitState state, @NotNull PGUnitContainer left_front_of_unit) throws PGError {
         super(unitID, owner, group, state);
-        this.containers = new ArrayList<>();
+        this.containers = new HashMap<>();
 
         if(left_front_of_unit instanceof PGField) {
             PGField left_back_of_unit;
@@ -53,12 +52,12 @@ public abstract class PGUnitLarge extends PGUnit implements PGActivatedUnit {
                 throw new PGError("Incorrect location of unit");
             }
 
-            containers.add(left_front_of_unit);
-            containers.add(left_back_of_unit);
-            containers.add(right_front_of_unit);
-            containers.add(right_back_of_unit);
+            containers.put("left_front", left_front_of_unit);
+            containers.put("left_back", left_back_of_unit);
+            containers.put("right_front", right_front_of_unit);
+            containers.put("right_back", right_back_of_unit);
 
-            if(containers.contains(null)) {
+            if(containers.containsValue(null)) {
                 throw new PGError("Incorrect location of unit");
             }
 
@@ -77,4 +76,34 @@ public abstract class PGUnitLarge extends PGUnit implements PGActivatedUnit {
         }
     }
 
+    @Override
+    public void update(Observable obj, Object arg) {
+        if(this.containers.get("left_back") instanceof PGField && this.containers.get("right_back") instanceof PGField) {
+            PGField left_field = (PGField) this.containers.get("left_back");
+            PGField right_field = (PGField) this.containers.get("right_back");
+            List<PGUnit> units = new ArrayList<>();
+            try {
+                units.add(left_field.getRearNeighbor().getContainedUnit());
+                units.add(left_field.getSecondRearNeighbor().getContainedUnit());
+                units.add(right_field.getRearNeighbor().getContainedUnit());
+                units.add(right_field.getSecondRearNeighbor().getContainedUnit());
+            } catch (NullPointerException e) {
+                return;
+            }
+
+            if(units.contains(null)) {
+                return;
+            }
+
+            Set<PGUnitGroup> unique_groups = new HashSet<>();
+            unique_groups.add(this.group);
+            for(PGUnit unit : units) {
+                unique_groups.add(unit.getGroup());
+            }
+
+            if(unique_groups.size() == 1) {
+                this.state = PGUnitState.ACTIVATED; //TODO: Perform real activation here
+            }
+        }
+    }
 }
