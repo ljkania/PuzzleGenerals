@@ -83,41 +83,32 @@ public class PGPlayerArea {
         return this.fields[x][y];
     }
     
-    public void initializeUnitsDistribution(Map<PGCoordinate, PGUnit> unitsDistribution, int reserveCount) throws PGError {
-    	unitsDistribution.forEach((coords, unit) -> {
-    		fields[coords.x][coords.y].setContainedUnit(unit);
-    	});
-    	
-    	this.reserve = new PGUnitsReserve(reserveCount);
-    }
-    
-    public void moveUnitsToField() throws PGError {
-    	Map<PGCoordinate, PGUnit> unitsDistribution = reserve.provideUnits();
-    	
-    	if(unitsDistribution.size() + reserve.sizeOfReserve() != totalNumberOfUnits) {
-    		throw new PGWrongSumOfUnitsException();
-    	}
-    	
-    	if (unitsDistribution.keySet().stream()
-    			.anyMatch(coord -> coord.x < 0 && coord.y >= this.width && coord.y < 0 && coord.y >= this.height)) {
-    		throw new PGOutOfAreaException();
-    	}
-    	
-    	unitsDistribution.forEach((coords, unit) -> {
-    		fields[coords.x][coords.y].setContainedUnit(unit);
-    	});
-    }
-    
-    public void moveUnitToReserve(PGUnit unit) throws PGOutOfAreaException {
+    public PGCoordinate findPGUnit(PGUnit unit) {
     	for(int i = 0; i < this.width; i++) {
     		for(int j = 0; j < this.height; i++) { 
     			if(fields[i][j].getContainedUnit().equals(unit)) {
     				this.reserve.incrementReserve();
-    				fields[i][j].deleteObservers();
-    				fields[i][j].setContainedUnit(null);
+    				return new PGCoordinate(i, j);
     			}
     		}
     	}
+    	return null;
     }
-
+    
+    public void moveUnitToReserve(PGUnit unit) throws PGOutOfAreaException {
+    	PGCoordinate coords = findPGUnit(unit);
+    	if(coords == null)
+    		throw new IllegalArgumentException("Unit " + unit + " doesn't exist");
+    	this.reserve.incrementReserve();
+    	fields[coords.x][coords.y].deleteObservers();
+		fields[coords.x][coords.y].setContainedUnit(null);
+    }
+    
+    public int getWidth() {
+    	return width;
+    }
+    
+    public int getHeight() {
+    	return height;
+    }
 }
