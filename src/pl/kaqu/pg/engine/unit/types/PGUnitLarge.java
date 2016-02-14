@@ -1,7 +1,6 @@
 package pl.kaqu.pg.engine.unit.types;
 
 import com.sun.istack.internal.NotNull;
-import pl.kaqu.pg.engine.error.PGError;
 import pl.kaqu.pg.engine.error.PGIncorrectUnitLocationException;
 import pl.kaqu.pg.engine.gamearea.PGField;
 import pl.kaqu.pg.engine.gamearea.PGUnitContainer;
@@ -38,10 +37,24 @@ public abstract class PGUnitLarge extends PGUnit implements PGActivatedUnit {
     public static final int LEFT_BACK = 1;
     public static final int RIGHT_FRONT = 2;
     public static final int RIGHT_BACK = 3;
+    private final int width = 2;
+    private final int height = 2;
 
-    protected PGUnitLarge(long unitID, PGPlayer owner, PGUnitGroup group, PGUnitState state, @NotNull PGUnitContainer leftFrontOfUnit) throws PGError {
+    protected PGUnitLarge(long unitID, PGPlayer owner, PGUnitGroup group, PGUnitState state, @NotNull PGUnitContainer leftFrontOfUnit) throws PGIncorrectUnitLocationException {
         super(unitID, owner, group, state);
         this.currentUnitContainers = new HashMap<>();
+        this.setCurrentUnitContainers(leftFrontOfUnit);
+    }
+
+    public int getFrontRowIndex() {
+        if(currentUnitContainers.get(LEFT_FRONT) instanceof PGField) {
+            return ((PGField) currentUnitContainers.get(LEFT_FRONT)).getCoordinate().getY();
+        }
+        return Integer.MAX_VALUE;
+    }
+
+    public void setCurrentUnitContainers(@NotNull PGUnitContainer leftFrontOfUnit) throws PGIncorrectUnitLocationException {
+        this.currentUnitContainers.clear();
 
         if(leftFrontOfUnit instanceof PGField) {
             PGField leftBackOfUnit;
@@ -78,6 +91,22 @@ public abstract class PGUnitLarge extends PGUnit implements PGActivatedUnit {
                 }
             }
         }
+    }
+
+    @NotNull public PGUnitContainer getCurrentFrontLeftContainer() {
+        return currentUnitContainers.get(LEFT_FRONT);
+    }
+
+    @NotNull public List<PGUnitContainer> getCurrentUnitContainers() {
+        return new ArrayList<>(this.currentUnitContainers.values());
+    }
+
+    public int getWidth() {
+        return this.width;
+    }
+
+    public int getHeight() {
+        return this.height;
     }
 
     @Override

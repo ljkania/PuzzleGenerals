@@ -31,16 +31,28 @@ import java.util.*;
  */
 
 public abstract class PGUnitSmall extends PGUnit implements PGActivatedUnit {
-    PGUnitContainer currentUnitContainers;
+    PGUnitContainer currentUnitContainer;
+    private final int width = 1;
+    private final int height = 1;
 
-    protected PGUnitSmall(long unitID, PGPlayer owner, PGUnitGroup group, PGUnitState state, @NotNull PGUnitContainer currentUnitContainers){
+    protected PGUnitSmall(long unitID, PGPlayer owner, PGUnitGroup group, PGUnitState state, @NotNull PGUnitContainer currentUnitContainer) {
         super(unitID, owner, group, state);
-        this.currentUnitContainers = currentUnitContainers;
+        this.setCurrentUnitContainers(currentUnitContainer);
+    }
 
-        if(this.currentUnitContainers instanceof PGField) {
+    public int getFrontRowIndex() {
+        if(currentUnitContainer instanceof PGField) {
+            return ((PGField) currentUnitContainer).getCoordinate().getY();
+        }
+        return Integer.MAX_VALUE;
+    }
+
+    public void setCurrentUnitContainers(@NotNull PGUnitContainer currentUnitContainer) {
+        this.currentUnitContainer = currentUnitContainer;
+        if(this.currentUnitContainer instanceof PGField) {
             List<PGField> toObserve = new ArrayList<>();
-            toObserve.add(((PGField) this.currentUnitContainers).getRearNeighbor());
-            toObserve.add(((PGField) this.currentUnitContainers).getSecondRearNeighbor());
+            toObserve.add(((PGField) this.currentUnitContainer).getRearNeighbor());
+            toObserve.add(((PGField) this.currentUnitContainer).getSecondRearNeighbor());
 
             if(!toObserve.contains(null)) {
                 for(PGField field : toObserve) {
@@ -49,6 +61,25 @@ public abstract class PGUnitSmall extends PGUnit implements PGActivatedUnit {
             }
         }
     }
+
+    @NotNull public PGUnitContainer getCurrentFrontLeftContainer() {
+        return currentUnitContainer;
+    }
+
+    @NotNull public List<PGUnitContainer> getCurrentUnitContainers() {
+        List<PGUnitContainer> result = new ArrayList<>();
+        result.add(this.currentUnitContainer);
+        return result;
+    }
+
+    public int getWidth() {
+        return this.width;
+    }
+
+    public int getHeight() {
+        return this.height;
+    }
+
 
     @Override
     public void update(Observable obj, Object arg) {

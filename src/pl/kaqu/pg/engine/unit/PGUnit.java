@@ -20,6 +20,9 @@ package pl.kaqu.pg.engine.unit;
  */
 
 import com.sun.istack.internal.NotNull;
+import com.sun.tools.javac.util.Pair;
+import pl.kaqu.pg.engine.error.PGIncorrectUnitLocationException;
+import pl.kaqu.pg.engine.gamearea.PGUnitContainer;
 import pl.kaqu.pg.engine.gamearea.behaviour.PGUnitContainerObserver;
 import pl.kaqu.pg.engine.player.PGPlayer;
 import pl.kaqu.pg.engine.unit.action.PGUnitAction;
@@ -67,4 +70,10 @@ public abstract class PGUnit implements Serializable, PGUnitContainerObserver {
         return currentEffects;
     }
     abstract @NotNull public PGUnitAction getUnitAction();
+    abstract public int getFrontRowIndex();
+    abstract public void setCurrentUnitContainers(@NotNull PGUnitContainer leftFront) throws PGIncorrectUnitLocationException;
+    @NotNull abstract public List<PGUnitContainer> getCurrentUnitContainers();
+    abstract @NotNull public PGUnitContainer getCurrentFrontLeftContainer();
+    abstract public int getWidth();
+    abstract public int getHeight();
 }

@@ -19,10 +19,76 @@ package pl.kaqu.pg.engine.gamearea.behaviour.dispatcher;
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+import pl.kaqu.pg.engine.error.PGIncorrectUnitLocationException;
+import pl.kaqu.pg.engine.gamearea.PGField;
+import pl.kaqu.pg.engine.gamearea.PGUnitContainer;
+import pl.kaqu.pg.engine.unit.PGUnit;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
 /**
  * Class responsible for setting units in correct order on board after changes
  */
 public class PGOrderDispatcher {
+    public void reorderUnits(PGField[][] grid) throws PGIncorrectUnitLocationException {
+        int width = grid.length;
+        int height = grid[0].length;
 
-    // Responsible for correcting and checking unit order
+        Comparator<PGUnit> unitComparator = (PGUnit u1, PGUnit u2) -> {
+            if(u1.getPriority() != u2.getPriority()) {
+                return u1.getPriority() - u2.getPriority();
+            }
+            return u2.getFrontRowIndex() - u1.getFrontRowIndex();
+        };
+
+        PriorityQueue<PGUnit> queue = new PriorityQueue<>(height * width, unitComparator);
+        Set<PGUnit> uniqueUnits = new HashSet<>();
+
+        for(PGField[] column : grid) {
+            for(PGField field : column) {
+                uniqueUnits.add(field.getContainedUnit());
+                field.setContainedUnit(null);
+            }
+        }
+        queue.addAll(uniqueUnits.stream().collect(Collectors.toList()));
+
+        while(!queue.isEmpty()) {
+            PGUnit unit = queue.remove();
+            int widthOfUnit = unit.getWidth();
+            int heightOfUnit = unit.getHeight();
+            PGUnitContainer leftFrontOfUnit = unit.getCurrentFrontLeftContainer();
+
+            if(leftFrontOfUnit instanceof PGField) {
+                int x = ((PGField) leftFrontOfUnit).getCoordinate().getX();
+                int y = ((PGField) leftFrontOfUnit).getCoordinate().getY();
+
+                for(int k = 0; k + heightOfUnit <= height; k++) {
+                    boolean occupied = false;
+                    for(int i = x; i < x + widthOfUnit; i++) {
+                        for(int j = y; j < y + heightOfUnit; j++) {
+                            if(grid[i][j].getContainedUnit() != null) {
+                                occupied = true;
+                                break;
+                            }
+                        }
+
+                        if(occupied) {
+                            break;
+                        }
+                    }
+
+                    if(!occupied) {
+                        unit.setCurrentUnitContainers(grid[x][k]);
+                        List<PGUnitContainer> containersToChange = unit.getCurrentUnitContainers();
+
+                        for(PGUnitContainer container : containersToChange) {
+                            container.setContainedUnit(unit);
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+    }
 }

@@ -36,10 +36,24 @@ public abstract class PGUnitHigh extends PGUnit implements PGActivatedUnit {
     Map<Integer, PGUnitContainer> currentUnitContainers;
     public static final int FRONT = 0;
     public static final int BACK = 1;
+    private final int width = 1;
+    private final int height = 2;
 
     protected PGUnitHigh(long unitID, PGPlayer owner, PGUnitGroup group, PGUnitState state, @NotNull PGUnitContainer frontOfUnit) throws PGError {
         super(unitID, owner, group, state);
         this.currentUnitContainers = new HashMap<>();
+        this.setCurrentUnitContainers(frontOfUnit);
+    }
+
+    public int getFrontRowIndex() {
+        if(currentUnitContainers.get(FRONT) instanceof PGField) {
+            return ((PGField) currentUnitContainers.get(FRONT)).getCoordinate().getY();
+        }
+        return Integer.MAX_VALUE;
+    }
+
+    public void setCurrentUnitContainers(@NotNull PGUnitContainer frontOfUnit) throws PGIncorrectUnitLocationException {
+        this.currentUnitContainers.clear();
 
         if(frontOfUnit instanceof PGField) {
             PGField backOfUnit = ((PGField) frontOfUnit).getRearNeighbor();
@@ -60,8 +74,23 @@ public abstract class PGUnitHigh extends PGUnit implements PGActivatedUnit {
                     field.addObserver(this);
                 }
             }
-
         }
+    }
+
+    @NotNull public PGUnitContainer getCurrentFrontLeftContainer() {
+        return currentUnitContainers.get(FRONT);
+    }
+
+    @NotNull public List<PGUnitContainer> getCurrentUnitContainers() {
+        return new ArrayList<>(this.currentUnitContainers.values());
+    }
+
+    public int getWidth() {
+        return this.width;
+    }
+
+    public int getHeight() {
+        return this.height;
     }
 
     @Override
