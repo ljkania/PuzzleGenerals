@@ -27,6 +27,8 @@ import pl.kaqu.pg.engine.unit.PGUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static java.lang.Integer.max;
+
 /**
  * Class responsible for setting units in correct order on board after changes
  */
@@ -52,6 +54,7 @@ public class PGOrderDispatcher {
             }
         }
         queue.addAll(uniqueUnits.stream().collect(Collectors.toList()));
+        int[] firstPossible = new int[width];
 
         while(!queue.isEmpty()) {
             PGUnit unit = queue.remove();
@@ -63,7 +66,12 @@ public class PGOrderDispatcher {
                 int x = ((PGField) leftFrontOfUnit).getCoordinate().getX();
                 int y = ((PGField) leftFrontOfUnit).getCoordinate().getY();
 
-                for(int k = 0; k + heightOfUnit <= height; k++) {
+                int k = 0;
+                for(int i=x; i<x+widthOfUnit; i++) {
+                    k = max(k, firstPossible[i]);
+                }
+
+                for(; k + heightOfUnit <= height; k++) {
                     boolean occupied = false;
                     for(int i = x; i < x + widthOfUnit; i++) {
                         for(int j = y; j < y + heightOfUnit; j++) {
@@ -85,6 +93,11 @@ public class PGOrderDispatcher {
                         for(PGUnitContainer container : containersToChange) {
                             container.setContainedUnit(unit);
                         }
+
+                        for(int i=x; i<x+widthOfUnit; i++) {
+                            firstPossible[i] = k+heightOfUnit;
+                        }
+
                         break;
                     }
                 }
