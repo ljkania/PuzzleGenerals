@@ -29,12 +29,14 @@ public class PGPlayerArea {
     private final int height;
     private final PGField[][] fields;
     private PGPlayer connectedPlayer;
+    private PGUnitContainer hand;
 
     public PGPlayerArea(int width, int height, @NotNull PGPlayer connectedPlayer) {
         this.width = width;
         this.height = height;
         this.connectedPlayer = connectedPlayer;
         this.fields = new PGField[this.width][];
+        this.hand = new PGUnitContainer(null);
         initializeFields();
     }
 

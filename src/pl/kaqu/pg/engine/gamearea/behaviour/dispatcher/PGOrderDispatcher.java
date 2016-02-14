@@ -33,7 +33,7 @@ import static java.lang.Integer.max;
  * Class responsible for setting units in correct order on board after changes
  */
 public class PGOrderDispatcher {
-    public void reorderUnits(PGField[][] grid) throws PGIncorrectUnitLocationException {
+    public static void reorderUnits(PGField[][] grid) throws PGIncorrectUnitLocationException {
         int width = grid.length;
         int height = grid[0].length;
 
