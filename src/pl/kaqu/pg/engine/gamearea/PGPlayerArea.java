@@ -19,7 +19,6 @@ package pl.kaqu.pg.engine.gamearea;
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import java.util.Collection;
 import java.util.Map;
 
 import com.sun.istack.internal.NotNull;
@@ -32,20 +31,22 @@ import pl.kaqu.pg.engine.unit.PGUnit;
 
 public class PGPlayerArea {
 	
-	public static final int TOTAL_NUMBER_OF_UNITS = 37;
+	private static final float INITIAL_FIELD_LOAD = 0.7f;
 	
-    private final int width;
+	private final int totalNumberOfUnits;
+	private final int width;
     private final int height;
     private final PGField[][] fields;
     private PGPlayer connectedPlayer;
     
-    private UnitsReserve reserve;
+    private PGUnitsReserve reserve;
     
     public PGPlayerArea(int width, int height, @NotNull PGPlayer connectedPlayer) {
         this.width = width;
         this.height = height;
         this.connectedPlayer = connectedPlayer;
         this.fields = new PGField[this.width][];
+        this.totalNumberOfUnits = (int) (INITIAL_FIELD_LOAD * width * height);
         initializeFields();
     }
 
@@ -82,27 +83,18 @@ public class PGPlayerArea {
         return this.fields[x][y];
     }
     
-    public void initializeUnitsDistribution(Map<PGCoordinate, PGUnit> unitsDistribution, Collection<PGUnit> reserve) throws PGError {
-    	if(unitsDistribution.size() + reserve.size() != TOTAL_NUMBER_OF_UNITS) {
-    		throw new PGWrongSumOfUnitsException();
-    	}
-    	
-    	if (unitsDistribution.keySet().stream()
-    			.anyMatch(coord -> coord.x < 0 && coord.y >= this.width && coord.y < 0 && coord.y >= this.height)) {
-    		throw new PGOutOfAreaException();
-    	}
-    	
+    public void initializeUnitsDistribution(Map<PGCoordinate, PGUnit> unitsDistribution, int reserveCount) throws PGError {
     	unitsDistribution.forEach((coords, unit) -> {
     		fields[coords.x][coords.y].setContainedUnit(unit);
     	});
     	
-    	this.reserve = new UnitsReserve(reserve);
+    	this.reserve = new PGUnitsReserve(reserveCount);
     }
     
     public void moveUnitsToField() throws PGError {
     	Map<PGCoordinate, PGUnit> unitsDistribution = reserve.provideUnits();
     	
-    	if(unitsDistribution.size() + reserve.sizeOfReserve() != TOTAL_NUMBER_OF_UNITS) {
+    	if(unitsDistribution.size() + reserve.sizeOfReserve() != totalNumberOfUnits) {
     		throw new PGWrongSumOfUnitsException();
     	}
     	
@@ -116,13 +108,16 @@ public class PGPlayerArea {
     	});
     }
     
-    public void moveUnitToReserve(int x, int y) throws PGOutOfAreaException {
-        if (x < 0 && x >= this.width && y < 0 && y >= this.height) {
-            throw new PGOutOfAreaException();
-        }
-
-        this.reserve.addUnitToReserve(fields[x][y].getContainedUnit());
-        fields[x][y].setContainedUnit(null);
+    public void moveUnitToReserve(PGUnit unit) throws PGOutOfAreaException {
+    	for(int i = 0; i < this.width; i++) {
+    		for(int j = 0; j < this.height; i++) { 
+    			if(fields[i][j].getContainedUnit().equals(unit)) {
+    				this.reserve.incrementReserve();
+    				fields[i][j].deleteObservers();
+    				fields[i][j].setContainedUnit(null);
+    			}
+    		}
+    	}
     }
 
 }

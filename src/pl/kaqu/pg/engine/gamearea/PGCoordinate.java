@@ -21,7 +21,7 @@ package pl.kaqu.pg.engine.gamearea;
 
 public class PGCoordinate {
 
-	public final int x;
+    public final int x;
     public final int y;
 
     public PGCoordinate(int x, int y) {
@@ -32,8 +32,7 @@ public class PGCoordinate {
     @Override
 	public int hashCode() {
 		final int prime = 31;
-		int result = 1;
-		result = prime * result + x;
+		int result = prime + x;
 		result = prime * result + y;
 		return result;
 	}
