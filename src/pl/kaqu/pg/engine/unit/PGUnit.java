@@ -1,9 +1,5 @@
 package pl.kaqu.pg.engine.unit;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
 /*
     PuzzleGenerals
     Copyright (C) 2016 kaqu kaqukal@gmail.com
@@ -22,6 +18,10 @@ import java.util.List;
     with this program; if not, write to the Free Software Foundation, Inc.,
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.sun.istack.internal.NotNull;
 

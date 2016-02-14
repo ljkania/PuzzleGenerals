@@ -1,8 +1,5 @@
 package pl.kaqu.pg.engine.gamearea;
 
-import java.util.Collection;
-import java.util.Map;
-
 /*
     PuzzleGenerals
     Copyright (C) 2016 kaqu kaqukal@gmail.com
@@ -21,6 +18,9 @@ import java.util.Map;
     with this program; if not, write to the Free Software Foundation, Inc.,
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+
+import java.util.Collection;
+import java.util.Map;
 
 import com.sun.istack.internal.NotNull;
 
