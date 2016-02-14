@@ -2,6 +2,7 @@ package pl.kaqu.pg.engine.unit.types;
 
 import com.sun.istack.internal.NotNull;
 import pl.kaqu.pg.engine.error.PGError;
+import pl.kaqu.pg.engine.error.PGIncorrectUnitLocationException;
 import pl.kaqu.pg.engine.gamearea.PGField;
 import pl.kaqu.pg.engine.gamearea.PGUnitContainer;
 import pl.kaqu.pg.engine.player.PGPlayer;
@@ -52,7 +53,7 @@ public abstract class PGUnitLarge extends PGUnit implements PGActivatedUnit {
                 rightFrontOfUnit = ((PGField) leftFrontOfUnit).getRightNeighbor();
                 rightBackOfUnit = rightFrontOfUnit.getRearNeighbor();
             } catch(NullPointerException e) {
-                throw new PGError(); // FIXME: change error to new error class
+                throw new PGIncorrectUnitLocationException();
             }
 
             currentUnitContainers.put(LEFT_FRONT, leftFrontOfUnit);
@@ -61,7 +62,7 @@ public abstract class PGUnitLarge extends PGUnit implements PGActivatedUnit {
             currentUnitContainers.put(RIGHT_BACK, rightBackOfUnit);
 
             if(currentUnitContainers.containsValue(null)) {
-                throw new PGError(); // FIXME: change error to new error class
+                throw new PGIncorrectUnitLocationException();
             }
 
             List<PGField> toObserve = new ArrayList<>();

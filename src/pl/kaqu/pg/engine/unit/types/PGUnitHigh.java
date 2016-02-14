@@ -2,13 +2,13 @@ package pl.kaqu.pg.engine.unit.types;
 
 import com.sun.istack.internal.NotNull;
 import pl.kaqu.pg.engine.error.PGError;
+import pl.kaqu.pg.engine.error.PGIncorrectUnitLocationException;
 import pl.kaqu.pg.engine.gamearea.PGField;
 import pl.kaqu.pg.engine.gamearea.PGUnitContainer;
 import pl.kaqu.pg.engine.player.PGPlayer;
 import pl.kaqu.pg.engine.unit.PGUnit;
 import pl.kaqu.pg.engine.unit.PGUnitGroup;
 import pl.kaqu.pg.engine.unit.activation.PGActivatedUnit;
-import pl.kaqu.pg.engine.unit.activation.PGActivationType;
 import pl.kaqu.pg.engine.unit.effect.PGUnitState;
 
 import java.util.*;
@@ -45,7 +45,7 @@ public abstract class PGUnitHigh extends PGUnit implements PGActivatedUnit {
             PGField backOfUnit = ((PGField) frontOfUnit).getRearNeighbor();
 
             if(backOfUnit == null) {
-                throw new PGError(); // FIXME: change error to new error class
+                throw new PGIncorrectUnitLocationException();
             }
 
             this.currentUnitContainers.put(FRONT, frontOfUnit);
