@@ -1,5 +1,8 @@
 package pl.kaqu.pg.engine.gamearea;
 
+import java.util.Collection;
+import java.util.Map;
+
 /*
     PuzzleGenerals
     Copyright (C) 2016 kaqu kaqukal@gmail.com
@@ -20,16 +23,24 @@ package pl.kaqu.pg.engine.gamearea;
  */
 
 import com.sun.istack.internal.NotNull;
+
+import pl.kaqu.pg.engine.error.PGError;
+import pl.kaqu.pg.engine.error.PGWrongSumOfUnitsException;
 import pl.kaqu.pg.engine.error.PGOutOfAreaException;
 import pl.kaqu.pg.engine.player.PGPlayer;
+import pl.kaqu.pg.engine.unit.PGUnit;
 
 public class PGPlayerArea {
-
+	
+	public static final int TOTAL_NUMBER_OF_UNITS = 37;
+	
     private final int width;
     private final int height;
     private final PGField[][] fields;
     private PGPlayer connectedPlayer;
-
+    
+    private UnitsReserve reserve;
+    
     public PGPlayerArea(int width, int height, @NotNull PGPlayer connectedPlayer) {
         this.width = width;
         this.height = height;
@@ -69,6 +80,49 @@ public class PGPlayerArea {
             throw new PGOutOfAreaException();
         }
         return this.fields[x][y];
+    }
+    
+    public void initializeUnitsDistribution(Map<PGCoordinate, PGUnit> unitsDistribution, Collection<PGUnit> reserve) throws PGError {
+    	if(unitsDistribution.size() + reserve.size() != TOTAL_NUMBER_OF_UNITS) {
+    		throw new PGWrongSumOfUnitsException();
+    	}
+    	
+    	if (unitsDistribution.keySet().stream()
+    			.anyMatch(coord -> coord.x < 0 && coord.y >= this.width && coord.y < 0 && coord.y >= this.height)) {
+    		throw new PGOutOfAreaException();
+    	}
+    	
+    	unitsDistribution.forEach((coords, unit) -> {
+    		fields[coords.x][coords.y].setContainedUnit(unit);
+    	});
+    	
+    	this.reserve = new UnitsReserve(reserve);
+    }
+    
+    public void moveUnitsToField() throws PGError {
+    	Map<PGCoordinate, PGUnit> unitsDistribution = reserve.provideUnits();
+    	
+    	if(unitsDistribution.size() + reserve.sizeOfReserve() != TOTAL_NUMBER_OF_UNITS) {
+    		throw new PGWrongSumOfUnitsException();
+    	}
+    	
+    	if (unitsDistribution.keySet().stream()
+    			.anyMatch(coord -> coord.x < 0 && coord.y >= this.width && coord.y < 0 && coord.y >= this.height)) {
+    		throw new PGOutOfAreaException();
+    	}
+    	
+    	unitsDistribution.forEach((coords, unit) -> {
+    		fields[coords.x][coords.y].setContainedUnit(unit);
+    	});
+    }
+    
+    public void moveUnitToReserve(int x, int y) throws PGOutOfAreaException {
+        if (x < 0 && x >= this.width && y < 0 && y >= this.height) {
+            throw new PGOutOfAreaException();
+        }
+
+        this.reserve.addUnitToReserve(fields[x][y].getContainedUnit());
+        fields[x][y].setContainedUnit(null);
     }
 
 }

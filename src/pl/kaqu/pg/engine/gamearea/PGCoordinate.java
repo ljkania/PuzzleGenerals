@@ -21,11 +21,30 @@ package pl.kaqu.pg.engine.gamearea;
 
 public class PGCoordinate {
 
-    public final int x;
+	public final int x;
     public final int y;
 
     public PGCoordinate(int x, int y) {
         this.x = x;
         this.y = y;
     }
+    
+    @Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + x;
+		result = prime * result + y;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!(obj instanceof PGCoordinate))
+			return false;
+		PGCoordinate other = (PGCoordinate) obj;
+		return x == other.x && y == other.y;
+	}
 }
