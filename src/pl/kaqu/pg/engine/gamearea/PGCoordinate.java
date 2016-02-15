@@ -28,4 +28,22 @@ public class PGCoordinate {
         this.x = x;
         this.y = y;
     }
+    
+    @Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = prime + x;
+		result = prime * result + y;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!(obj instanceof PGCoordinate))
+			return false;
+		PGCoordinate other = (PGCoordinate) obj;
+		return x == other.x && y == other.y;
+	}
 }

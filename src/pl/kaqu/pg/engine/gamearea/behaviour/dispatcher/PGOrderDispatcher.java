@@ -41,7 +41,7 @@ public class PGOrderDispatcher {
             return u1.getPriority() - u2.getPriority();
         }
         if(u1.getPrimaryUnitContainer() instanceof PGField && u2.getPrimaryUnitContainer() instanceof PGField) {
-            return ((PGField) u2.getPrimaryUnitContainer()).getCoordinate().x - ((PGField) u1.getPrimaryUnitContainer()).getCoordinate().x;
+            return ((PGField) u2.getPrimaryUnitContainer()).getCoordinate().y - ((PGField) u1.getPrimaryUnitContainer()).getCoordinate().y;
         }
         return 0;
     };
@@ -73,7 +73,6 @@ public class PGOrderDispatcher {
 
             if(leftFrontOfUnit instanceof PGField) {
                 int x = ((PGField) leftFrontOfUnit).getCoordinate().x;
-                int y = ((PGField) leftFrontOfUnit).getCoordinate().y;
 
                 int k = 0;
                 for(int i=x; i<x+widthOfUnit; i++) {
