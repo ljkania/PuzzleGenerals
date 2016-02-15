@@ -32,39 +32,29 @@ import java.util.*;
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-public abstract class PGUnitAttackingFormation extends PGUnit implements PGActivatedUnit {
-    Map<Integer, PGUnitContainer> currentUnitContainers;
-    public static final int FRONT = 0;
+public abstract class PGUnitSmallAttackingFormation extends PGUnit {
+    public static final int FRONT = PGUnit.PRIMARY_CONTAINER;
     public static final int CENTER = 1;
     public static final int BACK = 2;
-    private final int width = 1;
-    private final int height = 3;
 
-    protected PGUnitAttackingFormation(long unitID, PGPlayer owner, PGUnitGroup group, PGUnitState state, @NotNull PGUnitContainer frontOfUnit) throws PGError {
-        super(unitID, owner, group, state);
+    protected PGUnitSmallAttackingFormation(long unitID, PGPlayer owner, PGUnitGroup group, PGUnitState state, @NotNull PGUnitContainer primaryContainer) throws PGError {
+        super(unitID, owner, group, state, 1, 3);
         this.currentUnitContainers = new HashMap<>();
-        this.setCurrentUnitContainers(frontOfUnit);
+        this.setCurrentUnitContainers(primaryContainer);
     }
 
-    public int getFrontRowIndex() {
-        if(currentUnitContainers.get(FRONT) instanceof PGField) {
-            return ((PGField) currentUnitContainers.get(FRONT)).getCoordinate().getY();
-        }
-        return Integer.MAX_VALUE;
-    }
-
-    public void setCurrentUnitContainers(@NotNull PGUnitContainer frontOfUnit) throws PGIncorrectUnitLocationException {
+    public void setCurrentUnitContainers(@NotNull PGUnitContainer primaryContainer) throws PGIncorrectUnitLocationException {
         this.currentUnitContainers.clear();
 
-        if(frontOfUnit instanceof PGField) {
-            PGField centerOfUnit = ((PGField) frontOfUnit).getRearNeighbor();
-            PGField backOfUnit = ((PGField) frontOfUnit).getSecondRearNeighbor();
+        if(primaryContainer instanceof PGField) {
+            PGField centerOfUnit = ((PGField) primaryContainer).getRearNeighbor();
+            PGField backOfUnit = ((PGField) primaryContainer).getSecondRearNeighbor();
 
             if(centerOfUnit == null || backOfUnit == null) {
                 throw new PGIncorrectUnitLocationException();
             }
 
-            this.currentUnitContainers.put(FRONT, frontOfUnit);
+            this.currentUnitContainers.put(FRONT, primaryContainer);
             this.currentUnitContainers.put(CENTER, centerOfUnit);
             this.currentUnitContainers.put(BACK, backOfUnit);
 
@@ -77,23 +67,9 @@ public abstract class PGUnitAttackingFormation extends PGUnit implements PGActiv
                     field.addObserver(this);
                 }
             }
+        } else {
+            this.currentUnitContainers.put(PGUnit.PRIMARY_CONTAINER, primaryContainer);
         }
-    }
-
-    @NotNull public PGUnitContainer getCurrentFrontLeftContainer() {
-        return currentUnitContainers.get(FRONT);
-    }
-
-    @NotNull public List<PGUnitContainer> getCurrentUnitContainers() {
-        return new ArrayList<>(this.currentUnitContainers.values());
-    }
-
-    public int getWidth() {
-        return this.width;
-    }
-
-    public int getHeight() {
-        return this.height;
     }
 
     @Override

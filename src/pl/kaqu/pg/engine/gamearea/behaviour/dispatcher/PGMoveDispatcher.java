@@ -20,7 +20,6 @@ package pl.kaqu.pg.engine.gamearea.behaviour.dispatcher;
  */
 
 import pl.kaqu.pg.engine.error.PGIncorrectUnitLocationException;
-import pl.kaqu.pg.engine.error.PGUnitNotInHandException;
 import pl.kaqu.pg.engine.gamearea.PGField;
 import pl.kaqu.pg.engine.gamearea.PGUnitContainer;
 import pl.kaqu.pg.engine.unit.PGUnit;
@@ -32,30 +31,29 @@ import java.util.List;
  * Class responsible for dispatching player moves
  */
 public class PGMoveDispatcher {
-    public void removeUnitFromContainers(PGUnit unit) {
+
+    public void pickUnitToHand(PGUnitContainer unitContainer, PGUnitContainer hand) throws PGIncorrectUnitLocationException {
+        PGUnit unit = unitContainer.getContainedUnit();
+        hand.setContainedUnit(unit);
         for(PGUnitContainer container : unit.getCurrentUnitContainers()) {
             container.setContainedUnit(null);
         }
-    }
-
-    public void pickUnit(PGUnit unit, PGUnitContainer hand) throws PGIncorrectUnitLocationException {
-        hand.setContainedUnit(unit);
-        removeUnitFromContainers(unit);
         unit.setCurrentUnitContainers(hand);
     }
 
-    public void dropUnit(PGUnit unit, PGUnitContainer hand, PGField leftFront) throws PGUnitNotInHandException, PGIncorrectUnitLocationException {
-        if(hand != unit.getCurrentFrontLeftContainer()) {
-            throw new PGUnitNotInHandException();
+    public void dropUnitFromHand(PGUnitContainer hand, PGField primaryContainer) throws PGIncorrectUnitLocationException {
+        PGUnit unit = hand.getContainedUnit();
+        for(PGUnitContainer container : unit.getCurrentUnitContainers()) {
+            container.setContainedUnit(null);
         }
-        removeUnitFromContainers(unit);
-        int x = leftFront.getCoordinate().getX();
-        int y = leftFront.getCoordinate().getY();
-        int width = unit.getWidth();
-        int height = unit.getHeight();
+
+        int x = primaryContainer.getCoordinate().x;
+        int y = primaryContainer.getCoordinate().y;
+        int width = unit.width;
+        int height = unit.height;
         List<PGField> unitLocations = new ArrayList<>();
 
-        PGField currentMostLeft = leftFront;
+        PGField currentMostLeft = primaryContainer;
 
         for(int i=0; i<height; i++) {
             PGField currentField = currentMostLeft;
@@ -73,6 +71,6 @@ public class PGMoveDispatcher {
         for(PGField field : unitLocations) {
             field.setContainedUnit(unit);
         }
-        unit.setCurrentUnitContainers(leftFront);
+        unit.setCurrentUnitContainers(primaryContainer);
     }
 }

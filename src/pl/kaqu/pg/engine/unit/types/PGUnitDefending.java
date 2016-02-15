@@ -6,7 +6,6 @@ import pl.kaqu.pg.engine.gamearea.PGUnitContainer;
 import pl.kaqu.pg.engine.player.PGPlayer;
 import pl.kaqu.pg.engine.unit.PGUnit;
 import pl.kaqu.pg.engine.unit.PGUnitGroup;
-import pl.kaqu.pg.engine.unit.activation.PGActivatedUnit;
 import pl.kaqu.pg.engine.unit.effect.PGUnitState;
 
 import java.util.*;
@@ -30,29 +29,20 @@ import java.util.*;
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-public abstract class PGUnitWall extends PGUnit implements PGActivatedUnit {
-    PGUnitContainer currentUnitContainer;
-    private final int width = 1;
-    private final int height = 1;
-
-    protected PGUnitWall(long unitID, PGPlayer owner, PGUnitGroup group, PGUnitState state, @NotNull PGUnitContainer currentUnitContainer) {
-        super(unitID, owner, group, state);
+public abstract class PGUnitDefending extends PGUnit {
+    protected PGUnitDefending(long unitID, PGPlayer owner, PGUnitGroup group, PGUnitState state, @NotNull PGUnitContainer currentUnitContainer) {
+        super(unitID, owner, group, state, 1, 1);
         this.setCurrentUnitContainers(currentUnitContainer);
     }
 
-    public int getFrontRowIndex() {
-        if(currentUnitContainer instanceof PGField) {
-            return ((PGField) currentUnitContainer).getCoordinate().getY();
-        }
-        return Integer.MAX_VALUE;
-    }
-
     public void setCurrentUnitContainers(@NotNull PGUnitContainer currentUnitContainer) {
-        this.currentUnitContainer = currentUnitContainer;
-        if(this.currentUnitContainer instanceof PGField) {
+        this.currentUnitContainers.clear();
+        this.currentUnitContainers.put(PGUnit.PRIMARY_CONTAINER, currentUnitContainer);
+
+        if(currentUnitContainer instanceof PGField) {
             List<PGField> toObserve = new ArrayList<>();
-            toObserve.add(((PGField) this.currentUnitContainer).getRearNeighbor());
-            toObserve.add(((PGField) this.currentUnitContainer).getSecondRearNeighbor());
+            toObserve.add(((PGField) currentUnitContainer).getRearNeighbor());
+            toObserve.add(((PGField) currentUnitContainer).getSecondRearNeighbor());
 
             if(!toObserve.contains(null)) {
                 for(PGField field : toObserve) {
@@ -61,25 +51,6 @@ public abstract class PGUnitWall extends PGUnit implements PGActivatedUnit {
             }
         }
     }
-
-    @NotNull public PGUnitContainer getCurrentFrontLeftContainer() {
-        return currentUnitContainer;
-    }
-
-    @NotNull public List<PGUnitContainer> getCurrentUnitContainers() {
-        List<PGUnitContainer> result = new ArrayList<>();
-        result.add(this.currentUnitContainer);
-        return result;
-    }
-
-    public int getWidth() {
-        return this.width;
-    }
-
-    public int getHeight() {
-        return this.height;
-    }
-
 
     @Override
     public void update(Observable obj, Object arg) {

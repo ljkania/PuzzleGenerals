@@ -33,18 +33,24 @@ import pl.kaqu.pg.engine.unit.effect.PGUnitState;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Observer;
 
 public abstract class PGUnit implements Serializable, PGUnitContainerObserver {
-
     public final long unitID;
     protected PGPlayer owner;
     protected PGUnitGroup group;
     protected PGUnitState state;
     protected List<PGUnitEffect> currentEffects;
+    protected Map<Integer, PGUnitContainer> currentUnitContainers;
+    protected static final int PRIMARY_CONTAINER = 0;
+    public final int width;
+    public final int height;
 
-    protected PGUnit(long unitID, @NotNull PGPlayer owner, @NotNull PGUnitGroup group, @NotNull PGUnitState state){
+    protected PGUnit(long unitID, @NotNull PGPlayer owner, @NotNull PGUnitGroup group, @NotNull PGUnitState state, int width, int height){
         this.unitID = unitID;
+        this.width = width;
+        this.height = height;
         this.owner = owner != null ? owner : PGPlayer.NO_PLAYER;
         this.group = group != null ? group : PGUnitGroup.NONE;
         this.state = state;
@@ -70,10 +76,11 @@ public abstract class PGUnit implements Serializable, PGUnitContainerObserver {
         return currentEffects;
     }
     abstract @NotNull public PGUnitAction getUnitAction();
-    abstract public int getFrontRowIndex();
-    abstract public void setCurrentUnitContainers(@NotNull PGUnitContainer leftFront) throws PGIncorrectUnitLocationException;
-    @NotNull abstract public List<PGUnitContainer> getCurrentUnitContainers();
-    abstract @NotNull public PGUnitContainer getCurrentFrontLeftContainer();
-    abstract public int getWidth();
-    abstract public int getHeight();
+    abstract public void setCurrentUnitContainers(@NotNull PGUnitContainer primaryContainer) throws PGIncorrectUnitLocationException;
+    @NotNull public List<PGUnitContainer> getCurrentUnitContainers() {
+        return new ArrayList<>(this.currentUnitContainers.values());
+    }
+    @NotNull public PGUnitContainer getPrimaryUnitContainer() {
+        return currentUnitContainers.get(PRIMARY_CONTAINER);
+    }
 }

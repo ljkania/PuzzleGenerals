@@ -40,4 +40,10 @@ public class PGUnitContainer extends Observable {
         this.containedUnit = containedUnit;
         this.notifyObservers();
     }
+
+    @Nullable public PGUnit pickContainedUnit() {
+        PGUnit tmp = this.containedUnit;
+        this.containedUnit = null;
+        return tmp;
+    }
 }

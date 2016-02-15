@@ -20,7 +20,9 @@ package pl.kaqu.pg.engine.gamearea.behaviour.dispatcher;
  */
 
 import pl.kaqu.pg.engine.error.PGIncorrectUnitLocationException;
+import pl.kaqu.pg.engine.error.PGOutOfAreaException;
 import pl.kaqu.pg.engine.gamearea.PGField;
+import pl.kaqu.pg.engine.gamearea.PGPlayerArea;
 import pl.kaqu.pg.engine.gamearea.PGUnitContainer;
 import pl.kaqu.pg.engine.unit.PGUnit;
 
@@ -33,24 +35,31 @@ import static java.lang.Integer.max;
  * Class responsible for setting units in correct order on board after changes
  */
 public class PGOrderDispatcher {
-    public static void reorderUnits(PGField[][] grid) throws PGIncorrectUnitLocationException {
-        int width = grid.length;
-        int height = grid[0].length;
 
-        Comparator<PGUnit> unitComparator = (PGUnit u1, PGUnit u2) -> {
-            if(u1.getPriority() != u2.getPriority()) {
-                return u1.getPriority() - u2.getPriority();
-            }
-            return u2.getFrontRowIndex() - u1.getFrontRowIndex();
-        };
+    public static final Comparator<PGUnit> UNIT_COMPARATOR = (PGUnit u1, PGUnit u2) -> {
+        if (u1.getPriority() != u2.getPriority()) {
+            return u1.getPriority() - u2.getPriority();
+        }
+        if(u1.getPrimaryUnitContainer() instanceof PGField && u2.getPrimaryUnitContainer() instanceof PGField) {
+            return ((PGField) u2.getPrimaryUnitContainer()).getCoordinate().x - ((PGField) u1.getPrimaryUnitContainer()).getCoordinate().x;
+        }
+        return 0;
+    };
 
-        PriorityQueue<PGUnit> queue = new PriorityQueue<>(height * width, unitComparator);
+    public static void reorderUnits(PGPlayerArea playerArea) throws PGIncorrectUnitLocationException {
+        int width = playerArea.width;
+        int height = playerArea.height;
+
+        PriorityQueue<PGUnit> queue = new PriorityQueue<>(height * width, UNIT_COMPARATOR);
         Set<PGUnit> uniqueUnits = new HashSet<>();
 
-        for(PGField[] column : grid) {
-            for(PGField field : column) {
-                uniqueUnits.add(field.getContainedUnit());
-                field.setContainedUnit(null);
+        for(int i=0; i<width; i++) {
+            for(int j=0; j<height; j++) {
+                try {
+                    uniqueUnits.add(playerArea.getField(i, j).pickContainedUnit());
+                } catch (PGOutOfAreaException e) {
+                    e.printStackTrace();
+                }
             }
         }
         queue.addAll(uniqueUnits.stream().collect(Collectors.toList()));
@@ -58,48 +67,32 @@ public class PGOrderDispatcher {
 
         while(!queue.isEmpty()) {
             PGUnit unit = queue.remove();
-            int widthOfUnit = unit.getWidth();
-            int heightOfUnit = unit.getHeight();
-            PGUnitContainer leftFrontOfUnit = unit.getCurrentFrontLeftContainer();
+            int widthOfUnit = unit.width;
+            int heightOfUnit = unit.height;
+            PGUnitContainer leftFrontOfUnit = unit.getPrimaryUnitContainer();
 
             if(leftFrontOfUnit instanceof PGField) {
-                int x = ((PGField) leftFrontOfUnit).getCoordinate().getX();
-                int y = ((PGField) leftFrontOfUnit).getCoordinate().getY();
+                int x = ((PGField) leftFrontOfUnit).getCoordinate().x;
+                int y = ((PGField) leftFrontOfUnit).getCoordinate().y;
 
                 int k = 0;
                 for(int i=x; i<x+widthOfUnit; i++) {
                     k = max(k, firstPossible[i]);
                 }
 
-                for(; k + heightOfUnit <= height; k++) {
-                    boolean occupied = false;
-                    for(int i = x; i < x + widthOfUnit; i++) {
-                        for(int j = y; j < y + heightOfUnit; j++) {
-                            if(grid[i][j].getContainedUnit() != null) {
-                                occupied = true;
-                                break;
-                            }
-                        }
+                try {
+                    unit.setCurrentUnitContainers(playerArea.getField(x, k));
+                } catch (PGOutOfAreaException e) {
+                    e.printStackTrace();
+                }
+                List<PGUnitContainer> containersToChange = unit.getCurrentUnitContainers();
 
-                        if(occupied) {
-                            break;
-                        }
-                    }
+                for(PGUnitContainer container : containersToChange) {
+                    container.setContainedUnit(unit);
+                }
 
-                    if(!occupied) {
-                        unit.setCurrentUnitContainers(grid[x][k]);
-                        List<PGUnitContainer> containersToChange = unit.getCurrentUnitContainers();
-
-                        for(PGUnitContainer container : containersToChange) {
-                            container.setContainedUnit(unit);
-                        }
-
-                        for(int i=x; i<x+widthOfUnit; i++) {
-                            firstPossible[i] = k+heightOfUnit;
-                        }
-
-                        break;
-                    }
+                for(int i=x; i<x+widthOfUnit; i++) {
+                    firstPossible[i] = k+heightOfUnit;
                 }
             }
         }

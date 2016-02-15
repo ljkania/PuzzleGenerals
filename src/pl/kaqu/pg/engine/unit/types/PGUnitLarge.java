@@ -33,43 +33,34 @@ import java.util.*;
 
 public abstract class PGUnitLarge extends PGUnit implements PGActivatedUnit {
     Map<Integer, PGUnitContainer> currentUnitContainers;
-    public static final int LEFT_FRONT = 0;
-    public static final int LEFT_BACK = 1;
-    public static final int RIGHT_FRONT = 2;
-    public static final int RIGHT_BACK = 3;
-    private final int width = 2;
-    private final int height = 2;
+    private static final int LEFT_FRONT = PGUnit.PRIMARY_CONTAINER;
+    private static final int LEFT_BACK = 1;
+    private static final int RIGHT_FRONT = 2;
+    private static final int RIGHT_BACK = 3;
 
-    protected PGUnitLarge(long unitID, PGPlayer owner, PGUnitGroup group, PGUnitState state, @NotNull PGUnitContainer leftFrontOfUnit) throws PGIncorrectUnitLocationException {
-        super(unitID, owner, group, state);
+    protected PGUnitLarge(long unitID, PGPlayer owner, PGUnitGroup group, PGUnitState state, @NotNull PGUnitContainer primaryContainer) throws PGIncorrectUnitLocationException {
+        super(unitID, owner, group, state, 2, 2);
         this.currentUnitContainers = new HashMap<>();
-        this.setCurrentUnitContainers(leftFrontOfUnit);
+        this.setCurrentUnitContainers(primaryContainer);
     }
 
-    public int getFrontRowIndex() {
-        if(currentUnitContainers.get(LEFT_FRONT) instanceof PGField) {
-            return ((PGField) currentUnitContainers.get(LEFT_FRONT)).getCoordinate().getY();
-        }
-        return Integer.MAX_VALUE;
-    }
-
-    public void setCurrentUnitContainers(@NotNull PGUnitContainer leftFrontOfUnit) throws PGIncorrectUnitLocationException {
+    public void setCurrentUnitContainers(@NotNull PGUnitContainer primaryContainer) throws PGIncorrectUnitLocationException {
         this.currentUnitContainers.clear();
 
-        if(leftFrontOfUnit instanceof PGField) {
+        if(primaryContainer instanceof PGField) {
             PGField leftBackOfUnit;
             PGField rightFrontOfUnit;
             PGField rightBackOfUnit;
 
             try {
-                leftBackOfUnit = ((PGField) leftFrontOfUnit).getRearNeighbor();
-                rightFrontOfUnit = ((PGField) leftFrontOfUnit).getRightNeighbor();
+                leftBackOfUnit = ((PGField) primaryContainer).getRearNeighbor();
+                rightFrontOfUnit = ((PGField) primaryContainer).getRightNeighbor();
                 rightBackOfUnit = rightFrontOfUnit.getRearNeighbor();
             } catch(NullPointerException e) {
                 throw new PGIncorrectUnitLocationException();
             }
 
-            currentUnitContainers.put(LEFT_FRONT, leftFrontOfUnit);
+            currentUnitContainers.put(LEFT_FRONT, primaryContainer);
             currentUnitContainers.put(LEFT_BACK, leftBackOfUnit);
             currentUnitContainers.put(RIGHT_FRONT, rightFrontOfUnit);
             currentUnitContainers.put(RIGHT_BACK, rightBackOfUnit);
@@ -90,23 +81,9 @@ public abstract class PGUnitLarge extends PGUnit implements PGActivatedUnit {
                     field.addObserver(this);
                 }
             }
+        } else {
+            this.currentUnitContainers.put(PGUnit.PRIMARY_CONTAINER, primaryContainer);
         }
-    }
-
-    @NotNull public PGUnitContainer getCurrentFrontLeftContainer() {
-        return currentUnitContainers.get(LEFT_FRONT);
-    }
-
-    @NotNull public List<PGUnitContainer> getCurrentUnitContainers() {
-        return new ArrayList<>(this.currentUnitContainers.values());
-    }
-
-    public int getWidth() {
-        return this.width;
-    }
-
-    public int getHeight() {
-        return this.height;
     }
 
     @Override

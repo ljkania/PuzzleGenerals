@@ -25,8 +25,8 @@ import pl.kaqu.pg.engine.player.PGPlayer;
 
 public class PGPlayerArea {
 
-    private final int width;
-    private final int height;
+    public final int width;
+    public final int height;
     private final PGField[][] fields;
     private PGPlayer connectedPlayer;
     private PGUnitContainer hand;
@@ -72,5 +72,4 @@ public class PGPlayerArea {
         }
         return this.fields[x][y];
     }
-
 }
