@@ -28,6 +28,7 @@ import java.util.Observable;
 import com.sun.istack.internal.NotNull;
 
 import pl.kaqu.pg.engine.error.PGError;
+import pl.kaqu.pg.engine.error.PGIncorrectUnitLocationException;
 import pl.kaqu.pg.engine.gamearea.PGField;
 import pl.kaqu.pg.engine.gamearea.PGUnitContainer;
 import pl.kaqu.pg.engine.player.PGPlayer;
@@ -38,21 +39,26 @@ import pl.kaqu.pg.engine.unit.effect.PGUnitState;
 
 public abstract class PGUnitHigh extends PGUnit implements PGActivatedUnit {
     Map<Integer, PGUnitContainer> currentUnitContainers;
-    public static final int FRONT = 0;
-    public static final int BACK = 1;
+    private static final int FRONT = PGUnit.PRIMARY_CONTAINER;
+    private static final int BACK = 1;
 
-    protected PGUnitHigh(long unitID, PGPlayer owner, PGUnitGroup group, PGUnitState state, @NotNull PGUnitContainer frontOfUnit) throws PGError {
-        super(unitID, owner, group, state);
+    protected PGUnitHigh(long unitID, PGPlayer owner, PGUnitGroup group, PGUnitState state, @NotNull PGUnitContainer primaryContainer) throws PGError {
+        super(unitID, owner, group, state, 1, 2);
         this.currentUnitContainers = new HashMap<>();
+        this.setCurrentUnitContainers(primaryContainer);
+    }
 
-        if(frontOfUnit instanceof PGField) {
-            PGField backOfUnit = ((PGField) frontOfUnit).getRearNeighbor();
+    public void setCurrentUnitContainers(@NotNull PGUnitContainer primaryContainer) throws PGIncorrectUnitLocationException {
+        this.currentUnitContainers.clear();
+
+        if(primaryContainer instanceof PGField) {
+            PGField backOfUnit = ((PGField) primaryContainer).getRearNeighbor();
 
             if(backOfUnit == null) {
-                throw new PGError(); // FIXME: change error to new error class
+                throw new PGIncorrectUnitLocationException();
             }
 
-            this.currentUnitContainers.put(FRONT, frontOfUnit);
+            this.currentUnitContainers.put(FRONT, primaryContainer);
             this.currentUnitContainers.put(BACK, backOfUnit);
 
             List<PGField> toObserve = new ArrayList<>();
@@ -64,7 +70,8 @@ public abstract class PGUnitHigh extends PGUnit implements PGActivatedUnit {
                     field.addObserver(this);
                 }
             }
-
+        } else {
+            this.currentUnitContainers.put(PGUnit.PRIMARY_CONTAINER, primaryContainer);
         }
     }
 

@@ -6,7 +6,6 @@ import pl.kaqu.pg.engine.gamearea.PGUnitContainer;
 import pl.kaqu.pg.engine.player.PGPlayer;
 import pl.kaqu.pg.engine.unit.PGUnit;
 import pl.kaqu.pg.engine.unit.PGUnitGroup;
-import pl.kaqu.pg.engine.unit.activation.PGActivatedUnit;
 import pl.kaqu.pg.engine.unit.effect.PGUnitState;
 
 import java.util.*;
@@ -30,8 +29,8 @@ import java.util.*;
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-public abstract class PGUnitSmall extends PGUnit implements PGActivatedUnit {
-    protected PGUnitSmall(long unitID, PGPlayer owner, PGUnitGroup group, PGUnitState state, @NotNull PGUnitContainer currentUnitContainer) {
+public abstract class PGUnitDefending extends PGUnit {
+    protected PGUnitDefending(long unitID, PGPlayer owner, PGUnitGroup group, PGUnitState state, @NotNull PGUnitContainer currentUnitContainer) {
         super(unitID, owner, group, state, 1, 1);
         this.setCurrentUnitContainers(currentUnitContainer);
     }

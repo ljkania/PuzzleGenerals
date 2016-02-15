@@ -30,22 +30,22 @@ import pl.kaqu.pg.engine.player.PGPlayer;
 import pl.kaqu.pg.engine.unit.PGUnit;
 
 public class PGPlayerArea {
-	
 	private static final float INITIAL_FIELD_LOAD = 0.7f;
 	
 	private final int totalNumberOfUnits;
-	private final int width;
-    private final int height;
+	public final int width;
+    public final int height;
     private final PGField[][] fields;
     private PGPlayer connectedPlayer;
-    
+
+    private PGUnitContainer hand;
     private PGUnitsReserve reserve;
-    
     public PGPlayerArea(int width, int height, @NotNull PGPlayer connectedPlayer) {
         this.width = width;
         this.height = height;
         this.connectedPlayer = connectedPlayer;
         this.fields = new PGField[this.width][];
+        this.hand = new PGUnitContainer(null);
         this.totalNumberOfUnits = (int) (INITIAL_FIELD_LOAD * width * height);
         initializeFields();
     }
@@ -82,7 +82,7 @@ public class PGPlayerArea {
         }
         return this.fields[x][y];
     }
-    
+
     public PGCoordinate findPGUnit(PGUnit unit) {
     	for(int i = 0; i < this.width; i++) {
     		for(int j = 0; j < this.height; i++) { 
@@ -102,13 +102,5 @@ public class PGPlayerArea {
     	this.reserve.incrementReserve();
     	fields[coords.x][coords.y].deleteObservers();
 		fields[coords.x][coords.y].setContainedUnit(null);
-    }
-    
-    public int getWidth() {
-    	return width;
-    }
-    
-    public int getHeight() {
-    	return height;
     }
 }

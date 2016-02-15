@@ -1,6 +1,8 @@
 package pl.kaqu.pg.engine.unit.types;
 
 import com.sun.istack.internal.NotNull;
+import pl.kaqu.pg.engine.error.PGError;
+import pl.kaqu.pg.engine.error.PGIncorrectUnitLocationException;
 import pl.kaqu.pg.engine.gamearea.PGField;
 import pl.kaqu.pg.engine.gamearea.PGUnitContainer;
 import pl.kaqu.pg.engine.player.PGPlayer;
@@ -30,26 +32,43 @@ import java.util.*;
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-public abstract class PGUnitSmall extends PGUnit implements PGActivatedUnit {
-    protected PGUnitSmall(long unitID, PGPlayer owner, PGUnitGroup group, PGUnitState state, @NotNull PGUnitContainer currentUnitContainer) {
-        super(unitID, owner, group, state, 1, 1);
-        this.setCurrentUnitContainers(currentUnitContainer);
+public abstract class PGUnitSmallAttackingFormation extends PGUnit {
+    public static final int FRONT = PGUnit.PRIMARY_CONTAINER;
+    public static final int CENTER = 1;
+    public static final int BACK = 2;
+
+    protected PGUnitSmallAttackingFormation(long unitID, PGPlayer owner, PGUnitGroup group, PGUnitState state, @NotNull PGUnitContainer primaryContainer) throws PGError {
+        super(unitID, owner, group, state, 1, 3);
+        this.currentUnitContainers = new HashMap<>();
+        this.setCurrentUnitContainers(primaryContainer);
     }
 
-    public void setCurrentUnitContainers(@NotNull PGUnitContainer currentUnitContainer) {
+    public void setCurrentUnitContainers(@NotNull PGUnitContainer primaryContainer) throws PGIncorrectUnitLocationException {
         this.currentUnitContainers.clear();
-        this.currentUnitContainers.put(PGUnit.PRIMARY_CONTAINER, currentUnitContainer);
 
-        if(currentUnitContainer instanceof PGField) {
+        if(primaryContainer instanceof PGField) {
+            PGField centerOfUnit = ((PGField) primaryContainer).getRearNeighbor();
+            PGField backOfUnit = ((PGField) primaryContainer).getSecondRearNeighbor();
+
+            if(centerOfUnit == null || backOfUnit == null) {
+                throw new PGIncorrectUnitLocationException();
+            }
+
+            this.currentUnitContainers.put(FRONT, primaryContainer);
+            this.currentUnitContainers.put(CENTER, centerOfUnit);
+            this.currentUnitContainers.put(BACK, backOfUnit);
+
             List<PGField> toObserve = new ArrayList<>();
-            toObserve.add(((PGField) currentUnitContainer).getRearNeighbor());
-            toObserve.add(((PGField) currentUnitContainer).getSecondRearNeighbor());
+            toObserve.add(backOfUnit.getRearNeighbor());
+            toObserve.add(backOfUnit.getSecondRearNeighbor());
 
             if(!toObserve.contains(null)) {
                 for(PGField field : toObserve) {
                     field.addObserver(this);
                 }
             }
+        } else {
+            this.currentUnitContainers.put(PGUnit.PRIMARY_CONTAINER, primaryContainer);
         }
     }
 

@@ -1,7 +1,7 @@
 package pl.kaqu.pg.engine.unit.types;
 
 import com.sun.istack.internal.NotNull;
-import pl.kaqu.pg.engine.error.PGError;
+import pl.kaqu.pg.engine.error.PGIncorrectUnitLocationException;
 import pl.kaqu.pg.engine.gamearea.PGField;
 import pl.kaqu.pg.engine.gamearea.PGUnitContainer;
 import pl.kaqu.pg.engine.player.PGPlayer;
@@ -33,35 +33,40 @@ import java.util.*;
 
 public abstract class PGUnitLarge extends PGUnit implements PGActivatedUnit {
     Map<Integer, PGUnitContainer> currentUnitContainers;
-    public static final int LEFT_FRONT = 0;
-    public static final int LEFT_BACK = 1;
-    public static final int RIGHT_FRONT = 2;
-    public static final int RIGHT_BACK = 3;
+    private static final int LEFT_FRONT = PGUnit.PRIMARY_CONTAINER;
+    private static final int LEFT_BACK = 1;
+    private static final int RIGHT_FRONT = 2;
+    private static final int RIGHT_BACK = 3;
 
-    protected PGUnitLarge(long unitID, PGPlayer owner, PGUnitGroup group, PGUnitState state, @NotNull PGUnitContainer leftFrontOfUnit) throws PGError {
-        super(unitID, owner, group, state);
+    protected PGUnitLarge(long unitID, PGPlayer owner, PGUnitGroup group, PGUnitState state, @NotNull PGUnitContainer primaryContainer) throws PGIncorrectUnitLocationException {
+        super(unitID, owner, group, state, 2, 2);
         this.currentUnitContainers = new HashMap<>();
+        this.setCurrentUnitContainers(primaryContainer);
+    }
 
-        if(leftFrontOfUnit instanceof PGField) {
+    public void setCurrentUnitContainers(@NotNull PGUnitContainer primaryContainer) throws PGIncorrectUnitLocationException {
+        this.currentUnitContainers.clear();
+
+        if(primaryContainer instanceof PGField) {
             PGField leftBackOfUnit;
             PGField rightFrontOfUnit;
             PGField rightBackOfUnit;
 
             try {
-                leftBackOfUnit = ((PGField) leftFrontOfUnit).getRearNeighbor();
-                rightFrontOfUnit = ((PGField) leftFrontOfUnit).getRightNeighbor();
+                leftBackOfUnit = ((PGField) primaryContainer).getRearNeighbor();
+                rightFrontOfUnit = ((PGField) primaryContainer).getRightNeighbor();
                 rightBackOfUnit = rightFrontOfUnit.getRearNeighbor();
             } catch(NullPointerException e) {
-                throw new PGError(); // FIXME: change error to new error class
+                throw new PGIncorrectUnitLocationException();
             }
 
-            currentUnitContainers.put(LEFT_FRONT, leftFrontOfUnit);
+            currentUnitContainers.put(LEFT_FRONT, primaryContainer);
             currentUnitContainers.put(LEFT_BACK, leftBackOfUnit);
             currentUnitContainers.put(RIGHT_FRONT, rightFrontOfUnit);
             currentUnitContainers.put(RIGHT_BACK, rightBackOfUnit);
 
             if(currentUnitContainers.containsValue(null)) {
-                throw new PGError(); // FIXME: change error to new error class
+                throw new PGIncorrectUnitLocationException();
             }
 
             List<PGField> toObserve = new ArrayList<>();
@@ -76,6 +81,8 @@ public abstract class PGUnitLarge extends PGUnit implements PGActivatedUnit {
                     field.addObserver(this);
                 }
             }
+        } else {
+            this.currentUnitContainers.put(PGUnit.PRIMARY_CONTAINER, primaryContainer);
         }
     }
 
