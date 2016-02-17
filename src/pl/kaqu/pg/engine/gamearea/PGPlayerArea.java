@@ -88,6 +88,10 @@ public class PGPlayerArea {
         return this.fields[x][y];
     }
 
+    @NotNull public PGUnitContainer getHand() {
+        return this.hand;
+    }
+
     public void moveUnitToReserve(@NotNull PGUnit unit) throws PGOutOfAreaException {
         if(!(unit.getPrimaryUnitContainer() instanceof PGField))
     		throw new IllegalArgumentException("Unit " + unit + " is not on the grid");
