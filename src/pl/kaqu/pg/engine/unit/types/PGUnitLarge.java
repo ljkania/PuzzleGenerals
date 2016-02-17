@@ -32,7 +32,6 @@ import java.util.*;
  */
 
 public abstract class PGUnitLarge extends PGUnit implements PGActivatedUnit {
-    Map<Integer, PGUnitContainer> currentUnitContainers;
     private static final int LEFT_FRONT = PGUnit.PRIMARY_CONTAINER;
     private static final int LEFT_BACK = 1;
     private static final int RIGHT_FRONT = 2;

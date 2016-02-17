@@ -38,7 +38,6 @@ import pl.kaqu.pg.engine.unit.activation.PGActivatedUnit;
 import pl.kaqu.pg.engine.unit.effect.PGUnitState;
 
 public abstract class PGUnitHigh extends PGUnit implements PGActivatedUnit {
-    Map<Integer, PGUnitContainer> currentUnitContainers;
     private static final int FRONT = PGUnit.PRIMARY_CONTAINER;
     private static final int BACK = 1;
 

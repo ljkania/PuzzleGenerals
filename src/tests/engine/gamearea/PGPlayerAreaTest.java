@@ -45,7 +45,7 @@ public class PGPlayerAreaTest {
         exception.expect(IllegalArgumentException.class);
         new PGPlayerArea(8, -1, new PGPlayer());
     }
-    
+
     @Test
     public void getField_AnyCorrectArguments_ArgumentsEqualsReturnedPGFieldCoordinate() throws PGOutOfAreaException {
         PGPlayerArea playerArea = new PGPlayerArea(8, 6, new PGPlayer());
