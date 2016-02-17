@@ -75,6 +75,56 @@ public class PGPlayerAreaTest {
     }
 
     @Test
+    public void getField_GetFieldNextToLeftEdge_LeftNeighbourShouldBeNull() throws PGOutOfAreaException {
+        PGPlayerArea playerArea = new PGPlayerArea(8, 6, new PGPlayer());
+        PGField field = playerArea.getField(0, 4);
+        assertNull(field.getLeftNeighbor());
+    }
+
+    @Test
+    public void getField_GetFieldNextToRightEdge_RightNeighbourShouldBeNull() throws PGOutOfAreaException {
+        PGPlayerArea playerArea = new PGPlayerArea(8, 6, new PGPlayer());
+        PGField field = playerArea.getField(7, 4);
+        assertNull(field.getRightNeighbor());
+    }
+
+    @Test
+     public void getField_GetFieldAtFirstRow_FrontNeighbourShouldBeNull() throws PGOutOfAreaException {
+        PGPlayerArea playerArea = new PGPlayerArea(8, 6, new PGPlayer());
+        PGField field = playerArea.getField(3, 0);
+        assertNull(field.getFrontNeighbor());
+    }
+
+    @Test
+     public void getField_GetFieldAtLastRow_RearNeighbourShouldBeNull() throws PGOutOfAreaException {
+        PGPlayerArea playerArea = new PGPlayerArea(8, 6, new PGPlayer());
+        PGField field = playerArea.getField(4, 5);
+        assertNull(field.getRearNeighbor());
+    }
+
+    @Test
+    public void getField_GetFieldAtLastRow_SecondRearNeighbourShouldBeNull() throws PGOutOfAreaException {
+        PGPlayerArea playerArea = new PGPlayerArea(8, 6, new PGPlayer());
+        PGField field = playerArea.getField(3, 5);
+        assertNull(field.getSecondRearNeighbor());
+    }
+
+    @Test
+    public void getField_GetFieldAtOneBeforeLastRow_SecondRearNeighbourShouldBeNull() throws PGOutOfAreaException {
+        PGPlayerArea playerArea = new PGPlayerArea(8, 6, new PGPlayer());
+        PGField field = playerArea.getField(2, 4);
+        assertNull(field.getSecondRearNeighbor());
+    }
+
+    @Test
+    public void getField_GetAnyFieldAndFieldTwoSpaceBehindIt_SecondOneEqualsFirstSecondNeighbour() throws PGOutOfAreaException {
+        PGPlayerArea playerArea = new PGPlayerArea(8, 6, new PGPlayer());
+        PGField field1 = playerArea.getField(5, 1);
+        PGField field2 = playerArea.getField(5, 3);
+        assertEquals(field1.getSecondRearNeighbor(), field2);
+    }
+
+    @Test
     public void getField_FirstArgumentNegative_PGOutOfAreaExceptionThrown() throws PGOutOfAreaException {
         PGPlayerArea playerArea = new PGPlayerArea(8, 6, new PGPlayer());
         exception.expect(PGOutOfAreaException.class);
