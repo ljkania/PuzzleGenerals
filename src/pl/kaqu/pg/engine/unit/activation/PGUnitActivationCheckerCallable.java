@@ -20,7 +20,7 @@ package pl.kaqu.pg.engine.unit.activation;
  */
 
 
-import com.sun.istack.internal.NotNull;
+import org.jetbrains.annotations.NotNull;
 import pl.kaqu.pg.engine.unit.PGUnit;
 
 import java.util.concurrent.Callable;

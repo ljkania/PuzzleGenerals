@@ -21,7 +21,7 @@ package pl.kaqu.pg.engine.gamearea;
 
 import java.util.Map;
 
-import com.sun.istack.internal.NotNull;
+import org.jetbrains.annotations.NotNull;
 
 import pl.kaqu.pg.engine.error.PGError;
 import pl.kaqu.pg.engine.error.PGWrongSumOfUnitsException;
@@ -41,6 +41,10 @@ public class PGPlayerArea {
     private PGUnitContainer hand;
     private PGUnitsReserve reserve;
     public PGPlayerArea(int width, int height, @NotNull PGPlayer connectedPlayer) {
+        if(width <= 0 || height <= 0) {
+            throw new IllegalArgumentException();
+        }
+
         this.width = width;
         this.height = height;
         this.connectedPlayer = connectedPlayer;

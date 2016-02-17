@@ -19,7 +19,7 @@ package pl.kaqu.pg.engine.gamearea;
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import com.sun.istack.internal.Nullable;
+import org.jetbrains.annotations.Nullable;
 import pl.kaqu.pg.engine.unit.PGUnit;
 
 import java.util.Observable;

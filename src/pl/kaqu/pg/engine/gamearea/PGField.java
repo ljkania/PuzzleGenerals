@@ -19,8 +19,8 @@ package pl.kaqu.pg.engine.gamearea;
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import com.sun.istack.internal.NotNull;
-import com.sun.istack.internal.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public final class PGField extends PGUnitContainer {
 

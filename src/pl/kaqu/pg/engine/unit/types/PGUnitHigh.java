@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 
-import com.sun.istack.internal.NotNull;
+import org.jetbrains.annotations.NotNull;
 
 import pl.kaqu.pg.engine.error.PGError;
 import pl.kaqu.pg.engine.error.PGIncorrectUnitLocationException;

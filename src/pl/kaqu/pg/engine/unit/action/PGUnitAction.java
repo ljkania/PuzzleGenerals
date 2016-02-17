@@ -19,7 +19,7 @@ package pl.kaqu.pg.engine.unit.action;
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import com.sun.istack.internal.NotNull;
+import org.jetbrains.annotations.NotNull;
 import pl.kaqu.pg.engine.unit.PGUnit;
 
 public abstract class PGUnitAction {

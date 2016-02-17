@@ -1,6 +1,6 @@
 package pl.kaqu.pg.engine.unit.types;
 
-import com.sun.istack.internal.NotNull;
+import org.jetbrains.annotations.NotNull;
 import pl.kaqu.pg.engine.gamearea.PGField;
 import pl.kaqu.pg.engine.gamearea.PGUnitContainer;
 import pl.kaqu.pg.engine.player.PGPlayer;

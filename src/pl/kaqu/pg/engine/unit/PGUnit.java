@@ -23,7 +23,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.sun.istack.internal.NotNull;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import pl.kaqu.pg.engine.error.PGIncorrectUnitLocationException;
 import pl.kaqu.pg.engine.gamearea.PGUnitContainer;
 import pl.kaqu.pg.engine.gamearea.behaviour.PGUnitContainerObserver;
@@ -45,7 +46,7 @@ public abstract class PGUnit implements Serializable, PGUnitContainerObserver {
     public final int width;
     public final int height;
 
-    protected PGUnit(long unitID, @NotNull PGPlayer owner, @NotNull PGUnitGroup group, @NotNull PGUnitState state, int width, int height){
+    protected PGUnit(long unitID, @Nullable PGPlayer owner, @Nullable PGUnitGroup group, @NotNull PGUnitState state, int width, int height){
         this.unitID = unitID;
         this.width = width;
         this.height = height;
