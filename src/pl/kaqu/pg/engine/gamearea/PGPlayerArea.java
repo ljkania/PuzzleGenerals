@@ -77,7 +77,7 @@ public class PGPlayerArea {
     }
 
     @NotNull public PGField getField(int x, int y) throws PGOutOfAreaException {
-        if (x < 0 && x >= this.width && y < 0 && y >= this.height) {
+        if (x < 0 || x >= this.width || y < 0 || y >= this.height) {
             throw new PGOutOfAreaException();
         }
         return this.fields[x][y];
