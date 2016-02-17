@@ -44,7 +44,7 @@ public abstract class PGUnitLarge extends PGUnit implements PGActivatedUnit {
     }
 
     public void setCurrentUnitContainers(@NotNull PGUnitContainer primaryContainer) throws PGIncorrectUnitLocationException {
-        this.currentUnitContainers.clear();
+        clearCurrentUnitContainers();
 
         if(primaryContainer instanceof PGField) {
             PGField leftBackOfUnit;
@@ -68,20 +68,25 @@ public abstract class PGUnitLarge extends PGUnit implements PGActivatedUnit {
                 throw new PGIncorrectUnitLocationException();
             }
 
-            List<PGField> toObserve = new ArrayList<>();
-            toObserve.add(leftBackOfUnit.getRearNeighbor());
-            toObserve.add(leftBackOfUnit.getSecondRearNeighbor());
-            toObserve.add(rightBackOfUnit.getRearNeighbor());
-            toObserve.add(rightBackOfUnit.getSecondRearNeighbor());
+            observedObjects.add(leftBackOfUnit.getRearNeighbor());
+            observedObjects.add(leftBackOfUnit.getSecondRearNeighbor());
+            observedObjects.add(rightBackOfUnit.getRearNeighbor());
+            observedObjects.add(rightBackOfUnit.getSecondRearNeighbor());
 
 
-            if(!toObserve.contains(null)) {
-                for(PGField field : toObserve) {
-                    field.addObserver(this);
+            if(!observedObjects.contains(null)) {
+                for(Observable observable : observedObjects) {
+                    observable.addObserver(this);
                 }
+            } else {
+                observedObjects.clear();
             }
         } else {
             this.currentUnitContainers.put(PGUnit.PRIMARY_CONTAINER, primaryContainer);
+        }
+
+        for(PGUnitContainer unitContainer : this.currentUnitContainers.values()) {
+            unitContainer.setContainedUnit(this);
         }
     }
 

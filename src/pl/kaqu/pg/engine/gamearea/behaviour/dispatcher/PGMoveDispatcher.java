@@ -34,24 +34,21 @@ public class PGMoveDispatcher {
 
     public void pickUnitToHand(PGUnitContainer unitContainer, PGUnitContainer hand) throws PGIncorrectUnitLocationException {
         PGUnit unit = unitContainer.getContainedUnit();
-        hand.setContainedUnit(unit);
-        for(PGUnitContainer container : unit.getCurrentUnitContainers()) {
-            container.setContainedUnit(null);
+        if(unit != null) {
+            unit.setCurrentUnitContainers(hand);
         }
-        unit.setCurrentUnitContainers(hand);
     }
 
     public void dropUnitFromHand(PGUnitContainer hand, PGField primaryContainer) throws PGIncorrectUnitLocationException {
         PGUnit unit = hand.getContainedUnit();
-        for(PGUnitContainer container : unit.getCurrentUnitContainers()) {
-            container.setContainedUnit(null);
+        if(unit == null) {
+            return;
         }
 
         int x = primaryContainer.getCoordinate().x;
         int y = primaryContainer.getCoordinate().y;
         int width = unit.width;
         int height = unit.height;
-        List<PGField> unitLocations = new ArrayList<>();
 
         PGField currentMostLeft = primaryContainer;
 
@@ -61,16 +58,11 @@ public class PGMoveDispatcher {
                 if(currentField == null || currentField.getContainedUnit() != null) {
                     throw new PGIncorrectUnitLocationException();
                 }
-
-                unitLocations.add(currentField);
                 currentField = currentField.getRightNeighbor();
             }
             currentMostLeft = currentMostLeft.getRearNeighbor();
         }
 
-        for(PGField field : unitLocations) {
-            field.setContainedUnit(unit);
-        }
         unit.setCurrentUnitContainers(primaryContainer);
     }
 }

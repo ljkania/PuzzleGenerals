@@ -44,7 +44,7 @@ public abstract class PGUnitSmallAttackingFormation extends PGUnit {
     }
 
     public void setCurrentUnitContainers(@NotNull PGUnitContainer primaryContainer) throws PGIncorrectUnitLocationException {
-        this.currentUnitContainers.clear();
+        clearCurrentUnitContainers();
 
         if(primaryContainer instanceof PGField) {
             PGField centerOfUnit = ((PGField) primaryContainer).getRearNeighbor();
@@ -58,17 +58,22 @@ public abstract class PGUnitSmallAttackingFormation extends PGUnit {
             this.currentUnitContainers.put(CENTER, centerOfUnit);
             this.currentUnitContainers.put(BACK, backOfUnit);
 
-            List<PGField> toObserve = new ArrayList<>();
-            toObserve.add(backOfUnit.getRearNeighbor());
-            toObserve.add(backOfUnit.getSecondRearNeighbor());
+            observedObjects.add(backOfUnit.getRearNeighbor());
+            observedObjects.add(backOfUnit.getSecondRearNeighbor());
 
-            if(!toObserve.contains(null)) {
-                for(PGField field : toObserve) {
-                    field.addObserver(this);
+            if(!observedObjects.contains(null)) {
+                for(Observable observable : observedObjects) {
+                    observable.addObserver(this);
                 }
+            } else {
+                observedObjects.clear();
             }
         } else {
             this.currentUnitContainers.put(PGUnit.PRIMARY_CONTAINER, primaryContainer);
+        }
+
+        for(PGUnitContainer unitContainer : this.currentUnitContainers.values()) {
+            unitContainer.setContainedUnit(this);
         }
     }
 

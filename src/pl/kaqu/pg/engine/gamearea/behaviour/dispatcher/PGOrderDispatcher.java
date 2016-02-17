@@ -51,25 +51,30 @@ public class PGOrderDispatcher {
         int height = playerArea.height;
 
         PriorityQueue<PGUnit> queue = new PriorityQueue<>(height * width, UNIT_COMPARATOR);
-        Set<PGUnit> uniqueUnits = new HashSet<>();
+        Map<PGUnit, PGUnitContainer> previousUnitLocation = new HashMap<>();
 
         for(int i=0; i<width; i++) {
             for(int j=0; j<height; j++) {
                 try {
-                    uniqueUnits.add(playerArea.getField(i, j).pickContainedUnit());
+                    PGUnit unit = playerArea.getField(i,j).getContainedUnit();
+                    if(unit != null) {
+                        previousUnitLocation.put(unit, unit.getPrimaryUnitContainer());
+                        unit.clearCurrentUnitContainers();
+                    }
                 } catch (PGOutOfAreaException e) {
                     e.printStackTrace();
                 }
             }
         }
-        queue.addAll(uniqueUnits.stream().collect(Collectors.toList()));
+
+        queue.addAll(previousUnitLocation.keySet().stream().collect(Collectors.toList()));
         int[] firstPossible = new int[width];
 
         while(!queue.isEmpty()) {
             PGUnit unit = queue.remove();
             int widthOfUnit = unit.width;
             int heightOfUnit = unit.height;
-            PGUnitContainer leftFrontOfUnit = unit.getPrimaryUnitContainer();
+            PGUnitContainer leftFrontOfUnit = previousUnitLocation.get(unit);
 
             if(leftFrontOfUnit instanceof PGField) {
                 int x = ((PGField) leftFrontOfUnit).getCoordinate().x;

@@ -20,8 +20,7 @@ package pl.kaqu.pg.engine.unit;
  */
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -33,14 +32,13 @@ import pl.kaqu.pg.engine.unit.action.PGUnitAction;
 import pl.kaqu.pg.engine.unit.effect.PGUnitEffect;
 import pl.kaqu.pg.engine.unit.effect.PGUnitState;
 
-import java.util.Map;
-
 public abstract class PGUnit implements Serializable, PGUnitContainerObserver {
     public final long unitID;
     protected PGPlayer owner;
     protected PGUnitGroup group;
     protected PGUnitState state;
     protected List<PGUnitEffect> currentEffects;
+    protected List<Observable> observedObjects;
     protected Map<Integer, PGUnitContainer> currentUnitContainers;
     protected static final int PRIMARY_CONTAINER = 0;
     public final int width;
@@ -54,6 +52,8 @@ public abstract class PGUnit implements Serializable, PGUnitContainerObserver {
         this.group = group != null ? group : PGUnitGroup.NONE;
         this.state = state;
         this.currentEffects = new ArrayList<>();
+        this.observedObjects = new ArrayList<>();
+        this.currentUnitContainers = new HashMap<>();
     }
 
     @NotNull public PGPlayer getOwner() {
@@ -81,5 +81,15 @@ public abstract class PGUnit implements Serializable, PGUnitContainerObserver {
     }
     @NotNull public PGUnitContainer getPrimaryUnitContainer() {
         return currentUnitContainers.get(PRIMARY_CONTAINER);
+    }
+    public void clearCurrentUnitContainers() {
+        for(Observable obj : observedObjects) {
+            obj.deleteObserver(this);
+        }
+        this.observedObjects.clear();
+        for(PGUnitContainer unitContainer : this.currentUnitContainers.values()) {
+            unitContainer.setContainedUnit(null);
+        }
+        this.currentUnitContainers.clear();
     }
 }

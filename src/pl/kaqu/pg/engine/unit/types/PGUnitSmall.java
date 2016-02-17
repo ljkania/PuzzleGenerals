@@ -37,19 +37,24 @@ public abstract class PGUnitSmall extends PGUnit implements PGActivatedUnit {
     }
 
     public void setCurrentUnitContainers(@NotNull PGUnitContainer currentUnitContainer) {
-        this.currentUnitContainers.clear();
+        clearCurrentUnitContainers();
         this.currentUnitContainers.put(PGUnit.PRIMARY_CONTAINER, currentUnitContainer);
 
         if(currentUnitContainer instanceof PGField) {
-            List<PGField> toObserve = new ArrayList<>();
-            toObserve.add(((PGField) currentUnitContainer).getRearNeighbor());
-            toObserve.add(((PGField) currentUnitContainer).getSecondRearNeighbor());
+            observedObjects.add(((PGField) currentUnitContainer).getRearNeighbor());
+            observedObjects.add(((PGField) currentUnitContainer).getSecondRearNeighbor());
 
-            if(!toObserve.contains(null)) {
-                for(PGField field : toObserve) {
-                    field.addObserver(this);
+            if(!observedObjects.contains(null)) {
+                for(Observable observable : observedObjects) {
+                    observable.addObserver(this);
                 }
+            } else {
+                observedObjects.clear();
             }
+        }
+
+        for(PGUnitContainer unitContainer : this.currentUnitContainers.values()) {
+            unitContainer.setContainedUnit(this);
         }
     }
 

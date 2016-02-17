@@ -19,6 +19,7 @@ package pl.kaqu.pg.engine.gamearea;
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+import java.util.List;
 import java.util.Map;
 
 import org.jetbrains.annotations.NotNull;
@@ -87,24 +88,11 @@ public class PGPlayerArea {
         return this.fields[x][y];
     }
 
-    public PGCoordinate findPGUnit(PGUnit unit) {
-    	for(int i = 0; i < this.width; i++) {
-    		for(int j = 0; j < this.height; i++) { 
-    			if(fields[i][j].getContainedUnit().equals(unit)) {
-    				this.reserve.incrementReserve();
-    				return new PGCoordinate(i, j);
-    			}
-    		}
-    	}
-    	return null;
-    }
-    
-    public void moveUnitToReserve(PGUnit unit) throws PGOutOfAreaException {
-    	PGCoordinate coords = findPGUnit(unit);
-    	if(coords == null)
-    		throw new IllegalArgumentException("Unit " + unit + " doesn't exist");
-    	this.reserve.incrementReserve();
-    	fields[coords.x][coords.y].deleteObservers();
-		fields[coords.x][coords.y].setContainedUnit(null);
+    public void moveUnitToReserve(@NotNull PGUnit unit) throws PGOutOfAreaException {
+        if(!(unit.getPrimaryUnitContainer() instanceof PGField))
+    		throw new IllegalArgumentException("Unit " + unit + " is not on the grid");
+        List<PGUnitContainer> previousUnitContainers = unit.getCurrentUnitContainers();
+        this.reserve.incrementReserve();
+        unit.clearCurrentUnitContainers();
     }
 }
