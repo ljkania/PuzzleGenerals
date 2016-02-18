@@ -39,8 +39,9 @@ public class PGPlayerArea {
     private final PGField[][] fields;
     private PGPlayer connectedPlayer;
 
-    private PGUnitContainer hand;
+    protected final PGUnitContainer hand;
     private PGUnitsReserve reserve;
+
     public PGPlayerArea(int width, int height, @NotNull PGPlayer connectedPlayer) {
         if(width <= 0 || height <= 0) {
             throw new IllegalArgumentException();
@@ -88,14 +89,9 @@ public class PGPlayerArea {
         return this.fields[x][y];
     }
 
-    @NotNull public PGUnitContainer getHand() {
-        return this.hand;
-    }
-
     public void moveUnitToReserve(@NotNull PGUnit unit) throws PGOutOfAreaException {
         if(!(unit.getPrimaryUnitContainer() instanceof PGField))
     		throw new IllegalArgumentException("Unit " + unit + " is not on the grid");
-        List<PGUnitContainer> previousUnitContainers = unit.getCurrentUnitContainers();
         this.reserve.incrementReserve();
         unit.clearCurrentUnitContainers();
     }
