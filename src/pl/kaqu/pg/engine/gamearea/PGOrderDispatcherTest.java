@@ -1,16 +1,13 @@
 package pl.kaqu.pg.engine.gamearea;
 
 import org.jetbrains.annotations.NotNull;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import pl.kaqu.pg.engine.error.PGError;
-import pl.kaqu.pg.engine.error.PGIncorrectUnitLocationException;
-import pl.kaqu.pg.engine.error.PGOutOfAreaException;
-import pl.kaqu.pg.engine.gamearea.PGField;
-import pl.kaqu.pg.engine.gamearea.PGPlayerArea;
 import pl.kaqu.pg.engine.gamearea.behaviour.dispatcher.PGOrderDispatcher;
 import pl.kaqu.pg.engine.player.PGPlayer;
 import pl.kaqu.pg.engine.unit.PGUnit;
-import pl.kaqu.pg.engine.unit.PGUnitGroup;
 import pl.kaqu.pg.engine.unit.PGUnitRank;
 import pl.kaqu.pg.engine.unit.action.PGUnitAction;
 import pl.kaqu.pg.engine.unit.activation.PGActivationType;
@@ -43,13 +40,25 @@ import static org.junit.Assert.*;
  */
 
 public class PGOrderDispatcherTest {
+    static int width;
+    static int height;
+    static PGPlayer player;
+    PGPlayerArea playerArea;
+
+    @BeforeClass
+    public static void init() {
+        width = 8;
+        height = 6;
+        player = new PGPlayer();
+    }
+
+    @Before
+    public void initField() {
+        playerArea = new PGPlayerArea(width, height, player);
+    }
+
     @Test
     public void reorderUnits_EveryUnitHasTheSamePriorityAndStandAsCloseToFrontAsPossible_GridDoesNotChange() throws PGError {
-        int width = 8;
-        int height = 6;
-        PGPlayer player = new PGPlayer();
-        PGPlayerArea playerArea = new PGPlayerArea(width, height, player);
-
         PGUnit unit1 = new PGUnitLarge(0, player, null, PGUnitState.IDLE, playerArea.getField(0,0)) {
             @Override
             public void activate(@NotNull PGActivationType activationType) {
@@ -466,11 +475,6 @@ public class PGOrderDispatcherTest {
 
     @Test
     public void reorderUnits_SmallUnitAtTheBackOfAnotherHasBiggerPriority_SmallIsMovedToFront() throws PGError {
-        int width = 8;
-        int height = 6;
-        PGPlayer player = new PGPlayer();
-        PGPlayerArea playerArea = new PGPlayerArea(width, height, player);
-
         PGUnit unit1 = new PGUnitLarge(0, player, null, PGUnitState.IDLE, playerArea.getField(0,0)) {
             @Override
             public void activate(@NotNull PGActivationType activationType) {
@@ -580,11 +584,6 @@ public class PGOrderDispatcherTest {
 
     @Test
     public void reorderUnits_OneUnitSomewhereOnTheGrid_UnitIsMovedToFrontRow() throws PGError {
-        int width = 8;
-        int height = 6;
-        PGPlayer player = new PGPlayer();
-        PGPlayerArea playerArea = new PGPlayerArea(width, height, player);
-
         PGUnit unit = new PGUnitLarge(0, player, null, PGUnitState.IDLE, playerArea.getField(3,4)) {
             @Override
             public void activate(@NotNull PGActivationType activationType) {
