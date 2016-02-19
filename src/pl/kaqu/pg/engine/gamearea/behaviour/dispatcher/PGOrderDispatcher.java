@@ -88,11 +88,6 @@ public class PGOrderDispatcher {
                 } catch (PGOutOfAreaException e) {
                     e.printStackTrace();
                 }
-                List<PGUnitContainer> containersToChange = unit.getCurrentUnitContainers();
-
-                for(PGUnitContainer container : containersToChange) {
-                    container.setContainedUnit(unit);
-                }
 
                 for(int i=x; i<x+widthOfUnit; i++) {
                     firstPossible[i] = k+heightOfUnit;
