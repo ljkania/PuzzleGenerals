@@ -2,11 +2,10 @@ package pl.kaqu.pg.engine.gamearea;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import pl.kaqu.pg.engine.error.PGError;
-import pl.kaqu.pg.engine.gamearea.PGPlayerArea;
 import pl.kaqu.pg.engine.gamearea.behaviour.dispatcher.PGMoveDispatcher;
-import pl.kaqu.pg.engine.gamearea.behaviour.dispatcher.PGOrderDispatcher;
 import pl.kaqu.pg.engine.player.PGPlayer;
 import pl.kaqu.pg.engine.unit.PGUnit;
 import pl.kaqu.pg.engine.unit.PGUnitRank;
@@ -15,7 +14,6 @@ import pl.kaqu.pg.engine.unit.activation.PGActivationType;
 import pl.kaqu.pg.engine.unit.activation.PGUnitActivationCheckerCallable;
 import pl.kaqu.pg.engine.unit.effect.PGUnitEffect;
 import pl.kaqu.pg.engine.unit.effect.PGUnitState;
-import pl.kaqu.pg.engine.unit.types.PGUnitHigh;
 import pl.kaqu.pg.engine.unit.types.PGUnitLarge;
 import pl.kaqu.pg.engine.unit.types.PGUnitSmall;
 
@@ -41,25 +39,32 @@ import static org.junit.Assert.*;
  */
 
 public class PGMoveDispatcherTest {
+    static int width;
+    static int height;
+    static PGPlayer player;
+    PGPlayerArea playerArea;
+
+    @BeforeClass
+    public static void init() {
+        width = 8;
+        height = 6;
+        player = new PGPlayer();
+    }
+
+    @Before
+    public void initField() {
+        playerArea = new PGPlayerArea(width, height, player);
+    }
+
     @Test
     public void pickUnitToHand_PickFromEmptyField_HandContainsNull() throws PGError {
-        int width = 8;
-        int height = 6;
-        PGPlayer player = new PGPlayer();
-        PGPlayerArea playerArea = new PGPlayerArea(width, height, player);
-
         PGMoveDispatcher.pickUnitToHand(playerArea.getField(1,3), playerArea.hand);
-
         assertNull(playerArea.hand.getContainedUnit());
     }
 
     @Test
     public void pickUnitToHand_PickUnitWhenHandIsNotEmpty_HandContainsPreviousUnit() throws PGError {
-        int width = 8;
-        int height = 6;
-        PGPlayer player = new PGPlayer();
-        PGPlayerArea playerArea = new PGPlayerArea(width, height, player);
-        PGUnit unit1 = new PGUnitLarge(0, player, null, PGUnitState.IDLE, playerArea.getField(1, 3)) {
+        new PGUnitLarge(0, player, null, PGUnitState.IDLE, playerArea.getField(1, 3)) {
             @Override
             public int getPriority() {
                 return 0;
@@ -109,7 +114,7 @@ public class PGMoveDispatcherTest {
                 return null;
             }
         };
-        PGUnit unit2 = new PGUnitLarge(0, player, null, PGUnitState.IDLE, playerArea.hand) {
+        PGUnit unit = new PGUnitLarge(0, player, null, PGUnitState.IDLE, playerArea.hand) {
             @Override
             public int getPriority() {
                 return 0;
@@ -159,20 +164,15 @@ public class PGMoveDispatcherTest {
                 return null;
             }
         };
-
 
         PGMoveDispatcher.pickUnitToHand(playerArea.getField(1,3), playerArea.hand);
 
-        assertEquals(unit2, playerArea.hand.getContainedUnit());
+        assertEquals(unit, playerArea.hand.getContainedUnit());
     }
 
     @Test
     public void pickUnitToHand_PickUnitWhenHandIsNotEmpty_UnitStaysOnGrid() throws PGError {
-        int width = 8;
-        int height = 6;
-        PGPlayer player = new PGPlayer();
-        PGPlayerArea playerArea = new PGPlayerArea(width, height, player);
-        PGUnit unit1 = new PGUnitLarge(0, player, null, PGUnitState.IDLE, playerArea.getField(1, 3)) {
+        PGUnit unit = new PGUnitLarge(0, player, null, PGUnitState.IDLE, playerArea.getField(1, 3)) {
             @Override
             public int getPriority() {
                 return 0;
@@ -222,7 +222,7 @@ public class PGMoveDispatcherTest {
                 return null;
             }
         };
-        PGUnit unit2 = new PGUnitLarge(0, player, null, PGUnitState.IDLE, playerArea.hand) {
+        new PGUnitLarge(0, player, null, PGUnitState.IDLE, playerArea.hand) {
             @Override
             public int getPriority() {
                 return 0;
@@ -275,16 +275,11 @@ public class PGMoveDispatcherTest {
 
         PGMoveDispatcher.pickUnitToHand(playerArea.getField(1,3), playerArea.hand);
 
-        assertEquals(unit1, playerArea.getField(1,3).getContainedUnit());
+        assertEquals(unit, playerArea.getField(1,3).getContainedUnit());
     }
 
     @Test
     public void pickUnitToHand_LargeUnitPickedFromPrimaryContainer_HandContainsUnit() throws PGError {
-        int width = 8;
-        int height = 6;
-        PGPlayer player = new PGPlayer();
-        PGPlayerArea playerArea = new PGPlayerArea(width, height, player);
-
         PGUnit unit = new PGUnitLarge(0, player, null, PGUnitState.IDLE, playerArea.getField(1, 3)) {
             @Override
             public int getPriority() {
@@ -343,11 +338,6 @@ public class PGMoveDispatcherTest {
 
     @Test
     public void pickUnitToHand_LargeUnitPickedFromNotPrimaryContainer_HandContainsUnit() throws PGError {
-        int width = 8;
-        int height = 6;
-        PGPlayer player = new PGPlayer();
-        PGPlayerArea playerArea = new PGPlayerArea(width, height, player);
-
         PGUnit unit = new PGUnitLarge(0, player, null, PGUnitState.IDLE, playerArea.getField(1, 3)) {
             @Override
             public int getPriority() {
@@ -406,11 +396,6 @@ public class PGMoveDispatcherTest {
 
     @Test
     public void pickUnitToHand_LargeUnitPickedFromPrimaryContainer_UnitIsNotOnTheGridAnymore() throws PGError {
-        int width = 8;
-        int height = 6;
-        PGPlayer player = new PGPlayer();
-        PGPlayerArea playerArea = new PGPlayerArea(width, height, player);
-
         new PGUnitLarge(0, player, null, PGUnitState.IDLE, playerArea.getField(1, 3)) {
             @Override
             public int getPriority() {
@@ -472,11 +457,6 @@ public class PGMoveDispatcherTest {
 
     @Test
     public void pickUnitToHand_LargeUnitPickedFromNotPrimaryContainer_UnitIsNotOnTheGridAnymore() throws PGError {
-        int width = 8;
-        int height = 6;
-        PGPlayer player = new PGPlayer();
-        PGPlayerArea playerArea = new PGPlayerArea(width, height, player);
-
         new PGUnitLarge(0, player, null, PGUnitState.IDLE, playerArea.getField(1, 3)) {
             @Override
             public int getPriority() {
@@ -538,36 +518,19 @@ public class PGMoveDispatcherTest {
 
     @Test
     public void dropUnitFromHand_DropFromEmptyHand_HandContainsNull() throws PGError {
-        int width = 8;
-        int height = 6;
-        PGPlayer player = new PGPlayer();
-        PGPlayerArea playerArea = new PGPlayerArea(width, height, player);
-
         PGMoveDispatcher.dropUnitFromHand(playerArea.hand, playerArea.getField(1,3));
-
         assertNull(playerArea.hand.getContainedUnit());
     }
 
     @Test
     public void dropUnitFromHand_DropFromEmptyHand_GridHasNotChanged() throws PGError {
-        int width = 8;
-        int height = 6;
-        PGPlayer player = new PGPlayer();
-        PGPlayerArea playerArea = new PGPlayerArea(width, height, player);
-
         PGMoveDispatcher.dropUnitFromHand(playerArea.hand, playerArea.getField(1,3));
-
         assertNull(playerArea.getField(1,3).getContainedUnit());
     }
 
     @Test
     public void dropUnitFromHand_LargeUnitDropedOnEmptyContainers_HandContainsNull() throws PGError {
-        int width = 8;
-        int height = 6;
-        PGPlayer player = new PGPlayer();
-        PGPlayerArea playerArea = new PGPlayerArea(width, height, player);
-
-        PGUnit unit = new PGUnitLarge(0, player, null, PGUnitState.IDLE, playerArea.hand) {
+        new PGUnitLarge(0, player, null, PGUnitState.IDLE, playerArea.hand) {
             @Override
             public int getPriority() {
                 return 0;
@@ -625,11 +588,6 @@ public class PGMoveDispatcherTest {
 
     @Test
     public void dropUnitFromHand_LargeUnitDropedOnEmptyContainers_UnitIsOnGrid() throws PGError {
-        int width = 8;
-        int height = 6;
-        PGPlayer player = new PGPlayer();
-        PGPlayerArea playerArea = new PGPlayerArea(width, height, player);
-
         PGUnit unit = new PGUnitLarge(0, player, null, PGUnitState.IDLE, playerArea.getField(1, 3)) {
             @Override
             public int getPriority() {
@@ -688,12 +646,7 @@ public class PGMoveDispatcherTest {
 
     @Test
     public void dropUnitFromHand_LargeUnitDropedOnNotEmptyContainers_HandDoesNotChange() throws PGError {
-        int width = 8;
-        int height = 6;
-        PGPlayer player = new PGPlayer();
-        PGPlayerArea playerArea = new PGPlayerArea(width, height, player);
-
-        PGUnit unit1 = new PGUnitLarge(0, player, null, PGUnitState.IDLE, playerArea.hand) {
+        PGUnit unit = new PGUnitLarge(0, player, null, PGUnitState.IDLE, playerArea.hand) {
             @Override
             public int getPriority() {
                 return 0;
@@ -743,7 +696,7 @@ public class PGMoveDispatcherTest {
                 return null;
             }
         };
-        PGUnit unit2 = new PGUnitSmall(0, player, null, PGUnitState.IDLE, playerArea.getField(3,5)) {
+        new PGUnitSmall(0, player, null, PGUnitState.IDLE, playerArea.getField(3,5)) {
             @Override
             public int getPriority() {
                 return 0;
@@ -796,17 +749,12 @@ public class PGMoveDispatcherTest {
 
         PGMoveDispatcher.dropUnitFromHand(playerArea.hand, playerArea.getField(2,4));
 
-        assertEquals(unit1, playerArea.hand.getContainedUnit());
+        assertEquals(unit, playerArea.hand.getContainedUnit());
     }
 
     @Test
     public void dropUnitFromHand_LargeUnitDropedOnNotEmptyContainers_GridDoesNotChange() throws PGError {
-        int width = 8;
-        int height = 6;
-        PGPlayer player = new PGPlayer();
-        PGPlayerArea playerArea = new PGPlayerArea(width, height, player);
-
-        PGUnit unit1 = new PGUnitLarge(0, player, null, PGUnitState.IDLE, playerArea.hand) {
+        new PGUnitLarge(0, player, null, PGUnitState.IDLE, playerArea.hand) {
             @Override
             public int getPriority() {
                 return 0;
@@ -856,7 +804,7 @@ public class PGMoveDispatcherTest {
                 return null;
             }
         };
-        PGUnit unit2 = new PGUnitSmall(0, player, null, PGUnitState.IDLE, playerArea.getField(3,5)) {
+        PGUnit unit = new PGUnitSmall(0, player, null, PGUnitState.IDLE, playerArea.getField(3,5)) {
             @Override
             public int getPriority() {
                 return 0;
@@ -912,6 +860,6 @@ public class PGMoveDispatcherTest {
         assertNull(playerArea.getField(2,4).getContainedUnit());
         assertNull(playerArea.getField(3,4).getContainedUnit());
         assertNull(playerArea.getField(2,5).getContainedUnit());
-        assertEquals(unit2, playerArea.getField(3,5).getContainedUnit());
+        assertEquals(unit, playerArea.getField(3,5).getContainedUnit());
     }
 }
