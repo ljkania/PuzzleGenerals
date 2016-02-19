@@ -44,8 +44,6 @@ public abstract class PGUnitLarge extends PGUnit implements PGActivatedUnit {
     }
 
     public void setCurrentUnitContainers(@NotNull PGUnitContainer primaryContainer) throws PGIncorrectUnitLocationException {
-        clearCurrentUnitContainers();
-
         if(primaryContainer instanceof PGField) {
             PGField leftBackOfUnit;
             PGField rightFrontOfUnit;
@@ -59,29 +57,40 @@ public abstract class PGUnitLarge extends PGUnit implements PGActivatedUnit {
                 throw new PGIncorrectUnitLocationException();
             }
 
-            currentUnitContainers.put(LEFT_FRONT, primaryContainer);
-            currentUnitContainers.put(LEFT_BACK, leftBackOfUnit);
-            currentUnitContainers.put(RIGHT_FRONT, rightFrontOfUnit);
-            currentUnitContainers.put(RIGHT_BACK, rightBackOfUnit);
+            Map<Integer, PGUnitContainer> newUnitContainers = new HashMap<>();
 
-            if(currentUnitContainers.containsValue(null)) {
-                throw new PGIncorrectUnitLocationException();
+            newUnitContainers.put(LEFT_FRONT, primaryContainer);
+            newUnitContainers.put(LEFT_BACK, leftBackOfUnit);
+            newUnitContainers.put(RIGHT_FRONT, rightFrontOfUnit);
+            newUnitContainers.put(RIGHT_BACK, rightBackOfUnit);
+
+            for(PGUnitContainer unitContainer : newUnitContainers.values()) {
+                if(unitContainer == null || (unitContainer.getContainedUnit() != null && unitContainer.getContainedUnit() != this)) {
+                    throw new PGIncorrectUnitLocationException();
+                }
             }
 
-            observedObjects.add(leftBackOfUnit.getRearNeighbor());
-            observedObjects.add(leftBackOfUnit.getSecondRearNeighbor());
-            observedObjects.add(rightBackOfUnit.getRearNeighbor());
-            observedObjects.add(rightBackOfUnit.getSecondRearNeighbor());
+            clearCurrentUnitContainers();
+            this.currentUnitContainers = newUnitContainers;
+
+            this.observedObjects.add(leftBackOfUnit.getRearNeighbor());
+            this.observedObjects.add(leftBackOfUnit.getSecondRearNeighbor());
+            this.observedObjects.add(rightBackOfUnit.getRearNeighbor());
+            this.observedObjects.add(rightBackOfUnit.getSecondRearNeighbor());
 
 
-            if(!observedObjects.contains(null)) {
-                for(Observable observable : observedObjects) {
+            if(!this.observedObjects.contains(null)) {
+                for(Observable observable : this.observedObjects) {
                     observable.addObserver(this);
                 }
             } else {
-                observedObjects.clear();
+                this.observedObjects.clear();
             }
         } else {
+            if(primaryContainer.getContainedUnit() != null && primaryContainer.getContainedUnit() != this) {
+                throw new PGIncorrectUnitLocationException();
+            }
+            clearCurrentUnitContainers();
             this.currentUnitContainers.put(PGUnit.PRIMARY_CONTAINER, primaryContainer);
         }
 

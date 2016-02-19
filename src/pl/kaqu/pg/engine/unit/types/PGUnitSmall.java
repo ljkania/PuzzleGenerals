@@ -1,6 +1,7 @@
 package pl.kaqu.pg.engine.unit.types;
 
 import org.jetbrains.annotations.NotNull;
+import pl.kaqu.pg.engine.error.PGIncorrectUnitLocationException;
 import pl.kaqu.pg.engine.gamearea.PGField;
 import pl.kaqu.pg.engine.gamearea.PGUnitContainer;
 import pl.kaqu.pg.engine.player.PGPlayer;
@@ -31,25 +32,28 @@ import java.util.*;
  */
 
 public abstract class PGUnitSmall extends PGUnit implements PGActivatedUnit {
-    protected PGUnitSmall(long unitID, PGPlayer owner, PGUnitGroup group, PGUnitState state, @NotNull PGUnitContainer currentUnitContainer) {
+    protected PGUnitSmall(long unitID, PGPlayer owner, PGUnitGroup group, PGUnitState state, @NotNull PGUnitContainer currentUnitContainer) throws PGIncorrectUnitLocationException {
         super(unitID, owner, group, state, 1, 1);
         this.setCurrentUnitContainers(currentUnitContainer);
     }
 
-    public void setCurrentUnitContainers(@NotNull PGUnitContainer currentUnitContainer) {
+    public void setCurrentUnitContainers(@NotNull PGUnitContainer currentUnitContainer) throws PGIncorrectUnitLocationException {
+        if(currentUnitContainer.getContainedUnit() != null && currentUnitContainer.getContainedUnit() != this) {
+            throw new PGIncorrectUnitLocationException();
+        }
         clearCurrentUnitContainers();
         this.currentUnitContainers.put(PGUnit.PRIMARY_CONTAINER, currentUnitContainer);
 
         if(currentUnitContainer instanceof PGField) {
-            observedObjects.add(((PGField) currentUnitContainer).getRearNeighbor());
-            observedObjects.add(((PGField) currentUnitContainer).getSecondRearNeighbor());
+            this.observedObjects.add(((PGField) currentUnitContainer).getRearNeighbor());
+            this.observedObjects.add(((PGField) currentUnitContainer).getSecondRearNeighbor());
 
-            if(!observedObjects.contains(null)) {
-                for(Observable observable : observedObjects) {
+            if(!this.observedObjects.contains(null)) {
+                for(Observable observable : this.observedObjects) {
                     observable.addObserver(this);
                 }
             } else {
-                observedObjects.clear();
+                this.observedObjects.clear();
             }
         }
 

@@ -166,7 +166,7 @@ public class PGPlayerAreaTest {
     }
 
     @Test
-    public void moveUnitToReserve_OnePGUnitSmallOnTheGridMovedToReserve_ReserveCounterIncremented() throws PGOutOfAreaException {
+    public void moveUnitToReserve_OnePGUnitSmallOnTheGridMovedToReserve_ReserveCounterIncremented() throws PGOutOfAreaException, PGIncorrectUnitLocationException {
         int width = 8;
         int height = 6;
         PGPlayer player = new PGPlayer();
@@ -233,7 +233,7 @@ public class PGPlayerAreaTest {
     }
 
     @Test
-    public void moveUnitToReserve_OnePGUnitSmallOnTheGridMovedToReserve_UnitHasClearedUnitContainers() throws PGOutOfAreaException {
+    public void moveUnitToReserve_OnePGUnitSmallOnTheGridMovedToReserve_UnitHasClearedUnitContainers() throws PGOutOfAreaException, PGIncorrectUnitLocationException {
         int width = 8;
         int height = 6;
         PGPlayer player = new PGPlayer();
@@ -299,7 +299,7 @@ public class PGPlayerAreaTest {
     }
 
     @Test
-    public void moveUnitToReserve_OnePGUnitSmallOnTheGridMovedToReserve_GridDoesNotContainUnitAnymore() throws PGOutOfAreaException {
+    public void moveUnitToReserve_OnePGUnitSmallOnTheGridMovedToReserve_GridDoesNotContainUnitAnymore() throws PGOutOfAreaException, PGIncorrectUnitLocationException {
         int width = 8;
         int height = 6;
         PGPlayer player = new PGPlayer();

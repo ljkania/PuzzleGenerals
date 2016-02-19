@@ -44,38 +44,43 @@ public abstract class PGUnitSmallAttackingFormation extends PGUnit {
     }
 
     public void setCurrentUnitContainers(@NotNull PGUnitContainer primaryContainer) throws PGIncorrectUnitLocationException {
-        clearCurrentUnitContainers();
-
         if(primaryContainer instanceof PGField) {
-            PGField centerOfUnit = ((PGField) primaryContainer).getRearNeighbor();
-            PGField backOfUnit = ((PGField) primaryContainer).getSecondRearNeighbor();
+            Map<Integer, PGUnitContainer> newUnitContainers = new HashMap<>();
 
-            if(centerOfUnit == null || backOfUnit == null) {
-                throw new PGIncorrectUnitLocationException();
+            newUnitContainers.put(FRONT, primaryContainer);
+            newUnitContainers.put(CENTER, ((PGField) primaryContainer).getRearNeighbor());
+            newUnitContainers.put(BACK, ((PGField) primaryContainer).getSecondRearNeighbor());
+
+            for(PGUnitContainer unitContainer : newUnitContainers.values()) {
+                if(unitContainer == null || (unitContainer.getContainedUnit() != null && unitContainer.getContainedUnit() != this)) {
+                    throw new PGIncorrectUnitLocationException();
+                }
             }
 
-            this.currentUnitContainers.put(FRONT, primaryContainer);
-            this.currentUnitContainers.put(CENTER, centerOfUnit);
-            this.currentUnitContainers.put(BACK, backOfUnit);
+            clearCurrentUnitContainers();
+            this.currentUnitContainers = newUnitContainers;
 
-            observedObjects.add(backOfUnit.getRearNeighbor());
-            observedObjects.add(backOfUnit.getSecondRearNeighbor());
+            this.observedObjects.add(((PGField) this.currentUnitContainers.get(BACK)).getRearNeighbor());
+            this.observedObjects.add(((PGField) this.currentUnitContainers.get(BACK)).getSecondRearNeighbor());
 
-            if(!observedObjects.contains(null)) {
-                for(Observable observable : observedObjects) {
+            if(!this.observedObjects.contains(null)) {
+                for(Observable observable : this.observedObjects) {
                     observable.addObserver(this);
                 }
             } else {
-                observedObjects.clear();
+                this.observedObjects.clear();
             }
         } else {
+            if(primaryContainer.getContainedUnit() != null && primaryContainer.getContainedUnit() != this) {
+                throw new PGIncorrectUnitLocationException();
+            }
+            clearCurrentUnitContainers();
             this.currentUnitContainers.put(PGUnit.PRIMARY_CONTAINER, primaryContainer);
         }
 
         for(PGUnitContainer unitContainer : this.currentUnitContainers.values()) {
             unitContainer.setContainedUnit(this);
-        }
-    }
+        }    }
 
     @Override
     public void update(Observable obj, Object arg) {
