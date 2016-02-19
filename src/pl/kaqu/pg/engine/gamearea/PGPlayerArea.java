@@ -40,7 +40,7 @@ public class PGPlayerArea {
     private final PGField[][] fields;
     private PGPlayer connectedPlayer;
 
-    protected final PGUnitContainer hand;
+    public final PGUnitContainer hand;
     private final PGUnitsReserve reserve;
 
     public PGPlayerArea(int width, int height, @NotNull PGPlayer connectedPlayer) {

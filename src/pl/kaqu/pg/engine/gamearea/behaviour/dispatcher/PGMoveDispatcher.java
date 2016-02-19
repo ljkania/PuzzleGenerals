@@ -32,37 +32,23 @@ import java.util.List;
  */
 public class PGMoveDispatcher {
 
-    public void pickUnitToHand(PGUnitContainer unitContainer, PGUnitContainer hand) throws PGIncorrectUnitLocationException {
-        PGUnit unit = unitContainer.getContainedUnit();
-        if(unit != null) {
-            unit.setCurrentUnitContainers(hand);
-        }
-    }
-
-    public void dropUnitFromHand(PGUnitContainer hand, PGField primaryContainer) throws PGIncorrectUnitLocationException {
-        PGUnit unit = hand.getContainedUnit();
-        if(unit == null) {
+    public static void pickUnitToHand(PGUnitContainer unitContainer, PGUnitContainer hand) {
+        if(unitContainer.getContainedUnit() == null) {
             return;
         }
 
-        int x = primaryContainer.getCoordinate().x;
-        int y = primaryContainer.getCoordinate().y;
-        int width = unit.width;
-        int height = unit.height;
+        try {
+            unitContainer.getContainedUnit().setCurrentUnitContainers(hand);
+        } catch (PGIncorrectUnitLocationException e) {}
+    }
 
-        PGField currentMostLeft = primaryContainer;
-
-        for(int i=0; i<height; i++) {
-            PGField currentField = currentMostLeft;
-            for(int j=0; j<width; j++) {
-                if(currentField == null || currentField.getContainedUnit() != null) {
-                    throw new PGIncorrectUnitLocationException();
-                }
-                currentField = currentField.getRightNeighbor();
-            }
-            currentMostLeft = currentMostLeft.getRearNeighbor();
+    public static void dropUnitFromHand(PGUnitContainer hand, PGField primaryContainer) throws PGIncorrectUnitLocationException {
+        if(hand.getContainedUnit() == null) {
+            return;
         }
 
-        unit.setCurrentUnitContainers(primaryContainer);
+        try {
+            hand.getContainedUnit().setCurrentUnitContainers(primaryContainer);
+        } catch(PGIncorrectUnitLocationException e) {}
     }
 }
