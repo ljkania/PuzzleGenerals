@@ -1,12 +1,25 @@
 package tests.engine.gamearea;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import pl.kaqu.pg.engine.error.PGIncorrectUnitLocationException;
 import pl.kaqu.pg.engine.error.PGOutOfAreaException;
 import pl.kaqu.pg.engine.gamearea.PGField;
 import pl.kaqu.pg.engine.gamearea.PGPlayerArea;
+import pl.kaqu.pg.engine.gamearea.PGUnitContainer;
 import pl.kaqu.pg.engine.player.PGPlayer;
+import pl.kaqu.pg.engine.unit.PGUnit;
+import pl.kaqu.pg.engine.unit.PGUnitGroup;
+import pl.kaqu.pg.engine.unit.PGUnitRank;
+import pl.kaqu.pg.engine.unit.action.PGUnitAction;
+import pl.kaqu.pg.engine.unit.activation.PGActivationType;
+import pl.kaqu.pg.engine.unit.activation.PGUnitActivationCheckerCallable;
+import pl.kaqu.pg.engine.unit.effect.PGUnitEffect;
+import pl.kaqu.pg.engine.unit.effect.PGUnitState;
+import pl.kaqu.pg.engine.unit.types.PGUnitLarge;
+import pl.kaqu.pg.engine.unit.types.PGUnitSmall;
 
 import static org.junit.Assert.*;
 
@@ -150,5 +163,406 @@ public class PGPlayerAreaTest {
         PGPlayerArea playerArea = new PGPlayerArea(8, 6, new PGPlayer());
         exception.expect(PGOutOfAreaException.class);
         playerArea.getField(4, 7);
+    }
+
+    @Test
+    public void moveUnitToReserve_OnePGUnitSmallOnTheGridMovedToReserve_ReserveCounterIncremented() throws PGOutOfAreaException {
+        int width = 8;
+        int height = 6;
+        PGPlayer player = new PGPlayer();
+        PGPlayerArea playerArea = new PGPlayerArea(width, height, player);
+        int sizeOfReserve = playerArea.getReserve().sizeOfReserve();
+        long unitId = 0;
+        PGUnitGroup group = null;
+        PGUnitState state = PGUnitState.IDLE;
+        PGUnitContainer primaryContainer = playerArea.getField(3,4);
+
+        PGUnit unit = new PGUnitSmall(unitId, player, group, state, primaryContainer) {
+            @Override
+            public void activate(@NotNull PGActivationType activationType) {
+
+            }
+
+            @NotNull
+            @Override
+            public PGUnitActivationCheckerCallable getActivationCheckerThread() {
+                return null;
+            }
+
+            @Override
+            public int getPriority() {
+                return 0;
+            }
+
+            @NotNull
+            @Override
+            public String getName() {
+                return null;
+            }
+
+            @NotNull
+            @Override
+            public String getDescription() {
+                return null;
+            }
+
+            @Override
+            public PGUnitRank getRank() {
+                return null;
+            }
+
+            @Override
+            public void applyEffect(PGUnitEffect effect) {
+
+            }
+
+            @Override
+            public void removeEffect(PGUnitEffect effect) {
+
+            }
+
+            @NotNull
+            @Override
+            public PGUnitAction getUnitAction() {
+                return null;
+            }
+        };
+
+        playerArea.moveUnitToReserve(unit);
+        assertEquals(sizeOfReserve + 1, playerArea.getReserve().sizeOfReserve());
+    }
+
+    @Test
+    public void moveUnitToReserve_OnePGUnitSmallOnTheGridMovedToReserve_UnitHasClearedUnitContainers() throws PGOutOfAreaException {
+        int width = 8;
+        int height = 6;
+        PGPlayer player = new PGPlayer();
+        PGPlayerArea playerArea = new PGPlayerArea(width, height, player);
+        long unitId = 0;
+        PGUnitGroup group = null;
+        PGUnitState state = PGUnitState.IDLE;
+        PGUnitContainer primaryContainer = playerArea.getField(3,4);
+
+        PGUnit unit = new PGUnitSmall(unitId, player, group, state, primaryContainer) {
+            @Override
+            public void activate(@NotNull PGActivationType activationType) {
+
+            }
+
+            @NotNull
+            @Override
+            public PGUnitActivationCheckerCallable getActivationCheckerThread() {
+                return null;
+            }
+
+            @Override
+            public int getPriority() {
+                return 0;
+            }
+
+            @NotNull
+            @Override
+            public String getName() {
+                return null;
+            }
+
+            @NotNull
+            @Override
+            public String getDescription() {
+                return null;
+            }
+
+            @Override
+            public PGUnitRank getRank() {
+                return null;
+            }
+
+            @Override
+            public void applyEffect(PGUnitEffect effect) {
+
+            }
+
+            @Override
+            public void removeEffect(PGUnitEffect effect) {
+
+            }
+
+            @NotNull
+            @Override
+            public PGUnitAction getUnitAction() {
+                return null;
+            }
+        };
+
+        playerArea.moveUnitToReserve(unit);
+        assertTrue(unit.getCurrentUnitContainers().isEmpty());
+    }
+
+    @Test
+    public void moveUnitToReserve_OnePGUnitSmallOnTheGridMovedToReserve_GridDoesNotContainUnitAnymore() throws PGOutOfAreaException {
+        int width = 8;
+        int height = 6;
+        PGPlayer player = new PGPlayer();
+        PGPlayerArea playerArea = new PGPlayerArea(width, height, player);
+        long unitId = 0;
+        PGUnitGroup group = null;
+        PGUnitState state = PGUnitState.IDLE;
+        PGUnitContainer primaryContainer = playerArea.getField(3,4);
+
+        PGUnit unit = new PGUnitSmall(unitId, player, group, state, primaryContainer) {
+            @Override
+            public void activate(@NotNull PGActivationType activationType) {
+
+            }
+
+            @NotNull
+            @Override
+            public PGUnitActivationCheckerCallable getActivationCheckerThread() {
+                return null;
+            }
+
+            @Override
+            public int getPriority() {
+                return 0;
+            }
+
+            @NotNull
+            @Override
+            public String getName() {
+                return null;
+            }
+
+            @NotNull
+            @Override
+            public String getDescription() {
+                return null;
+            }
+
+            @Override
+            public PGUnitRank getRank() {
+                return null;
+            }
+
+            @Override
+            public void applyEffect(PGUnitEffect effect) {
+
+            }
+
+            @Override
+            public void removeEffect(PGUnitEffect effect) {
+
+            }
+
+            @NotNull
+            @Override
+            public PGUnitAction getUnitAction() {
+                return null;
+            }
+        };
+
+        playerArea.moveUnitToReserve(unit);
+        assertNull(primaryContainer.getContainedUnit());
+    }
+
+    @Test
+    public void moveUnitToReserve_BiggerUnitOnTheGridMovedToReserve_ReserveCounterIncremented() throws PGOutOfAreaException, PGIncorrectUnitLocationException {
+        int width = 8;
+        int height = 6;
+        PGPlayer player = new PGPlayer();
+        PGPlayerArea playerArea = new PGPlayerArea(width, height, player);
+        int sizeOfReserve = playerArea.getReserve().sizeOfReserve();
+        long unitId = 0;
+        PGUnitGroup group = null;
+        PGUnitState state = PGUnitState.IDLE;
+        PGUnitContainer primaryContainer = playerArea.getField(1,3);
+
+        PGUnit unit = new PGUnitLarge(unitId, player, group, state, primaryContainer) {
+            @Override
+            public void activate(@NotNull PGActivationType activationType) {
+
+            }
+
+            @NotNull
+            @Override
+            public PGUnitActivationCheckerCallable getActivationCheckerThread() {
+                return null;
+            }
+
+            @Override
+            public int getPriority() {
+                return 0;
+            }
+
+            @NotNull
+            @Override
+            public String getName() {
+                return null;
+            }
+
+            @NotNull
+            @Override
+            public String getDescription() {
+                return null;
+            }
+
+            @Override
+            public PGUnitRank getRank() {
+                return null;
+            }
+
+            @Override
+            public void applyEffect(PGUnitEffect effect) {
+
+            }
+
+            @Override
+            public void removeEffect(PGUnitEffect effect) {
+
+            }
+
+            @NotNull
+            @Override
+            public PGUnitAction getUnitAction() {
+                return null;
+            }
+        };
+
+        playerArea.moveUnitToReserve(unit);
+        assertEquals(sizeOfReserve + 1, playerArea.getReserve().sizeOfReserve());
+    }
+
+    @Test
+    public void moveUnitToReserve_BiggerUnitOnTheGridMovedToReserve_UnitHasClearedUnitContainers() throws PGOutOfAreaException {
+        int width = 8;
+        int height = 6;
+        PGPlayer player = new PGPlayer();
+        PGPlayerArea playerArea = new PGPlayerArea(width, height, player);
+        long unitId = 0;
+        PGUnitGroup group = null;
+        PGUnitState state = PGUnitState.IDLE;
+        PGUnitContainer primaryContainer = playerArea.getField(1,3);
+
+        PGUnit unit = new PGUnitSmall(unitId, player, group, state, primaryContainer) {
+            @Override
+            public void activate(@NotNull PGActivationType activationType) {
+
+            }
+
+            @NotNull
+            @Override
+            public PGUnitActivationCheckerCallable getActivationCheckerThread() {
+                return null;
+            }
+
+            @Override
+            public int getPriority() {
+                return 0;
+            }
+
+            @NotNull
+            @Override
+            public String getName() {
+                return null;
+            }
+
+            @NotNull
+            @Override
+            public String getDescription() {
+                return null;
+            }
+
+            @Override
+            public PGUnitRank getRank() {
+                return null;
+            }
+
+            @Override
+            public void applyEffect(PGUnitEffect effect) {
+
+            }
+
+            @Override
+            public void removeEffect(PGUnitEffect effect) {
+
+            }
+
+            @NotNull
+            @Override
+            public PGUnitAction getUnitAction() {
+                return null;
+            }
+        };
+
+        playerArea.moveUnitToReserve(unit);
+        assertTrue(unit.getCurrentUnitContainers().isEmpty());
+    }
+
+    @Test
+    public void moveUnitToReserve_BiggerUnitOnTheGridMovedToReserve_GridDoesNotContainUnitAnymore() throws PGOutOfAreaException {
+        int width = 8;
+        int height = 6;
+        PGPlayer player = new PGPlayer();
+        PGPlayerArea playerArea = new PGPlayerArea(width, height, player);
+        long unitId = 0;
+        PGUnitGroup group = null;
+        PGUnitState state = PGUnitState.IDLE;
+        PGField primaryContainer = playerArea.getField(1,3);
+
+        PGUnit unit = new PGUnitSmall(unitId, player, group, state, primaryContainer) {
+            @Override
+            public void activate(@NotNull PGActivationType activationType) {
+
+            }
+
+            @NotNull
+            @Override
+            public PGUnitActivationCheckerCallable getActivationCheckerThread() {
+                return null;
+            }
+
+            @Override
+            public int getPriority() {
+                return 0;
+            }
+
+            @NotNull
+            @Override
+            public String getName() {
+                return null;
+            }
+
+            @NotNull
+            @Override
+            public String getDescription() {
+                return null;
+            }
+
+            @Override
+            public PGUnitRank getRank() {
+                return null;
+            }
+
+            @Override
+            public void applyEffect(PGUnitEffect effect) {
+
+            }
+
+            @Override
+            public void removeEffect(PGUnitEffect effect) {
+
+            }
+
+            @NotNull
+            @Override
+            public PGUnitAction getUnitAction() {
+                return null;
+            }
+        };
+
+        playerArea.moveUnitToReserve(unit);
+        assertNull(primaryContainer.getContainedUnit());
+        assertNull(primaryContainer.getRightNeighbor().getContainedUnit());
+        assertNull(primaryContainer.getRearNeighbor().getContainedUnit());
+        assertNull(primaryContainer.getRightNeighbor().getRearNeighbor().getContainedUnit());
     }
 }

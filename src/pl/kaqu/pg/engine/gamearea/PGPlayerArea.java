@@ -29,6 +29,7 @@ import pl.kaqu.pg.engine.error.PGWrongSumOfUnitsException;
 import pl.kaqu.pg.engine.error.PGOutOfAreaException;
 import pl.kaqu.pg.engine.player.PGPlayer;
 import pl.kaqu.pg.engine.unit.PGUnit;
+import pl.kaqu.pg.engine.unit.effect.PGUnitState;
 
 public class PGPlayerArea {
 	private static final float INITIAL_FIELD_LOAD = 0.7f;
@@ -40,7 +41,7 @@ public class PGPlayerArea {
     private PGPlayer connectedPlayer;
 
     protected final PGUnitContainer hand;
-    private PGUnitsReserve reserve;
+    private final PGUnitsReserve reserve;
 
     public PGPlayerArea(int width, int height, @NotNull PGPlayer connectedPlayer) {
         if(width <= 0 || height <= 0) {
@@ -52,6 +53,7 @@ public class PGPlayerArea {
         this.connectedPlayer = connectedPlayer;
         this.fields = new PGField[this.width][];
         this.hand = new PGUnitContainer(null);
+        this.reserve = new PGUnitsReserve(20);
         this.totalNumberOfUnits = (int) (INITIAL_FIELD_LOAD * width * height);
         initializeFields();
     }
@@ -89,10 +91,15 @@ public class PGPlayerArea {
         return this.fields[x][y];
     }
 
+    @NotNull public PGUnitsReserve getReserve() {
+        return this.reserve;
+    }
+
     public void moveUnitToReserve(@NotNull PGUnit unit) throws PGOutOfAreaException {
         if(!(unit.getPrimaryUnitContainer() instanceof PGField))
     		throw new IllegalArgumentException("Unit " + unit + " is not on the grid");
         this.reserve.incrementReserve();
         unit.clearCurrentUnitContainers();
+        unit.setState(PGUnitState.RESERVE);
     }
 }
