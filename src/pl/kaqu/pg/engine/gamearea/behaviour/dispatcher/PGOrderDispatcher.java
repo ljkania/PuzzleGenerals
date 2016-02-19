@@ -27,7 +27,6 @@ import pl.kaqu.pg.engine.gamearea.PGUnitContainer;
 import pl.kaqu.pg.engine.unit.PGUnit;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static java.lang.Integer.max;
 
@@ -38,10 +37,10 @@ public class PGOrderDispatcher {
 
     public static final Comparator<PGUnit> UNIT_COMPARATOR = (PGUnit u1, PGUnit u2) -> {
         if (u1.getPriority() != u2.getPriority()) {
-            return u1.getPriority() - u2.getPriority();
+            return u2.getPriority() - u1.getPriority();
         }
         if(u1.getPrimaryUnitContainer() instanceof PGField && u2.getPrimaryUnitContainer() instanceof PGField) {
-            return ((PGField) u2.getPrimaryUnitContainer()).getCoordinate().y - ((PGField) u1.getPrimaryUnitContainer()).getCoordinate().y;
+            return ((PGField) u1.getPrimaryUnitContainer()).getCoordinate().y - ((PGField) u2.getPrimaryUnitContainer()).getCoordinate().y;
         }
         return 0;
     };
@@ -50,7 +49,6 @@ public class PGOrderDispatcher {
         int width = playerArea.width;
         int height = playerArea.height;
 
-        PriorityQueue<PGUnit> queue = new PriorityQueue<>(height * width, UNIT_COMPARATOR);
         Map<PGUnit, PGUnitContainer> previousUnitLocation = new HashMap<>();
 
         for(int i=0; i<width; i++) {
@@ -59,7 +57,6 @@ public class PGOrderDispatcher {
                     PGUnit unit = playerArea.getField(i,j).getContainedUnit();
                     if(unit != null) {
                         previousUnitLocation.put(unit, unit.getPrimaryUnitContainer());
-                        unit.clearCurrentUnitContainers();
                     }
                 } catch (PGOutOfAreaException e) {
                     e.printStackTrace();
@@ -67,11 +64,13 @@ public class PGOrderDispatcher {
             }
         }
 
-        queue.addAll(previousUnitLocation.keySet().stream().collect(Collectors.toList()));
+        List<PGUnit> sortedUnits = new ArrayList<>(previousUnitLocation.keySet());
+        sortedUnits.sort(UNIT_COMPARATOR);
+        sortedUnits.forEach(pl.kaqu.pg.engine.unit.PGUnit::clearCurrentUnitContainers);
+
         int[] firstPossible = new int[width];
 
-        while(!queue.isEmpty()) {
-            PGUnit unit = queue.remove();
+        for(PGUnit unit : sortedUnits) {
             int widthOfUnit = unit.width;
             int heightOfUnit = unit.height;
             PGUnitContainer leftFrontOfUnit = previousUnitLocation.get(unit);
