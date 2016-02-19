@@ -40,8 +40,8 @@ public class PGPlayerArea {
     private final PGField[][] fields;
     private PGPlayer connectedPlayer;
 
-    public final PGUnitContainer hand;
-    private final PGUnitsReserve reserve;
+    protected final PGUnitContainer hand;
+    protected final PGUnitsReserve reserve;
 
     public PGPlayerArea(int width, int height, @NotNull PGPlayer connectedPlayer) {
         if(width <= 0 || height <= 0) {

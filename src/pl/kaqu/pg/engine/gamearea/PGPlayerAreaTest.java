@@ -1,4 +1,4 @@
-package tests.engine.gamearea;
+package pl.kaqu.pg.engine.gamearea;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.Rule;

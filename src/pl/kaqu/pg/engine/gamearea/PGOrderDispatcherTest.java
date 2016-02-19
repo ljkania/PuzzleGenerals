@@ -1,14 +1,16 @@
-package tests.engine.gamearea.behaviour.dispatcher;
+package pl.kaqu.pg.engine.gamearea;
 
 import org.jetbrains.annotations.NotNull;
-import org.junit.Before;
 import org.junit.Test;
 import pl.kaqu.pg.engine.error.PGError;
+import pl.kaqu.pg.engine.error.PGIncorrectUnitLocationException;
+import pl.kaqu.pg.engine.error.PGOutOfAreaException;
+import pl.kaqu.pg.engine.gamearea.PGField;
 import pl.kaqu.pg.engine.gamearea.PGPlayerArea;
-import pl.kaqu.pg.engine.gamearea.behaviour.dispatcher.PGMoveDispatcher;
 import pl.kaqu.pg.engine.gamearea.behaviour.dispatcher.PGOrderDispatcher;
 import pl.kaqu.pg.engine.player.PGPlayer;
 import pl.kaqu.pg.engine.unit.PGUnit;
+import pl.kaqu.pg.engine.unit.PGUnitGroup;
 import pl.kaqu.pg.engine.unit.PGUnitRank;
 import pl.kaqu.pg.engine.unit.action.PGUnitAction;
 import pl.kaqu.pg.engine.unit.activation.PGActivationType;
@@ -40,444 +42,447 @@ import static org.junit.Assert.*;
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-public class PGMoveDispatcherTest {
+public class PGOrderDispatcherTest {
     @Test
-    public void pickUnitToHand_PickFromEmptyField_HandContainsNull() throws PGError {
+    public void reorderUnits_EveryUnitHasTheSamePriorityAndStandAsCloseToFrontAsPossible_GridDoesNotChange() throws PGError {
         int width = 8;
         int height = 6;
         PGPlayer player = new PGPlayer();
         PGPlayerArea playerArea = new PGPlayerArea(width, height, player);
 
-        PGMoveDispatcher.pickUnitToHand(playerArea.getField(1,3), playerArea.hand);
+        PGUnit unit1 = new PGUnitLarge(0, player, null, PGUnitState.IDLE, playerArea.getField(0,0)) {
+            @Override
+            public void activate(@NotNull PGActivationType activationType) {
 
-        assertNull(playerArea.hand.getContainedUnit());
+            }
+
+            @NotNull
+            @Override
+            public PGUnitActivationCheckerCallable getActivationCheckerThread() {
+                return null;
+            }
+
+            @Override
+            public int getPriority() {
+                return 0;
+            }
+
+            @NotNull
+            @Override
+            public String getName() {
+                return null;
+            }
+
+            @NotNull
+            @Override
+            public String getDescription() {
+                return null;
+            }
+
+            @Override
+            public PGUnitRank getRank() {
+                return null;
+            }
+
+            @Override
+            public void applyEffect(PGUnitEffect effect) {
+
+            }
+
+            @Override
+            public void removeEffect(PGUnitEffect effect) {
+
+            }
+
+            @NotNull
+            @Override
+            public PGUnitAction getUnitAction() {
+                return null;
+            }
+        };
+        PGUnit unit2 = new PGUnitLarge(0, player, null, PGUnitState.IDLE, playerArea.getField(2,0)) {
+            @Override
+            public void activate(@NotNull PGActivationType activationType) {
+
+            }
+
+            @NotNull
+            @Override
+            public PGUnitActivationCheckerCallable getActivationCheckerThread() {
+                return null;
+            }
+
+            @Override
+            public int getPriority() {
+                return 0;
+            }
+
+            @NotNull
+            @Override
+            public String getName() {
+                return null;
+            }
+
+            @NotNull
+            @Override
+            public String getDescription() {
+                return null;
+            }
+
+            @Override
+            public PGUnitRank getRank() {
+                return null;
+            }
+
+            @Override
+            public void applyEffect(PGUnitEffect effect) {
+
+            }
+
+            @Override
+            public void removeEffect(PGUnitEffect effect) {
+
+            }
+
+            @NotNull
+            @Override
+            public PGUnitAction getUnitAction() {
+                return null;
+            }
+        };
+        PGUnit unit3 = new PGUnitHigh(0, player, null, PGUnitState.IDLE, playerArea.getField(3,2)) {
+            @Override
+            public void activate(@NotNull PGActivationType activationType) {
+
+            }
+
+            @NotNull
+            @Override
+            public PGUnitActivationCheckerCallable getActivationCheckerThread() {
+                return null;
+            }
+
+            @Override
+            public int getPriority() {
+                return 0;
+            }
+
+            @NotNull
+            @Override
+            public String getName() {
+                return null;
+            }
+
+            @NotNull
+            @Override
+            public String getDescription() {
+                return null;
+            }
+
+            @Override
+            public PGUnitRank getRank() {
+                return null;
+            }
+
+            @Override
+            public void applyEffect(PGUnitEffect effect) {
+
+            }
+
+            @Override
+            public void removeEffect(PGUnitEffect effect) {
+
+            }
+
+            @NotNull
+            @Override
+            public PGUnitAction getUnitAction() {
+                return null;
+            }
+        };
+        PGUnit unit4 = new PGUnitSmall(0, player, null, PGUnitState.IDLE, playerArea.getField(3,4)) {
+            @Override
+            public void activate(@NotNull PGActivationType activationType) {
+
+            }
+
+            @NotNull
+            @Override
+            public PGUnitActivationCheckerCallable getActivationCheckerThread() {
+                return null;
+            }
+
+            @Override
+            public int getPriority() {
+                return 0;
+            }
+
+            @NotNull
+            @Override
+            public String getName() {
+                return null;
+            }
+
+            @NotNull
+            @Override
+            public String getDescription() {
+                return null;
+            }
+
+            @Override
+            public PGUnitRank getRank() {
+                return null;
+            }
+
+            @Override
+            public void applyEffect(PGUnitEffect effect) {
+
+            }
+
+            @Override
+            public void removeEffect(PGUnitEffect effect) {
+
+            }
+
+            @NotNull
+            @Override
+            public PGUnitAction getUnitAction() {
+                return null;
+            }
+        };
+        PGUnit unit5 = new PGUnitSmall(0, player, null, PGUnitState.IDLE, playerArea.getField(4,0)) {
+            @Override
+            public void activate(@NotNull PGActivationType activationType) {
+
+            }
+
+            @NotNull
+            @Override
+            public PGUnitActivationCheckerCallable getActivationCheckerThread() {
+                return null;
+            }
+
+            @Override
+            public int getPriority() {
+                return 0;
+            }
+
+            @NotNull
+            @Override
+            public String getName() {
+                return null;
+            }
+
+            @NotNull
+            @Override
+            public String getDescription() {
+                return null;
+            }
+
+            @Override
+            public PGUnitRank getRank() {
+                return null;
+            }
+
+            @Override
+            public void applyEffect(PGUnitEffect effect) {
+
+            }
+
+            @Override
+            public void removeEffect(PGUnitEffect effect) {
+
+            }
+
+            @NotNull
+            @Override
+            public PGUnitAction getUnitAction() {
+                return null;
+            }
+        };
+        PGUnit unit6 = new PGUnitLarge(0, player, null, PGUnitState.IDLE, playerArea.getField(4,1)) {
+            @Override
+            public void activate(@NotNull PGActivationType activationType) {
+
+            }
+
+            @NotNull
+            @Override
+            public PGUnitActivationCheckerCallable getActivationCheckerThread() {
+                return null;
+            }
+
+            @Override
+            public int getPriority() {
+                return 0;
+            }
+
+            @NotNull
+            @Override
+            public String getName() {
+                return null;
+            }
+
+            @NotNull
+            @Override
+            public String getDescription() {
+                return null;
+            }
+
+            @Override
+            public PGUnitRank getRank() {
+                return null;
+            }
+
+            @Override
+            public void applyEffect(PGUnitEffect effect) {
+
+            }
+
+            @Override
+            public void removeEffect(PGUnitEffect effect) {
+
+            }
+
+            @NotNull
+            @Override
+            public PGUnitAction getUnitAction() {
+                return null;
+            }
+        };
+        PGUnit unit7 = new PGUnitHigh(0, player, null, PGUnitState.IDLE, playerArea.getField(5,3)) {
+            @Override
+            public void activate(@NotNull PGActivationType activationType) {
+
+            }
+
+            @NotNull
+            @Override
+            public PGUnitActivationCheckerCallable getActivationCheckerThread() {
+                return null;
+            }
+
+            @Override
+            public int getPriority() {
+                return 0;
+            }
+
+            @NotNull
+            @Override
+            public String getName() {
+                return null;
+            }
+
+            @NotNull
+            @Override
+            public String getDescription() {
+                return null;
+            }
+
+            @Override
+            public PGUnitRank getRank() {
+                return null;
+            }
+
+            @Override
+            public void applyEffect(PGUnitEffect effect) {
+
+            }
+
+            @Override
+            public void removeEffect(PGUnitEffect effect) {
+
+            }
+
+            @NotNull
+            @Override
+            public PGUnitAction getUnitAction() {
+                return null;
+            }
+        };
+        PGUnit unit8 = new PGUnitSmall(0, player, null, PGUnitState.IDLE, playerArea.getField(5,5)) {
+            @Override
+            public void activate(@NotNull PGActivationType activationType) {
+
+            }
+
+            @NotNull
+            @Override
+            public PGUnitActivationCheckerCallable getActivationCheckerThread() {
+                return null;
+            }
+
+            @Override
+            public int getPriority() {
+                return 0;
+            }
+
+            @NotNull
+            @Override
+            public String getName() {
+                return null;
+            }
+
+            @NotNull
+            @Override
+            public String getDescription() {
+                return null;
+            }
+
+            @Override
+            public PGUnitRank getRank() {
+                return null;
+            }
+
+            @Override
+            public void applyEffect(PGUnitEffect effect) {
+
+            }
+
+            @Override
+            public void removeEffect(PGUnitEffect effect) {
+
+            }
+
+            @NotNull
+            @Override
+            public PGUnitAction getUnitAction() {
+                return null;
+            }
+        };
+
+
+        PGOrderDispatcher.reorderUnits(playerArea);
+
+        assertEquals(unit1.getPrimaryUnitContainer(), playerArea.getField(0,0));
+        assertEquals(unit2.getPrimaryUnitContainer(), playerArea.getField(2,0));
+        assertEquals(unit3.getPrimaryUnitContainer(), playerArea.getField(3,2));
+        assertEquals(unit4.getPrimaryUnitContainer(), playerArea.getField(3,4));
+        assertEquals(unit5.getPrimaryUnitContainer(), playerArea.getField(4,0));
+        assertEquals(unit6.getPrimaryUnitContainer(), playerArea.getField(4,1));
+        assertEquals(unit7.getPrimaryUnitContainer(), playerArea.getField(5,3));
+        assertEquals(unit8.getPrimaryUnitContainer(), playerArea.getField(5,5));
     }
 
     @Test
-    public void pickUnitToHand_PickUnitWhenHandIsNotEmpty_HandContainsPreviousUnit() throws PGError {
-        int width = 8;
-        int height = 6;
-        PGPlayer player = new PGPlayer();
-        PGPlayerArea playerArea = new PGPlayerArea(width, height, player);
-        PGUnit unit1 = new PGUnitLarge(0, player, null, PGUnitState.IDLE, playerArea.getField(1, 3)) {
-            @Override
-            public int getPriority() {
-                return 0;
-            }
-
-            @NotNull
-            @Override
-            public String getName() {
-                return null;
-            }
-
-            @NotNull
-            @Override
-            public String getDescription() {
-                return null;
-            }
-
-            @Override
-            public PGUnitRank getRank() {
-                return null;
-            }
-
-            @Override
-            public void applyEffect(PGUnitEffect effect) {
-
-            }
-
-            @Override
-            public void removeEffect(PGUnitEffect effect) {
-
-            }
-
-            @NotNull
-            @Override
-            public PGUnitAction getUnitAction() {
-                return null;
-            }
-
-            @Override
-            public void activate(@NotNull PGActivationType activationType) {
-
-            }
-
-            @NotNull
-            @Override
-            public PGUnitActivationCheckerCallable getActivationCheckerThread() {
-                return null;
-            }
-        };
-        PGUnit unit2 = new PGUnitLarge(0, player, null, PGUnitState.IDLE, playerArea.hand) {
-            @Override
-            public int getPriority() {
-                return 0;
-            }
-
-            @NotNull
-            @Override
-            public String getName() {
-                return null;
-            }
-
-            @NotNull
-            @Override
-            public String getDescription() {
-                return null;
-            }
-
-            @Override
-            public PGUnitRank getRank() {
-                return null;
-            }
-
-            @Override
-            public void applyEffect(PGUnitEffect effect) {
-
-            }
-
-            @Override
-            public void removeEffect(PGUnitEffect effect) {
-
-            }
-
-            @NotNull
-            @Override
-            public PGUnitAction getUnitAction() {
-                return null;
-            }
-
-            @Override
-            public void activate(@NotNull PGActivationType activationType) {
-
-            }
-
-            @NotNull
-            @Override
-            public PGUnitActivationCheckerCallable getActivationCheckerThread() {
-                return null;
-            }
-        };
-
-
-        PGMoveDispatcher.pickUnitToHand(playerArea.getField(1,3), playerArea.hand);
-
-        assertEquals(unit2, playerArea.hand.getContainedUnit());
-    }
-
-    @Test
-    public void pickUnitToHand_PickUnitWhenHandIsNotEmpty_UnitStaysOnGrid() throws PGError {
-        int width = 8;
-        int height = 6;
-        PGPlayer player = new PGPlayer();
-        PGPlayerArea playerArea = new PGPlayerArea(width, height, player);
-        PGUnit unit1 = new PGUnitLarge(0, player, null, PGUnitState.IDLE, playerArea.getField(1, 3)) {
-            @Override
-            public int getPriority() {
-                return 0;
-            }
-
-            @NotNull
-            @Override
-            public String getName() {
-                return null;
-            }
-
-            @NotNull
-            @Override
-            public String getDescription() {
-                return null;
-            }
-
-            @Override
-            public PGUnitRank getRank() {
-                return null;
-            }
-
-            @Override
-            public void applyEffect(PGUnitEffect effect) {
-
-            }
-
-            @Override
-            public void removeEffect(PGUnitEffect effect) {
-
-            }
-
-            @NotNull
-            @Override
-            public PGUnitAction getUnitAction() {
-                return null;
-            }
-
-            @Override
-            public void activate(@NotNull PGActivationType activationType) {
-
-            }
-
-            @NotNull
-            @Override
-            public PGUnitActivationCheckerCallable getActivationCheckerThread() {
-                return null;
-            }
-        };
-        PGUnit unit2 = new PGUnitLarge(0, player, null, PGUnitState.IDLE, playerArea.hand) {
-            @Override
-            public int getPriority() {
-                return 0;
-            }
-
-            @NotNull
-            @Override
-            public String getName() {
-                return null;
-            }
-
-            @NotNull
-            @Override
-            public String getDescription() {
-                return null;
-            }
-
-            @Override
-            public PGUnitRank getRank() {
-                return null;
-            }
-
-            @Override
-            public void applyEffect(PGUnitEffect effect) {
-
-            }
-
-            @Override
-            public void removeEffect(PGUnitEffect effect) {
-
-            }
-
-            @NotNull
-            @Override
-            public PGUnitAction getUnitAction() {
-                return null;
-            }
-
-            @Override
-            public void activate(@NotNull PGActivationType activationType) {
-
-            }
-
-            @NotNull
-            @Override
-            public PGUnitActivationCheckerCallable getActivationCheckerThread() {
-                return null;
-            }
-        };
-
-        PGMoveDispatcher.pickUnitToHand(playerArea.getField(1,3), playerArea.hand);
-
-        assertEquals(unit1, playerArea.getField(1,3).getContainedUnit());
-    }
-
-    @Test
-    public void pickUnitToHand_LargeUnitPickedFromPrimaryContainer_HandContainsUnit() throws PGError {
-        int width = 8;
-        int height = 6;
-        PGPlayer player = new PGPlayer();
-        PGPlayerArea playerArea = new PGPlayerArea(width, height, player);
-
-        PGUnit unit = new PGUnitLarge(0, player, null, PGUnitState.IDLE, playerArea.getField(1, 3)) {
-            @Override
-            public int getPriority() {
-                return 0;
-            }
-
-            @NotNull
-            @Override
-            public String getName() {
-                return null;
-            }
-
-            @NotNull
-            @Override
-            public String getDescription() {
-                return null;
-            }
-
-            @Override
-            public PGUnitRank getRank() {
-                return null;
-            }
-
-            @Override
-            public void applyEffect(PGUnitEffect effect) {
-
-            }
-
-            @Override
-            public void removeEffect(PGUnitEffect effect) {
-
-            }
-
-            @NotNull
-            @Override
-            public PGUnitAction getUnitAction() {
-                return null;
-            }
-
-            @Override
-            public void activate(@NotNull PGActivationType activationType) {
-
-            }
-
-            @NotNull
-            @Override
-            public PGUnitActivationCheckerCallable getActivationCheckerThread() {
-                return null;
-            }
-        };
-
-        PGMoveDispatcher.pickUnitToHand(playerArea.getField(1,3), playerArea.hand);
-
-        assertEquals(unit, playerArea.hand.getContainedUnit());
-    }
-
-    @Test
-    public void pickUnitToHand_LargeUnitPickedFromNotPrimaryContainer_HandContainsUnit() throws PGError {
-        int width = 8;
-        int height = 6;
-        PGPlayer player = new PGPlayer();
-        PGPlayerArea playerArea = new PGPlayerArea(width, height, player);
-
-        PGUnit unit = new PGUnitLarge(0, player, null, PGUnitState.IDLE, playerArea.getField(1, 3)) {
-            @Override
-            public int getPriority() {
-                return 0;
-            }
-
-            @NotNull
-            @Override
-            public String getName() {
-                return null;
-            }
-
-            @NotNull
-            @Override
-            public String getDescription() {
-                return null;
-            }
-
-            @Override
-            public PGUnitRank getRank() {
-                return null;
-            }
-
-            @Override
-            public void applyEffect(PGUnitEffect effect) {
-
-            }
-
-            @Override
-            public void removeEffect(PGUnitEffect effect) {
-
-            }
-
-            @NotNull
-            @Override
-            public PGUnitAction getUnitAction() {
-                return null;
-            }
-
-            @Override
-            public void activate(@NotNull PGActivationType activationType) {
-
-            }
-
-            @NotNull
-            @Override
-            public PGUnitActivationCheckerCallable getActivationCheckerThread() {
-                return null;
-            }
-        };
-
-        PGMoveDispatcher.pickUnitToHand(playerArea.getField(2,4), playerArea.hand);
-
-        assertEquals(unit, playerArea.hand.getContainedUnit());
-    }
-
-    @Test
-    public void pickUnitToHand_LargeUnitPickedFromPrimaryContainer_UnitIsNotOnTheGridAnymore() throws PGError {
-        int width = 8;
-        int height = 6;
-        PGPlayer player = new PGPlayer();
-        PGPlayerArea playerArea = new PGPlayerArea(width, height, player);
-
-        new PGUnitLarge(0, player, null, PGUnitState.IDLE, playerArea.getField(1, 3)) {
-            @Override
-            public int getPriority() {
-                return 0;
-            }
-
-            @NotNull
-            @Override
-            public String getName() {
-                return null;
-            }
-
-            @NotNull
-            @Override
-            public String getDescription() {
-                return null;
-            }
-
-            @Override
-            public PGUnitRank getRank() {
-                return null;
-            }
-
-            @Override
-            public void applyEffect(PGUnitEffect effect) {
-
-            }
-
-            @Override
-            public void removeEffect(PGUnitEffect effect) {
-
-            }
-
-            @NotNull
-            @Override
-            public PGUnitAction getUnitAction() {
-                return null;
-            }
-
-            @Override
-            public void activate(@NotNull PGActivationType activationType) {
-
-            }
-
-            @NotNull
-            @Override
-            public PGUnitActivationCheckerCallable getActivationCheckerThread() {
-                return null;
-            }
-        };
-
-        PGMoveDispatcher.pickUnitToHand(playerArea.getField(1,3), playerArea.hand);
-
-        assertNull(playerArea.getField(1,3).getContainedUnit());
-        assertNull(playerArea.getField(2,3).getContainedUnit());
-        assertNull(playerArea.getField(1,4).getContainedUnit());
-        assertNull(playerArea.getField(2,4).getContainedUnit());
-    }
-
-    @Test
-    public void pickUnitToHand_LargeUnitPickedFromNotPrimaryContainer_UnitIsNotOnTheGridAnymore() throws PGError {
+    public void reorderUnits_SmallUnitAtTheBackOfAnotherHasBiggerPriority_SmallIsMovedToFront() throws PGError {
         int width = 8;
         int height = 6;
         PGPlayer player = new PGPlayer();
         PGPlayerArea playerArea = new PGPlayerArea(width, height, player);
 
-        new PGUnitLarge(0, player, null, PGUnitState.IDLE, playerArea.getField(1, 3)) {
+        PGUnit unit1 = new PGUnitLarge(0, player, null, PGUnitState.IDLE, playerArea.getField(0,0)) {
+            @Override
+            public void activate(@NotNull PGActivationType activationType) {
+
+            }
+
+            @NotNull
+            @Override
+            public PGUnitActivationCheckerCallable getActivationCheckerThread() {
+                return null;
+            }
+
             @Override
             public int getPriority() {
                 return 0;
@@ -515,7 +520,8 @@ public class PGMoveDispatcherTest {
             public PGUnitAction getUnitAction() {
                 return null;
             }
-
+        };
+        PGUnit unit2 = new PGUnitSmall(0, player, null, PGUnitState.IDLE, playerArea.getField(0,2)) {
             @Override
             public void activate(@NotNull PGActivationType activationType) {
 
@@ -526,48 +532,71 @@ public class PGMoveDispatcherTest {
             public PGUnitActivationCheckerCallable getActivationCheckerThread() {
                 return null;
             }
+
+            @Override
+            public int getPriority() {
+                return 1;
+            }
+
+            @NotNull
+            @Override
+            public String getName() {
+                return null;
+            }
+
+            @NotNull
+            @Override
+            public String getDescription() {
+                return null;
+            }
+
+            @Override
+            public PGUnitRank getRank() {
+                return null;
+            }
+
+            @Override
+            public void applyEffect(PGUnitEffect effect) {
+
+            }
+
+            @Override
+            public void removeEffect(PGUnitEffect effect) {
+
+            }
+
+            @NotNull
+            @Override
+            public PGUnitAction getUnitAction() {
+                return null;
+            }
         };
 
-        PGMoveDispatcher.pickUnitToHand(playerArea.getField(2,4), playerArea.hand);
+        PGOrderDispatcher.reorderUnits(playerArea);
 
-        assertNull(playerArea.getField(1,3).getContainedUnit());
-        assertNull(playerArea.getField(2,3).getContainedUnit());
-        assertNull(playerArea.getField(1,4).getContainedUnit());
-        assertNull(playerArea.getField(2,4).getContainedUnit());
+        assertEquals(unit1.getPrimaryUnitContainer(), playerArea.getField(0, 1));
+        assertEquals(unit2.getPrimaryUnitContainer(), playerArea.getField(0,0));
     }
 
     @Test
-    public void dropUnitFromHand_DropFromEmptyHand_HandContainsNull() throws PGError {
+    public void reorderUnits_OneUnitSomewhereOnTheGrid_UnitIsMovedToFrontRow() throws PGError {
         int width = 8;
         int height = 6;
         PGPlayer player = new PGPlayer();
         PGPlayerArea playerArea = new PGPlayerArea(width, height, player);
 
-        PGMoveDispatcher.dropUnitFromHand(playerArea.hand, playerArea.getField(1,3));
+        PGUnit unit = new PGUnitLarge(0, player, null, PGUnitState.IDLE, playerArea.getField(3,4)) {
+            @Override
+            public void activate(@NotNull PGActivationType activationType) {
 
-        assertNull(playerArea.hand.getContainedUnit());
-    }
+            }
 
-    @Test
-    public void dropUnitFromHand_DropFromEmptyHand_GridHasNotChanged() throws PGError {
-        int width = 8;
-        int height = 6;
-        PGPlayer player = new PGPlayer();
-        PGPlayerArea playerArea = new PGPlayerArea(width, height, player);
+            @NotNull
+            @Override
+            public PGUnitActivationCheckerCallable getActivationCheckerThread() {
+                return null;
+            }
 
-        PGMoveDispatcher.dropUnitFromHand(playerArea.hand, playerArea.getField(1,3));
-
-        assertNull(playerArea.getField(1,3).getContainedUnit());
-    }
-
-    @Test
-    public void dropUnitFromHand_LargeUnitDropedOnEmptyContainers_HandContainsNull() throws PGError {
-        int width = 8;
-        int height = 6;
-        PGPlayer player = new PGPlayer();
-        PGPlayerArea playerArea = new PGPlayerArea(width, height, player);
-
-        PGUnit unit = new PGUnitLarge(0, player, null, PGUnitState.IDLE, playerArea.hand) {
             @Override
             public int getPriority() {
                 return 0;
@@ -605,313 +634,11 @@ public class PGMoveDispatcherTest {
             public PGUnitAction getUnitAction() {
                 return null;
             }
-
-            @Override
-            public void activate(@NotNull PGActivationType activationType) {
-
-            }
-
-            @NotNull
-            @Override
-            public PGUnitActivationCheckerCallable getActivationCheckerThread() {
-                return null;
-            }
         };
 
-        PGMoveDispatcher.dropUnitFromHand(playerArea.hand, playerArea.getField(2,4));
+        PGOrderDispatcher.reorderUnits(playerArea);
 
-        assertNull(playerArea.hand.getContainedUnit());
+        assertEquals(unit.getPrimaryUnitContainer(), playerArea.getField(3,0));
     }
 
-    @Test
-    public void dropUnitFromHand_LargeUnitDropedOnEmptyContainers_UnitIsOnGrid() throws PGError {
-        int width = 8;
-        int height = 6;
-        PGPlayer player = new PGPlayer();
-        PGPlayerArea playerArea = new PGPlayerArea(width, height, player);
-
-        PGUnit unit = new PGUnitLarge(0, player, null, PGUnitState.IDLE, playerArea.getField(1, 3)) {
-            @Override
-            public int getPriority() {
-                return 0;
-            }
-
-            @NotNull
-            @Override
-            public String getName() {
-                return null;
-            }
-
-            @NotNull
-            @Override
-            public String getDescription() {
-                return null;
-            }
-
-            @Override
-            public PGUnitRank getRank() {
-                return null;
-            }
-
-            @Override
-            public void applyEffect(PGUnitEffect effect) {
-
-            }
-
-            @Override
-            public void removeEffect(PGUnitEffect effect) {
-
-            }
-
-            @NotNull
-            @Override
-            public PGUnitAction getUnitAction() {
-                return null;
-            }
-
-            @Override
-            public void activate(@NotNull PGActivationType activationType) {
-
-            }
-
-            @NotNull
-            @Override
-            public PGUnitActivationCheckerCallable getActivationCheckerThread() {
-                return null;
-            }
-        };
-
-        PGMoveDispatcher.dropUnitFromHand(playerArea.hand, playerArea.getField(2,4));
-
-        assertEquals(unit, playerArea.getField(2,4).getContainedUnit());
-    }
-
-    @Test
-    public void dropUnitFromHand_LargeUnitDropedOnNotEmptyContainers_HandDoesNotChange() throws PGError {
-        int width = 8;
-        int height = 6;
-        PGPlayer player = new PGPlayer();
-        PGPlayerArea playerArea = new PGPlayerArea(width, height, player);
-
-        PGUnit unit1 = new PGUnitLarge(0, player, null, PGUnitState.IDLE, playerArea.hand) {
-            @Override
-            public int getPriority() {
-                return 0;
-            }
-
-            @NotNull
-            @Override
-            public String getName() {
-                return null;
-            }
-
-            @NotNull
-            @Override
-            public String getDescription() {
-                return null;
-            }
-
-            @Override
-            public PGUnitRank getRank() {
-                return null;
-            }
-
-            @Override
-            public void applyEffect(PGUnitEffect effect) {
-
-            }
-
-            @Override
-            public void removeEffect(PGUnitEffect effect) {
-
-            }
-
-            @NotNull
-            @Override
-            public PGUnitAction getUnitAction() {
-                return null;
-            }
-
-            @Override
-            public void activate(@NotNull PGActivationType activationType) {
-
-            }
-
-            @NotNull
-            @Override
-            public PGUnitActivationCheckerCallable getActivationCheckerThread() {
-                return null;
-            }
-        };
-        PGUnit unit2 = new PGUnitSmall(0, player, null, PGUnitState.IDLE, playerArea.getField(3,5)) {
-            @Override
-            public int getPriority() {
-                return 0;
-            }
-
-            @NotNull
-            @Override
-            public String getName() {
-                return null;
-            }
-
-            @NotNull
-            @Override
-            public String getDescription() {
-                return null;
-            }
-
-            @Override
-            public PGUnitRank getRank() {
-                return null;
-            }
-
-            @Override
-            public void applyEffect(PGUnitEffect effect) {
-
-            }
-
-            @Override
-            public void removeEffect(PGUnitEffect effect) {
-
-            }
-
-            @NotNull
-            @Override
-            public PGUnitAction getUnitAction() {
-                return null;
-            }
-
-            @Override
-            public void activate(@NotNull PGActivationType activationType) {
-
-            }
-
-            @NotNull
-            @Override
-            public PGUnitActivationCheckerCallable getActivationCheckerThread() {
-                return null;
-            }
-        };
-
-        PGMoveDispatcher.dropUnitFromHand(playerArea.hand, playerArea.getField(2,4));
-
-        assertEquals(unit1, playerArea.hand.getContainedUnit());
-    }
-
-    @Test
-    public void dropUnitFromHand_LargeUnitDropedOnNotEmptyContainers_GridDoesNotChange() throws PGError {
-        int width = 8;
-        int height = 6;
-        PGPlayer player = new PGPlayer();
-        PGPlayerArea playerArea = new PGPlayerArea(width, height, player);
-
-        PGUnit unit1 = new PGUnitLarge(0, player, null, PGUnitState.IDLE, playerArea.hand) {
-            @Override
-            public int getPriority() {
-                return 0;
-            }
-
-            @NotNull
-            @Override
-            public String getName() {
-                return null;
-            }
-
-            @NotNull
-            @Override
-            public String getDescription() {
-                return null;
-            }
-
-            @Override
-            public PGUnitRank getRank() {
-                return null;
-            }
-
-            @Override
-            public void applyEffect(PGUnitEffect effect) {
-
-            }
-
-            @Override
-            public void removeEffect(PGUnitEffect effect) {
-
-            }
-
-            @NotNull
-            @Override
-            public PGUnitAction getUnitAction() {
-                return null;
-            }
-
-            @Override
-            public void activate(@NotNull PGActivationType activationType) {
-
-            }
-
-            @NotNull
-            @Override
-            public PGUnitActivationCheckerCallable getActivationCheckerThread() {
-                return null;
-            }
-        };
-        PGUnit unit2 = new PGUnitSmall(0, player, null, PGUnitState.IDLE, playerArea.getField(3,5)) {
-            @Override
-            public int getPriority() {
-                return 0;
-            }
-
-            @NotNull
-            @Override
-            public String getName() {
-                return null;
-            }
-
-            @NotNull
-            @Override
-            public String getDescription() {
-                return null;
-            }
-
-            @Override
-            public PGUnitRank getRank() {
-                return null;
-            }
-
-            @Override
-            public void applyEffect(PGUnitEffect effect) {
-
-            }
-
-            @Override
-            public void removeEffect(PGUnitEffect effect) {
-
-            }
-
-            @NotNull
-            @Override
-            public PGUnitAction getUnitAction() {
-                return null;
-            }
-
-            @Override
-            public void activate(@NotNull PGActivationType activationType) {
-
-            }
-
-            @NotNull
-            @Override
-            public PGUnitActivationCheckerCallable getActivationCheckerThread() {
-                return null;
-            }
-        };
-
-        PGMoveDispatcher.dropUnitFromHand(playerArea.hand, playerArea.getField(2,4));
-
-        assertNull(playerArea.getField(2,4).getContainedUnit());
-        assertNull(playerArea.getField(3,4).getContainedUnit());
-        assertNull(playerArea.getField(2,5).getContainedUnit());
-        assertEquals(unit2, playerArea.getField(3,5).getContainedUnit());
-    }
 }
