@@ -432,7 +432,7 @@ public class PGPlayerAreaTest {
     }
 
     @Test
-    public void moveUnitToReserve_BiggerUnitOnTheGridMovedToReserve_UnitHasClearedUnitContainers() throws PGOutOfAreaException {
+    public void moveUnitToReserve_BiggerUnitOnTheGridMovedToReserve_UnitHasClearedUnitContainers() throws PGOutOfAreaException, PGIncorrectUnitLocationException {
         int width = 8;
         int height = 6;
         PGPlayer player = new PGPlayer();
@@ -442,7 +442,7 @@ public class PGPlayerAreaTest {
         PGUnitState state = PGUnitState.IDLE;
         PGUnitContainer primaryContainer = playerArea.getField(1,3);
 
-        PGUnit unit = new PGUnitSmall(unitId, player, group, state, primaryContainer) {
+        PGUnit unit = new PGUnitLarge(unitId, player, group, state, primaryContainer) {
             @Override
             public void activate(@NotNull PGActivationType activationType) {
 
@@ -498,7 +498,7 @@ public class PGPlayerAreaTest {
     }
 
     @Test
-    public void moveUnitToReserve_BiggerUnitOnTheGridMovedToReserve_GridDoesNotContainUnitAnymore() throws PGOutOfAreaException {
+    public void moveUnitToReserve_BiggerUnitOnTheGridMovedToReserve_GridDoesNotContainUnitAnymore() throws PGOutOfAreaException, PGIncorrectUnitLocationException {
         int width = 8;
         int height = 6;
         PGPlayer player = new PGPlayer();
@@ -508,7 +508,7 @@ public class PGPlayerAreaTest {
         PGUnitState state = PGUnitState.IDLE;
         PGField primaryContainer = playerArea.getField(1,3);
 
-        PGUnit unit = new PGUnitSmall(unitId, player, group, state, primaryContainer) {
+        PGUnit unit = new PGUnitLarge(unitId, player, group, state, primaryContainer) {
             @Override
             public void activate(@NotNull PGActivationType activationType) {
 
